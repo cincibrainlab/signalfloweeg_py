@@ -115,7 +115,9 @@ def import_mea30(file_path):
 from signalfloweeg.utils import load_catalog
 
 # Using utils.load_catalog() to load an example EEG file
-catalog = load_catalog("https://tinyurl.com/unzzmfex")
+catalog = load_catalog(
+    "https://raw.githubusercontent.com/cincibrainlab/signalfloweeg_py/master/userdata/cchmc_data.yaml"
+)
 
 # EGI/MAGSTIM 128 Resting State Data
 resting_raw = catalog["demo_rest_raw"]
