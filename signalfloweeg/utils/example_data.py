@@ -1,7 +1,8 @@
 import yaml
 import requests
 
-def load_example_data_paths(file_path_or_url):
+
+def load_catalog(file_path_or_url):
     """
     Retrieve the paths of example datasets from a local file or a GitHub URL.
 

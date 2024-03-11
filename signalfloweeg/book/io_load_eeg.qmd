@@ -1,0 +1,64 @@
+# Load an EEG file
+**Source:** `signalfloweeg.io.load_eeg()`
+
+`load_eeg()` loads an EEG file into an MNE object. 
+
+This function is a wrapper for various custom import functions. It aims to enhance reproducibility and provide a consistent interface to the user. While the function returns a valid MNE EEG object, it may employ non-MNE functions or custom scripts to load the data.
+
+## Usage
+
+Importing raw EEG data can be challenging due to varying formats and channel montages. The `load_eeg()` function provides a consistent interface for users while allowing customization for each recording file. The function aims to create a valid MNE raw or epochs object with the correct channel montage and event markers.
+
+Using file extensions alone is insufficient, as recordings with different channel counts may share the same extension. Users should provide the correct file type and channel montage when using `load_eeg()`.
+
+### Assign Example Data Filenames
+
+```{python}
+#| output: false
+
+from signalfloweeg.utils import load_catalog
+
+# Using utils.load_catalog() to load an example EEG file
+catalog = load_catalog("https://tinyurl.com/unzzmfex")
+
+# EGI/MAGSTIM 128 Resting State Data
+continuous_eeg_file = catalog['demo_rest_state']
+
+# EGI/MAGSTIM 128 Auditory Evoked Potentials
+epoched_eeg_file    = catalog['demo_auditory_chirp']
+
+```
+
+
+### load_eeg(): View Recording Types
+
+Let's first see what recording types are available by running the function without any arguments.
+
+```{python}
+#| output: false
+#| 
+from signalfloweeg.io import load_eeg
+
+# No arguments to show recording types
+load_eeg();
+
+```
+
+![If load_eeg is run without or with incorrect inputs an informational display will be presented](https://www.dropbox.com/scl/fi/keuls51ipvvifr254h60t/CleanShot-2024-03-11-at-12.42.30-2x.png?rlkey=9icyz9yzbwouicqmmki7tjqcx&raw=1)
+
+# Example 1: Load a Magstim/EGI 128 Channel Continuous EEG File
+
+```{python}
+#| output: false
+#| 
+from signalfloweeg.io import load_eeg
+
+# No arguments to show recording types
+load_eeg(continuous_eeg_file, "EGI128A");
+
+```
+
+
+### Customize Import Functions
+
+Experienced programmers can add additional recording types to `config/recording_types.yaml` and helper functions to `load_eeg` to support new file types.

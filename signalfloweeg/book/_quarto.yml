@@ -2,13 +2,19 @@ project:
   type: book
 
 book:
-  title: "book"
-  author: "Norah Jones"
+  title: "SignalFlowEeg Python Documentation"
+  author: "Pedapati Lab"
   date: "3/11/2024"
+  page-navigation: true
   chapters:
     - index.qmd
     - intro.qmd
-    - example_data.qmd
+    - part: "Input/Output"
+      chapters: 
+        - io_load_eeg.qmd
+    - part: "Utilities"
+      chapters: 
+        - utils_load_catalog.qmd
     - summary.qmd
     - references.qmd
 
@@ -16,7 +22,9 @@ bibliography: references.bib
 
 format:
   html:
-    theme: cosmo
+    theme: zephyr
+    fontsize: 1.1em
+    linestretch: 1.7
   pdf:
     documentclass: scrreprt
 

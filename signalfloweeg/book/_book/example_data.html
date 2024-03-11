@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>book - 2&nbsp; Chapter 1: Example Data</title>
+<title>SignalFlowEeg Python Documentation - 2&nbsp; Retrieve a Custom Catalog of your Datasets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -113,7 +113,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./example_data.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Chapter 1: Example Data</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./example_data.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">load_catalog function</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -128,7 +128,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">book</a> 
+      <a href="./">SignalFlowEeg Python Documentation</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -153,7 +153,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./example_data.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Chapter 1: Example Data</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">load_catalog function</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -178,7 +178,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#image-output" id="toc-image-output" class="nav-link active" data-scroll-target="#image-output"><span class="header-section-number">3</span> Image output</a></li>
+  <li><a href="#usage" id="toc-usage" class="nav-link active" data-scroll-target="#usage"><span class="header-section-number">2.1</span> Usage</a></li>
+  <li><a href="#arguments" id="toc-arguments" class="nav-link" data-scroll-target="#arguments"><span class="header-section-number">2.2</span> Arguments</a></li>
+  <li><a href="#returns" id="toc-returns" class="nav-link" data-scroll-target="#returns"><span class="header-section-number">2.3</span> Returns</a></li>
+  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example"><span class="header-section-number">2.4</span> Example</a></li>
+  <li><a href="#see-also" id="toc-see-also" class="nav-link" data-scroll-target="#see-also"><span class="header-section-number">2.5</span> See Also</a></li>
+  <li><a href="#comments" id="toc-comments" class="nav-link" data-scroll-target="#comments"><span class="header-section-number">2.6</span> Comments</a></li>
   </ul>
 </nav>
     </div>
@@ -187,7 +192,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Chapter 1: Example Data</span></h1>
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Retrieve a Custom Catalog of your Datasets</span></h1>
 </div>
 
 
@@ -203,57 +208,78 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p>One of the longstand challenges with prototyping and testing functions is access to your data. In this chapter we will see how to create a simple file that can be used in your project to test and build your functions.</p>
-<div id="59ee2a55" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> signalfloweeg.utils <span class="im">import</span> load_example_data_paths</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>user_yaml <span class="op">=</span> <span class="st">"https://tinyurl.com/unzzmfex"</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>example_data <span class="op">=</span> load_example_data_paths(user_yaml)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Source:</strong> <code>signalfloweeg.utils.load_catalog()</code></p>
+<p><code>load_catalog()</code> retrieves a dictionary containing predefined dataset names and corresponding files or paths.</p>
+<p>Custom key-value pairs are stored in a YAML file, which can be loaded via file or URL and used in your code. This simplifies working with multiple datasets, users, or file locations.</p>
+<section id="usage" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="usage"><span class="header-section-number">2.1</span> Usage</h2>
+<div id="a54f923f" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> signalfloweeg.utils <span class="im">import</span> load_catalog</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> yaml</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare a YAML file</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'catalog_server'</span>: <span class="st">'serverA'</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'path1'</span>: <span class="st">'value1'</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'path2'</span>: <span class="st">'value2'</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># add more paths as needed</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'example_data_paths.yaml'</span>, <span class="st">'w'</span>) <span class="im">as</span> <span class="bu">file</span>:</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    yaml.dump(data, <span class="bu">file</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Using a YAML File (e.g., local folder)</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>example_data <span class="op">=</span> load_catalog(<span class="st">"example_data_paths.yaml"</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Using a YAML URL (e.g., from Github)</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>user_yaml_link <span class="op">=</span> <span class="st">"https://tinyurl.com/unzzmfex"</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>example_data_from_url <span class="op">=</span> load_catalog(user_yaml_link)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="image-output" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Image output</h1>
-<p>The <code>signalfloweeg</code> package provides a convenient function called <code>load_example_data_paths</code> that allows users to load a YAML file containing predetermined paths to example datasets or folders. This function makes it easy for users to access and utilize example data without having to manually specify the paths each time.</p>
-<p>The <code>load_example_data_paths</code> function is located in the <code>signalfloweeg/datasets/</code> directory, which is dedicated to dataset-related utilities and configurations. This placement aligns with the purpose and functionality of the function, keeping the codebase organized and maintainable.</p>
-<p>Here’s an updated version of the function:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> yaml</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_example_data_paths():</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Load the paths of example datasets from a YAML file.</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">        dict: A dictionary containing dataset names as keys and their corresponding paths as values.</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Load the dataset paths from a YAML file</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(<span class="st">"signalfloweeg/datasets/example_data_paths.yaml"</span>, <span class="st">"r"</span>) <span class="im">as</span> <span class="bu">file</span>:</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        example_datasets <span class="op">=</span> yaml.safe_load(<span class="bu">file</span>)</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> example_datasets</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>In this updated version:</p>
+</section>
+<section id="arguments" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="arguments"><span class="header-section-number">2.2</span> Arguments</h2>
 <ul>
-<li>The function name is changed to <code>load_example_data_paths</code> to clearly indicate its purpose of loading example data paths.</li>
-<li>The dataset paths are loaded from a YAML file named <code>example_data_paths.yaml</code> located in the <code>signalfloweeg/datasets/</code> directory.</li>
-<li>The function returns a dictionary containing the dataset names as keys and their corresponding paths as values.</li>
+<li><code>yaml_file</code> : str
+<ul>
+<li>Path to the YAML file containing the dataset names and their corresponding paths.</li>
+<li>The YAML file can also be loaded via URL.</li>
+</ul></li>
 </ul>
-<p>To use this function, create a YAML file named <code>example_data_paths.yaml</code> in the <code>signalfloweeg/datasets/</code> directory and specify the paths to your example datasets or folders in the following format:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">demo_rest_state</span><span class="kw">:</span><span class="at"> </span><span class="st">"/path/to/resting_state_dataset.set"</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">demo_auditory_chirp</span><span class="kw">:</span><span class="at"> </span><span class="st">"/path/to/auditory_chirp_dataset.set"</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">demo_auditory_assr</span><span class="kw">:</span><span class="at"> </span><span class="st">"/path/to/auditory_assr_dataset.set"</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Users can then import and use the <code>load_example_data_paths</code> function in their scripts or notebooks to easily access the predetermined example data paths:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> signalfloweeg.datasets <span class="im">import</span> load_example_data_paths</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>example_data_paths <span class="op">=</span> load_example_data_paths()</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>resting_state_path <span class="op">=</span> example_data_paths[<span class="st">"demo_rest_state"</span>]</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the resting_state_path for further processing or analysis</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The YAML file should have the following structure:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">catalog_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"Example Data Catalog"</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">catalog_owner</span><span class="kw">:</span><span class="at"> </span><span class="st">"John Doe"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">catalog_date</span><span class="kw">:</span><span class="at"> </span><span class="st">"2024-03-10"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">demo_rest_state</span><span class="kw">:</span><span class="at"> </span><span class="st">"/path/to/resting_state_dataset.set"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">demo_auditory_chirp</span><span class="kw">:</span><span class="at"> </span><span class="st">"/path/to/auditory_chirp_dataset.set"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">demo_auditory_assr_folder</span><span class="kw">:</span><span class="at"> </span><span class="st">"/path/to/auditory_assr_dataset/"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Note: Keys containing ‘catalog_’ are reserved for metadata, and the rest of the keys are used to specify the dataset names and their corresponding files or paths. The user has flexibility to store other useful key-value pairs (i.e., server, user, etc.).</p>
+</section>
+<section id="returns" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="returns"><span class="header-section-number">2.3</span> Returns</h2>
+<ul>
+<li><code>datasets</code> : dict
+<ul>
+<li>A dictionary containing the dataset names as keys and their corresponding paths as values.</li>
+</ul></li>
+</ul>
+</section>
+<section id="example" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="example"><span class="header-section-number">2.4</span> Example</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using a YAML URL (e.g., from Github)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>example_data_from_url <span class="op">=</span> load_catalog(<span class="st">"https://tinyurl.com/unzzmfex"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://www.dropbox.com/scl/fi/8zarctmvz55r3gt6llbrg/CleanShot-2024-03-10-at-22.54.18-2x.png?rlkey=qkyscezgy35jv7xdumrvu9m7s&amp;raw=1" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Example Data</figcaption>
+<p><img src="https://www.dropbox.com/scl/fi/8zarctmvz55r3gt6llbrg/CleanShot-2024-03-10-at-22.54.18-2x.png?rlkey=qkyscezgy35jv7xdumrvu9m7s&amp;raw=1" title="Title: load_catalog output" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure 1: Example visual output of load_catalog function: Green represents available datasets and their paths. Red represents placeholders with missing values.</figcaption>
 </figure>
 </div>
-<p>By providing a centralized function to load example data paths from a YAML file, <code>signalfloweeg</code> simplifies the process of accessing and using example datasets, promoting code reusability and maintainability.</p>
+</section>
+<section id="see-also" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="see-also"><span class="header-section-number">2.5</span> See Also</h2>
+</section>
+<section id="comments" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="comments"><span class="header-section-number">2.6</span> Comments</h2>
+<p>The <code>signalfloweeg</code> package provides a convenient function called <code>load_catalog</code> that allows users to load via file or URL a YAML file containing datasets. This function makes it easy to access and use data in your code without having to manually specify the paths each time. Different YAML catalogs could be created for different users, projects, or servers.</p>
 
 
 </section>

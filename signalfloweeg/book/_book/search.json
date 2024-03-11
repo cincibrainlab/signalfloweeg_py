@@ -1,10 +1,115 @@
 [
   {
+    "objectID": "example_data.html#example-of-usage-and-output",
+    "href": "example_data.html#example-of-usage-and-output",
+    "title": "2  Working with your own data: load_catalog function",
+    "section": "2.2 Example of Usage and Output",
+    "text": "2.2 Example of Usage and Output\nfrom signalfloweeg.utils import load_catalog\n\nexample_data = load_catalog(\"example_data_paths.yaml\")\n\n# Raw output from Github repository\nuser_yaml_link = \"https://tinyurl.com/unzzmfex\"\n\nexample_data_from_url = load_catalog(user_yaml_link)\n\n\n\nFigure 1: Example visual output of load_catalog function: Green represents available datasets and their paths. Red represents placeholders with missing values."
+  },
+  {
+    "objectID": "example_data.html#overview",
+    "href": "example_data.html#overview",
+    "title": "2  Working with your own data: load_catalog function",
+    "section": "2.1 Overview",
+    "text": "2.1 Overview\nThe signalfloweeg package provides a convenient function called load_catalog that allows users to load via file or URL a YAML file containing datasets. This function makes it easy to access and use data in your code without having to manually specify the paths each time. Different YAML catalogs could be created for different users, projects, or servers.\nThe YAML file should have the following structure:\ncatalog_name: \"Example Data Catalog\"\ncatalog_owner: \"John Doe\"\ncatalog_date: \"2024-03-10\"\ndemo_rest_state: \"/path/to/resting_state_dataset.set\"\ndemo_auditory_chirp: \"/path/to/auditory_chirp_dataset.set\"\ndemo_auditory_assr_folder: \"/path/to/auditory_assr_dataset/\"\nThe structure of the YAML file is simple. Keys containing ‘catalog_’ are reserved for metadata, and the rest of the keys are used to specify the dataset names and their corresponding files or paths. The user has flexibility to store other useful key-value pairs (i.e., server, user, etc.) that can also be retrieved. The load_catalog function returns a dictionary containing the dataset names as keys and their corresponding paths as values."
+  },
+  {
+    "objectID": "example_data.html#usage",
+    "href": "example_data.html#usage",
+    "title": "2  Retrieve a Custom Catalog of your Datasets",
+    "section": "2.1 Usage",
+    "text": "2.1 Usage\n\nfrom signalfloweeg.utils import load_catalog\nimport yaml\n\n# Prepare a YAML file\ndata = {\n    'catalog_server': 'serverA',\n    'path1': 'value1',\n    'path2': 'value2',\n    # add more paths as needed\n}\nwith open('example_data_paths.yaml', 'w') as file:\n    yaml.dump(data, file)\n\n# Using a YAML File (e.g., local folder)\nexample_data = load_catalog(\"example_data_paths.yaml\")\n\n# Using a YAML URL (e.g., from Github)\nuser_yaml_link = \"https://tinyurl.com/unzzmfex\"\n\nexample_data_from_url = load_catalog(user_yaml_link)"
+  },
+  {
+    "objectID": "example_data.html#arguments",
+    "href": "example_data.html#arguments",
+    "title": "2  Retrieve a Custom Catalog of your Datasets",
+    "section": "2.2 Arguments",
+    "text": "2.2 Arguments\n\nyaml_file : str\n\nPath to the YAML file containing the dataset names and their corresponding paths.\nThe YAML file can also be loaded via URL.\n\n\nThe YAML file should have the following structure:\ncatalog_name: \"Example Data Catalog\"\ncatalog_owner: \"John Doe\"\ncatalog_date: \"2024-03-10\"\ndemo_rest_state: \"/path/to/resting_state_dataset.set\"\ndemo_auditory_chirp: \"/path/to/auditory_chirp_dataset.set\"\ndemo_auditory_assr_folder: \"/path/to/auditory_assr_dataset/\"\nNote: Keys containing ‘catalog_’ are reserved for metadata, and the rest of the keys are used to specify the dataset names and their corresponding files or paths. The user has flexibility to store other useful key-value pairs (i.e., server, user, etc.)."
+  },
+  {
+    "objectID": "example_data.html#returns",
+    "href": "example_data.html#returns",
+    "title": "2  Retrieve a Custom Catalog of your Datasets",
+    "section": "2.3 Returns",
+    "text": "2.3 Returns\n\ndatasets : dict\n\nA dictionary containing the dataset names as keys and their corresponding paths as values."
+  },
+  {
+    "objectID": "example_data.html#example",
+    "href": "example_data.html#example",
+    "title": "2  Retrieve a Custom Catalog of your Datasets",
+    "section": "2.4 Example",
+    "text": "2.4 Example\n# Using a YAML URL (e.g., from Github)\nexample_data_from_url = load_catalog(\"https://tinyurl.com/unzzmfex\")\n\n\n\nFigure 1: Example visual output of load_catalog function: Green represents available datasets and their paths. Red represents placeholders with missing values."
+  },
+  {
+    "objectID": "example_data.html#see-also",
+    "href": "example_data.html#see-also",
+    "title": "2  Retrieve a Custom Catalog of your Datasets",
+    "section": "2.5 See Also",
+    "text": "2.5 See Also"
+  },
+  {
+    "objectID": "example_data.html#comments",
+    "href": "example_data.html#comments",
+    "title": "2  Retrieve a Custom Catalog of your Datasets",
+    "section": "2.6 Comments",
+    "text": "2.6 Comments\nThe signalfloweeg package provides a convenient function called load_catalog that allows users to load via file or URL a YAML file containing datasets. This function makes it easy to access and use data in your code without having to manually specify the paths each time. Different YAML catalogs could be created for different users, projects, or servers."
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "book",
+    "title": "SignalFlowEeg Python Documentation",
     "section": "",
     "text": "Preface\nThis is a Quarto book. also\nTo learn more about Quarto books visit https://quarto.org/docs/books."
+  },
+  {
+    "objectID": "utils_load_catalog.html#usage",
+    "href": "utils_load_catalog.html#usage",
+    "title": "3  Retrieve a Custom Catalog of your Datasets",
+    "section": "3.1 Usage",
+    "text": "3.1 Usage\n\nfrom signalfloweeg.utils import load_catalog\nimport yaml\n\n# Prepare a YAML file\ndata = {\n    'catalog_server': 'serverA',\n    'path1': 'value1',\n    'path2': 'value2',\n    # add more paths as needed\n}\nwith open('example_data_paths.yaml', 'w') as file:\n    yaml.dump(data, file)\n\n# Using a YAML File (e.g., local folder)\nexample_data = load_catalog(\"example_data_paths.yaml\")\n\n# Using a YAML URL (e.g., from Github)\nuser_yaml_link = \"https://tinyurl.com/unzzmfex\"\n\nexample_data_from_url = load_catalog(user_yaml_link)"
+  },
+  {
+    "objectID": "utils_load_catalog.html#arguments",
+    "href": "utils_load_catalog.html#arguments",
+    "title": "3  Retrieve a Custom Catalog of your Datasets",
+    "section": "3.2 Arguments",
+    "text": "3.2 Arguments\n\nyaml_file : str\n\nPath to the YAML file containing the dataset names and their corresponding paths.\nThe YAML file can also be loaded via URL.\n\n\nThe YAML file should have the following structure:\ncatalog_name: \"Example Data Catalog\"\ncatalog_owner: \"John Doe\"\ncatalog_date: \"2024-03-10\"\ndemo_rest_state: \"/path/to/resting_state_dataset.set\"\ndemo_auditory_chirp: \"/path/to/auditory_chirp_dataset.set\"\ndemo_auditory_assr_folder: \"/path/to/auditory_assr_dataset/\"\nNote: Keys containing ‘catalog_’ are reserved for metadata, and the rest of the keys are used to specify the dataset names and their corresponding files or paths. The user has flexibility to store other useful key-value pairs (i.e., server, user, etc.)."
+  },
+  {
+    "objectID": "utils_load_catalog.html#returns",
+    "href": "utils_load_catalog.html#returns",
+    "title": "3  Retrieve a Custom Catalog of your Datasets",
+    "section": "3.3 Returns",
+    "text": "3.3 Returns\n\ndatasets : dict\n\nA dictionary containing the dataset names as keys and their corresponding paths as values."
+  },
+  {
+    "objectID": "utils_load_catalog.html#example",
+    "href": "utils_load_catalog.html#example",
+    "title": "3  Retrieve a Custom Catalog of your Datasets",
+    "section": "3.4 Example",
+    "text": "3.4 Example\nfrom signalfloweeg.utils import load_catalog\n\n# Using a YAML URL (e.g., from Github)\nexample_data_from_url = load_catalog(\"https://tinyurl.com/unzzmfex\")\n\n\n\nFigure 1: Example visual output of load_catalog function: Green represents available datasets and their paths. Red represents placeholders with missing values."
+  },
+  {
+    "objectID": "utils_load_catalog.html#see-also",
+    "href": "utils_load_catalog.html#see-also",
+    "title": "3  Retrieve a Custom Catalog of your Datasets",
+    "section": "3.5 See Also",
+    "text": "3.5 See Also"
+  },
+  {
+    "objectID": "utils_load_catalog.html#comments",
+    "href": "utils_load_catalog.html#comments",
+    "title": "3  Retrieve a Custom Catalog of your Datasets",
+    "section": "3.6 Comments",
+    "text": "3.6 Comments\nThe signalfloweeg package provides a convenient function called load_catalog that allows users to load via file or URL a YAML file containing datasets. This function makes it easy to access and use data in your code without having to manually specify the paths each time. Different YAML catalogs could be created for different users, projects, or servers."
+  },
+  {
+    "objectID": "utils_load_catalog.html",
+    "href": "utils_load_catalog.html",
+    "title": "2  Introduction",
+    "section": "",
+    "text": "3 Retrieve a Custom Catalog of your Datasets\nSource: signalfloweeg.utils.load_catalog()\nload_catalog() retrieves a dictionary containing predefined dataset names and corresponding files or paths.\nCustom key-value pairs are stored in a YAML file, which can be loaded via file or URL and used in your code. This simplifies working with multiple datasets, users, or file locations."
   },
   {
     "objectID": "intro.html",
@@ -14,24 +119,17 @@
     "text": "This is a book created from markdown and executable code.\nSee Knuth (1984) for additional discussion of literate programming.\n\n\n\n\nKnuth, Donald E. 1984. “Literate Programming.” Comput. J. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97."
   },
   {
-    "objectID": "example_data.html",
-    "href": "example_data.html",
-    "title": "2  Chapter 1: Example Data",
+    "objectID": "io_load_eeg.html",
+    "href": "io_load_eeg.html",
+    "title": "2  Load an EEG file",
     "section": "",
-    "text": "One of the longstand challenges with prototyping and testing functions is access to your data. In this chapter we will see how to create a simple file that can be used in your project to test and build your functions.\n\nfrom signalfloweeg.utils import load_example_data_paths\n\nuser_yaml = \"https://tinyurl.com/unzzmfex\"\n\nexample_data = load_example_data_paths(user_yaml);\n\n\n3 Image output\nThe signalfloweeg package provides a convenient function called load_example_data_paths that allows users to load a YAML file containing predetermined paths to example datasets or folders. This function makes it easy for users to access and utilize example data without having to manually specify the paths each time.\nThe load_example_data_paths function is located in the signalfloweeg/datasets/ directory, which is dedicated to dataset-related utilities and configurations. This placement aligns with the purpose and functionality of the function, keeping the codebase organized and maintainable.\nHere’s an updated version of the function:\nimport yaml\n\ndef load_example_data_paths():\n    \"\"\"\n    Load the paths of example datasets from a YAML file.\n\n    Returns:\n        dict: A dictionary containing dataset names as keys and their corresponding paths as values.\n    \"\"\"\n    # Load the dataset paths from a YAML file\n    with open(\"signalfloweeg/datasets/example_data_paths.yaml\", \"r\") as file:\n        example_datasets = yaml.safe_load(file)\n\n    return example_datasets\nIn this updated version:\n\nThe function name is changed to load_example_data_paths to clearly indicate its purpose of loading example data paths.\nThe dataset paths are loaded from a YAML file named example_data_paths.yaml located in the signalfloweeg/datasets/ directory.\nThe function returns a dictionary containing the dataset names as keys and their corresponding paths as values.\n\nTo use this function, create a YAML file named example_data_paths.yaml in the signalfloweeg/datasets/ directory and specify the paths to your example datasets or folders in the following format:\ndemo_rest_state: \"/path/to/resting_state_dataset.set\"\ndemo_auditory_chirp: \"/path/to/auditory_chirp_dataset.set\"\ndemo_auditory_assr: \"/path/to/auditory_assr_dataset.set\"\n...\nUsers can then import and use the load_example_data_paths function in their scripts or notebooks to easily access the predetermined example data paths:\nfrom signalfloweeg.datasets import load_example_data_paths\n\nexample_data_paths = load_example_data_paths()\nresting_state_path = example_data_paths[\"demo_rest_state\"]\n# Use the resting_state_path for further processing or analysis\n\n\n\nExample Data\n\n\nBy providing a centralized function to load example data paths from a YAML file, signalfloweeg simplifies the process of accessing and using example datasets, promoting code reusability and maintainability."
+    "text": "3 Example 1: Load a Magstim/EGI 128 Channel Continuous EEG File\nfrom signalfloweeg.io import load_eeg\n\n# No arguments to show recording types\nload_eeg(continuous_eeg_file, \"EGI128A\");"
   },
   {
-    "objectID": "summary.html",
-    "href": "summary.html",
-    "title": "3  Summary",
-    "section": "",
-    "text": "In summary, this book has no content whatsoever."
-  },
-  {
-    "objectID": "references.html",
-    "href": "references.html",
-    "title": "References",
-    "section": "",
-    "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97."
+    "objectID": "io_load_eeg.html#usage",
+    "href": "io_load_eeg.html#usage",
+    "title": "2  Load an EEG file",
+    "section": "2.1 Usage",
+    "text": "2.1 Usage\nImporting raw EEG data can be challenging due to varying formats and channel montages. The load_eeg() function provides a consistent interface for users while allowing customization for each recording file. The function aims to create a valid MNE raw or epochs object with the correct channel montage and event markers.\nUsing file extensions alone is insufficient, as recordings with different channel counts may share the same extension. Users should provide the correct file type and channel montage when using load_eeg().\n\n2.1.1 Assign Example Data Filenames\n\nfrom signalfloweeg.utils import load_catalog\n\n# Using utils.load_catalog() to load an example EEG file\ncatalog = load_catalog(\"https://tinyurl.com/unzzmfex\")\n\n# EGI/MAGSTIM 128 Resting State Data\ncontinuous_eeg_file = catalog['demo_rest_state']\n\n# EGI/MAGSTIM 128 Auditory Evoked Potentials\nepoched_eeg_file    = catalog['demo_auditory_chirp']\n\n\n\n2.1.2 load_eeg(): View Recording Types\nLet’s first see what recording types are available by running the function without any arguments.\n\nfrom signalfloweeg.io import load_eeg\n\n# No arguments to show recording types\nload_eeg();\n\n\n\n\nIf load_eeg is run without or with incorrect inputs an informational display will be presented"
   }
 ]

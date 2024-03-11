@@ -1,0 +1,27 @@
+EGI_128_RAW:
+  montage: "GSN-HydroCel-128"
+  description: "EGI 128-channel Raw"
+
+EGI_128_MFF:
+  montage: "GSN-HydroCel-128"
+  description: "EGI 128-channel MFF"
+
+EGI_128_SET:
+  montage: "EEGLAB"
+  description: "EGI 128-channel EEGLAB SET"
+
+MEA30:
+  montage: import_mea30
+  description: "MEA 30-channel recording"
+
+BrainVision64:
+  montage: import_brainvision64
+  description: "BrainVision 64-channel recording"
+
+Neuroscan128:
+  montage: import_neuroscan128
+  description: "Neuroscan 128-channel recording"
+
+Biosemi64:
+  montage: import_biosemi64
+  description: "Biosemi 64-channel recording"

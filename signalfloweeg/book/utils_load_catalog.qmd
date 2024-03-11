@@ -1,0 +1,75 @@
+# Retrieve a Custom Catalog of your Datasets
+**Source:** `signalfloweeg.utils.load_catalog()`
+
+`load_catalog()` retrieves a dictionary containing predefined dataset names and corresponding files or paths.
+
+Custom key-value pairs are stored in a YAML file, which can be loaded via file or URL and used in your code. This simplifies working with multiple datasets, users, or file locations.
+
+## Usage
+
+```{python}
+#| output: false
+
+from signalfloweeg.utils import load_catalog
+import yaml
+
+# Prepare a YAML file
+data = {
+    'catalog_server': 'serverA',
+    'path1': 'value1',
+    'path2': 'value2',
+    # add more paths as needed
+}
+with open('example_data_paths.yaml', 'w') as file:
+    yaml.dump(data, file)
+
+# Using a YAML File (e.g., local folder)
+example_data = load_catalog("example_data_paths.yaml")
+
+# Using a YAML URL (e.g., from Github)
+user_yaml_link = "https://tinyurl.com/unzzmfex"
+
+example_data_from_url = load_catalog(user_yaml_link)
+```
+
+## Arguments
+
+- `yaml_file` : str
+    - Path to the YAML file containing the dataset names and their corresponding paths.
+    - The YAML file can also be loaded via URL.
+
+The YAML file should have the following structure:
+
+```yaml
+catalog_name: "Example Data Catalog"
+catalog_owner: "John Doe"
+catalog_date: "2024-03-10"
+demo_rest_state: "/path/to/resting_state_dataset.set"
+demo_auditory_chirp: "/path/to/auditory_chirp_dataset.set"
+demo_auditory_assr_folder: "/path/to/auditory_assr_dataset/"
+```
+
+Note: Keys containing 'catalog_' are reserved for metadata, and the rest of the keys are used to specify the dataset names and their corresponding files or paths. The user has flexibility to store other useful key-value pairs (i.e., server, user, etc.).
+
+## Returns
+
+- `datasets` : dict
+    - A dictionary containing the dataset names as keys and their corresponding paths as values.
+
+## Example
+
+```python
+from signalfloweeg.utils import load_catalog
+
+# Using a YAML URL (e.g., from Github)
+example_data_from_url = load_catalog("https://tinyurl.com/unzzmfex")
+```
+
+![Figure 1: Example visual output of load_catalog function: Green represents available datasets and their paths. Red represents placeholders with missing values.](https://www.dropbox.com/scl/fi/8zarctmvz55r3gt6llbrg/CleanShot-2024-03-10-at-22.54.18-2x.png?rlkey=qkyscezgy35jv7xdumrvu9m7s&raw=1 "Title: load_catalog output ")
+
+## See Also
+
+
+## Comments
+
+The `signalfloweeg` package provides a convenient function called `load_catalog` that allows users to load via file or URL a YAML file containing datasets. This function makes it easy to access and use data in your code without having to manually specify the paths each time. Different YAML catalogs could be created for different users, projects, or servers.
