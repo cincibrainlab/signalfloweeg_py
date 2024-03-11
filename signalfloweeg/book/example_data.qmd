@@ -1,0 +1,68 @@
+# Chapter 1: Example Data
+
+One of the longstand challenges with prototyping and testing functions is access to your data. In this chapter we will see how to create a simple file that can be used in your project to test and build your functions.
+
+```{python}
+#| output: false
+
+from signalfloweeg.utils import load_example_data_paths
+
+user_yaml = "https://tinyurl.com/unzzmfex"
+
+example_data = load_example_data_paths(user_yaml);
+
+```
+
+# Image output
+
+
+The `signalfloweeg` package provides a convenient function called `load_example_data_paths` that allows users to load a YAML file containing predetermined paths to example datasets or folders. This function makes it easy for users to access and utilize example data without having to manually specify the paths each time.
+
+The `load_example_data_paths` function is located in the `signalfloweeg/datasets/` directory, which is dedicated to dataset-related utilities and configurations. This placement aligns with the purpose and functionality of the function, keeping the codebase organized and maintainable.
+
+Here's an updated version of the function:
+
+```python
+import yaml
+
+def load_example_data_paths():
+    """
+    Load the paths of example datasets from a YAML file.
+
+    Returns:
+        dict: A dictionary containing dataset names as keys and their corresponding paths as values.
+    """
+    # Load the dataset paths from a YAML file
+    with open("signalfloweeg/datasets/example_data_paths.yaml", "r") as file:
+        example_datasets = yaml.safe_load(file)
+
+    return example_datasets
+```
+
+In this updated version:
+
+- The function name is changed to `load_example_data_paths` to clearly indicate its purpose of loading example data paths.
+- The dataset paths are loaded from a YAML file named `example_data_paths.yaml` located in the `signalfloweeg/datasets/` directory.
+- The function returns a dictionary containing the dataset names as keys and their corresponding paths as values.
+
+To use this function, create a YAML file named `example_data_paths.yaml` in the `signalfloweeg/datasets/` directory and specify the paths to your example datasets or folders in the following format:
+
+```yaml
+demo_rest_state: "/path/to/resting_state_dataset.set"
+demo_auditory_chirp: "/path/to/auditory_chirp_dataset.set"
+demo_auditory_assr: "/path/to/auditory_assr_dataset.set"
+...
+```
+
+Users can then import and use the `load_example_data_paths` function in their scripts or notebooks to easily access the predetermined example data paths:
+
+```python
+from signalfloweeg.datasets import load_example_data_paths
+
+example_data_paths = load_example_data_paths()
+resting_state_path = example_data_paths["demo_rest_state"]
+# Use the resting_state_path for further processing or analysis
+```
+![Example Data](https://www.dropbox.com/scl/fi/8zarctmvz55r3gt6llbrg/CleanShot-2024-03-10-at-22.54.18-2x.png?rlkey=qkyscezgy35jv7xdumrvu9m7s&raw=1)
+
+By providing a centralized function to load example data paths from a YAML file, `signalfloweeg` simplifies the process of accessing and using example datasets, promoting code reusability and maintainability.

@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "book",
+    "section": "",
+    "text": "Preface\nThis is a Quarto book. also\nTo learn more about Quarto books visit https://quarto.org/docs/books."
+  },
+  {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "1  Introduction",
+    "section": "",
+    "text": "This is a book created from markdown and executable code.\nSee Knuth (1984) for additional discussion of literate programming.\n\n\n\n\nKnuth, Donald E. 1984. “Literate Programming.” Comput. J. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97."
+  },
+  {
+    "objectID": "example_data.html",
+    "href": "example_data.html",
+    "title": "2  Chapter 1: Example Data",
+    "section": "",
+    "text": "One of the longstand challenges with prototyping and testing functions is access to your data. In this chapter we will see how to create a simple file that can be used in your project to test and build your functions.\n\nfrom signalfloweeg.utils import load_example_data_paths\n\nuser_yaml = \"https://tinyurl.com/unzzmfex\"\n\nexample_data = load_example_data_paths(user_yaml);\n\n\n3 Image output\nThe signalfloweeg package provides a convenient function called load_example_data_paths that allows users to load a YAML file containing predetermined paths to example datasets or folders. This function makes it easy for users to access and utilize example data without having to manually specify the paths each time.\nThe load_example_data_paths function is located in the signalfloweeg/datasets/ directory, which is dedicated to dataset-related utilities and configurations. This placement aligns with the purpose and functionality of the function, keeping the codebase organized and maintainable.\nHere’s an updated version of the function:\nimport yaml\n\ndef load_example_data_paths():\n    \"\"\"\n    Load the paths of example datasets from a YAML file.\n\n    Returns:\n        dict: A dictionary containing dataset names as keys and their corresponding paths as values.\n    \"\"\"\n    # Load the dataset paths from a YAML file\n    with open(\"signalfloweeg/datasets/example_data_paths.yaml\", \"r\") as file:\n        example_datasets = yaml.safe_load(file)\n\n    return example_datasets\nIn this updated version:\n\nThe function name is changed to load_example_data_paths to clearly indicate its purpose of loading example data paths.\nThe dataset paths are loaded from a YAML file named example_data_paths.yaml located in the signalfloweeg/datasets/ directory.\nThe function returns a dictionary containing the dataset names as keys and their corresponding paths as values.\n\nTo use this function, create a YAML file named example_data_paths.yaml in the signalfloweeg/datasets/ directory and specify the paths to your example datasets or folders in the following format:\ndemo_rest_state: \"/path/to/resting_state_dataset.set\"\ndemo_auditory_chirp: \"/path/to/auditory_chirp_dataset.set\"\ndemo_auditory_assr: \"/path/to/auditory_assr_dataset.set\"\n...\nUsers can then import and use the load_example_data_paths function in their scripts or notebooks to easily access the predetermined example data paths:\nfrom signalfloweeg.datasets import load_example_data_paths\n\nexample_data_paths = load_example_data_paths()\nresting_state_path = example_data_paths[\"demo_rest_state\"]\n# Use the resting_state_path for further processing or analysis\n\n\n\nExample Data\n\n\nBy providing a centralized function to load example data paths from a YAML file, signalfloweeg simplifies the process of accessing and using example datasets, promoting code reusability and maintainability."
+  },
+  {
+    "objectID": "summary.html",
+    "href": "summary.html",
+    "title": "3  Summary",
+    "section": "",
+    "text": "In summary, this book has no content whatsoever."
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97."
+  }
+]

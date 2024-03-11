@@ -2,12 +2,13 @@ project:
   type: book
 
 book:
-  title: "intro"
+  title: "book"
   author: "Norah Jones"
   date: "3/11/2024"
   chapters:
     - index.qmd
     - intro.qmd
+    - example_data.qmd
     - summary.qmd
     - references.qmd
 
