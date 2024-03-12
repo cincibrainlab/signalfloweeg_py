@@ -15,12 +15,24 @@ import numpy as np
 import mne
 from mne.datasets import fetch_fsaverage
 
+from signalfloweeg.utils import load_catalog
+
+# ------------------------------------------------------------------------------
+# Loading Local EEG Catalog
+# ------------------------------------------------------------------------------
+
+# Using utils.load_catalog() to load an example EEG file
+catalog = load_catalog(
+    "https://raw.githubusercontent.com/cincibrainlab/signalfloweeg_py/master/userdata/cchmc_data.yaml"
+)
+
+
 # ------------------------------------------------------------------------------
 # Defining Resting State EEG Data File Path
 # ------------------------------------------------------------------------------
 # Define the path to the resting state EEG data file
 # This file is expected to be in EEGLAB .set format
-eeg_file = '/Users/ernie/Documents/ExampleData/APD/D0113_rest_postica.set'
+eeg_file = '/srv/RAWDATA/1_NBRT_LAB_STUDIES/D0113_rest_postica.set'
 
 # ------------------------------------------------------------------------------
 # Reading Epochs from EEGLAB .set File
