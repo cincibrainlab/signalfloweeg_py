@@ -15,7 +15,7 @@ demo_resting_32ch: "/srv/RAWDATA/1_NBRT_LAB_STUDIES/Proj_SAT/D0003_rest_postcomp
 demo_infant_visual_erp: "/srv/RAWDATA/HBCD_Pilot/VEP/sub-PIUFL0018_ses-V03_task-VEP_acq-eeg_eeg.set"
 demo_infant_mmn: "/srv/RAWDATA/HBCD_Pilot/MMN/sub-PIUFL0017_ses-V03_task-MMN_acq-eeg_eeg.set"
 demo_infant_face: "/srv/RAWDATA/HBCD_Pilot/Face/sub-PIUFL0017_ses-V03_task-FACE_acq-eeg_eeg.set"
-demo_infant_resting: "/srv/RAWDATA/HBCD_Pilot/RS/sub-PIUFL0018_ses-V03_task-FACE_acq-eeg_eeg.set"
+demo_infant_resting: "/srv/RAWDATA/HBCD_Pilot/RS/sub-PIUFL0018_ses-V03_task-RS_acq-eeg_eeg.set"
 demo_mouse_auditory_chirp_raw: "/srv/RAWDATA/Grace_Projects/MouseData/Chirp_Adult_Oct2022_original/601 chirp.edf"
 demo_mouse_resting: "/Rest_Adult_Nov2021_preprocessed/3_ChanRemoval_iterpolated/14.set"
 bids_hbcd_folder: "/srv/RAWDATA/HBCD_Pilot/ALL_BIDS_FILES_NOT_SEPARATED_BY_PARADIGM"
