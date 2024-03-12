@@ -12,9 +12,13 @@ book:
     - part: "Input/Output"
       chapters: 
         - io_load_eeg.qmd
+        - io_load_eeg2_customize.qmd
     - part: "Utilities"
       chapters: 
         - utils_load_catalog.qmd
+    - part: "Visualization"
+      chapters: 
+        - viz_interactive_plots.qmd
     - summary.qmd
     - references.qmd
 

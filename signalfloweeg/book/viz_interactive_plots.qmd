@@ -1,0 +1,25 @@
+
+
+## Notes on Visualizations:
+When plotting EEG data using MATLAB in Jupyter Notebooks or similar notebook environments like Quattro, the choice of magic command impacts the interactivity of the resulting plot:
+
+**Inline magic command (%matplotlib inline):**
+- Produces a static, non-interactive plot embedded within the notebook
+- Faster rendering compared to interactive plots
+
+**Widget magic command (%matplotlib widget):**
+- Creates an interactive plot within the notebook
+- Allows zooming, panning, and other interactive features
+- Slower performance compared to the pop-out version using the QT framework
+
+**Pop-out version (QT framework):**
+- Generates a separate interactive plot window outside the notebook
+- Offers the fastest performance among the plotting options
+
+**Remote systems and notebooks:**
+- Notebook environments like Jupyter can be used on remote systems
+- Enables EEG data analysis and visualization through remote access solutions such as Visual Studio Code Tunnels
+
+In summary, while the widget magic command provides interactivity within the notebook, it comes with a performance trade-off. The inline magic command offers faster static plots, and the pop-out version using QT delivers the best performance. Notebooks can be utilized on remote systems, facilitating EEG data analysis and visualization in various settings.
+
+see the following link for more information ()[https://mne.tools/dev/install/advanced.html].

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>SignalFlowEeg Python Documentation - 3&nbsp; Retrieve a Custom Catalog of your Datasets</title>
+<title>SignalFlowEeg Python Documentation - 4&nbsp; Retrieve a Custom Catalog of your Datasets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -64,8 +64,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./summary.html" rel="next">
-<link href="./io_load_eeg.html" rel="prev">
+<link href="./viz_interactive_plots.html" rel="next">
+<link href="./io_load_eeg2_customize.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -113,7 +113,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./utils_load_catalog.html">Utilities</a></li><li class="breadcrumb-item"><a href="./utils_load_catalog.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Retrieve a Custom Catalog of your Datasets</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./utils_load_catalog.html">Utilities</a></li><li class="breadcrumb-item"><a href="./utils_load_catalog.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Retrieve a Custom Catalog of your Datasets</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -162,7 +162,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./io_load_eeg.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Load single EEG file</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Load an EEG file</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./io_load_eeg2_customize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Load an EEG file</span></span></a>
   </div>
 </li>
       </ul>
@@ -179,7 +185,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./utils_load_catalog.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Retrieve a Custom Catalog of your Datasets</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Retrieve a Custom Catalog of your Datasets</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Visualization</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./viz_interactive_plots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Notes on Visualizations:</span></span></a>
   </div>
 </li>
       </ul>
@@ -187,7 +210,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -206,21 +229,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#usage" id="toc-usage" class="nav-link active" data-scroll-target="#usage"><span class="header-section-number">3.1</span> Usage</a></li>
-  <li><a href="#arguments" id="toc-arguments" class="nav-link" data-scroll-target="#arguments"><span class="header-section-number">3.2</span> Arguments</a></li>
-  <li><a href="#returns" id="toc-returns" class="nav-link" data-scroll-target="#returns"><span class="header-section-number">3.3</span> Returns</a></li>
-  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example"><span class="header-section-number">3.4</span> Example</a></li>
-  <li><a href="#see-also" id="toc-see-also" class="nav-link" data-scroll-target="#see-also"><span class="header-section-number">3.5</span> See Also</a></li>
-  <li><a href="#comments" id="toc-comments" class="nav-link" data-scroll-target="#comments"><span class="header-section-number">3.6</span> Comments</a></li>
+  <li><a href="#usage" id="toc-usage" class="nav-link active" data-scroll-target="#usage"><span class="header-section-number">4.1</span> Usage</a></li>
+  <li><a href="#arguments" id="toc-arguments" class="nav-link" data-scroll-target="#arguments"><span class="header-section-number">4.2</span> Arguments</a></li>
+  <li><a href="#returns" id="toc-returns" class="nav-link" data-scroll-target="#returns"><span class="header-section-number">4.3</span> Returns</a></li>
+  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example"><span class="header-section-number">4.4</span> Example</a></li>
+  <li><a href="#see-also" id="toc-see-also" class="nav-link" data-scroll-target="#see-also"><span class="header-section-number">4.5</span> See Also</a></li>
+  <li><a href="#comments" id="toc-comments" class="nav-link" data-scroll-target="#comments"><span class="header-section-number">4.6</span> Comments</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./utils_load_catalog.html">Utilities</a></li><li class="breadcrumb-item"><a href="./utils_load_catalog.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Retrieve a Custom Catalog of your Datasets</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./utils_load_catalog.html">Utilities</a></li><li class="breadcrumb-item"><a href="./utils_load_catalog.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Retrieve a Custom Catalog of your Datasets</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Retrieve a Custom Catalog of your Datasets</span></h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Retrieve a Custom Catalog of your Datasets</span></h1>
 </div>
 
 
@@ -239,8 +262,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Source:</strong> <code>signalfloweeg.utils.load_catalog()</code></p>
 <p><code>load_catalog()</code> retrieves a dictionary containing predefined dataset names and corresponding files or paths.</p>
 <p>Custom key-value pairs are stored in a YAML file, which can be loaded via file or URL and used in your code. This simplifies working with multiple datasets, users, or file locations.</p>
-<section id="usage" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="usage"><span class="header-section-number">3.1</span> Usage</h2>
+<section id="usage" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="usage"><span class="header-section-number">4.1</span> Usage</h2>
 <div id="7793a34c" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> signalfloweeg.utils <span class="im">import</span> load_catalog</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> yaml</span>
@@ -264,8 +287,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>example_data_from_url <span class="op">=</span> load_catalog(user_yaml_link)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="arguments" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="arguments"><span class="header-section-number">3.2</span> Arguments</h2>
+<section id="arguments" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="arguments"><span class="header-section-number">4.2</span> Arguments</h2>
 <ul>
 <li><code>yaml_file</code> : str
 <ul>
@@ -282,8 +305,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">demo_auditory_assr_folder</span><span class="kw">:</span><span class="at"> </span><span class="st">"/path/to/auditory_assr_dataset/"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Note: Keys containing ‘catalog_’ are reserved for metadata, and the rest of the keys are used to specify the dataset names and their corresponding files or paths. The user has flexibility to store other useful key-value pairs (i.e., server, user, etc.).</p>
 </section>
-<section id="returns" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="returns"><span class="header-section-number">3.3</span> Returns</h2>
+<section id="returns" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="returns"><span class="header-section-number">4.3</span> Returns</h2>
 <ul>
 <li><code>datasets</code> : dict
 <ul>
@@ -291,8 +314,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul></li>
 </ul>
 </section>
-<section id="example" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="example"><span class="header-section-number">3.4</span> Example</h2>
+<section id="example" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="example"><span class="header-section-number">4.4</span> Example</h2>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> signalfloweeg.utils <span class="im">import</span> load_catalog</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Using a YAML URL (e.g., from Github)</span></span>
@@ -304,11 +327,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </figure>
 </div>
 </section>
-<section id="see-also" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="see-also"><span class="header-section-number">3.5</span> See Also</h2>
+<section id="see-also" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="see-also"><span class="header-section-number">4.5</span> See Also</h2>
 </section>
-<section id="comments" class="level2" data-number="3.6">
-<h2 data-number="3.6" class="anchored" data-anchor-id="comments"><span class="header-section-number">3.6</span> Comments</h2>
+<section id="comments" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="comments"><span class="header-section-number">4.6</span> Comments</h2>
 <p>The <code>signalfloweeg</code> package provides a convenient function called <code>load_catalog</code> that allows users to load via file or URL a YAML file containing datasets. This function makes it easy to access and use data in your code without having to manually specify the paths each time. Different YAML catalogs could be created for different users, projects, or servers.</p>
 
 
@@ -634,13 +657,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./io_load_eeg.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Load single EEG file</span></span>
+      <a href="./io_load_eeg2_customize.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Load an EEG file</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./summary.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./viz_interactive_plots.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Notes on Visualizations:</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

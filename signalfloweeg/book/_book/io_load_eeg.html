@@ -64,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./utils_load_catalog.html" rel="next">
+<link href="./io_load_eeg2_customize.html" rel="next">
 <link href="./intro.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -113,7 +113,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./io_load_eeg.html">Input/Output</a></li><li class="breadcrumb-item"><a href="./io_load_eeg.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Load single EEG file</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./io_load_eeg.html">Input/Output</a></li><li class="breadcrumb-item"><a href="./io_load_eeg.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Load an EEG file</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -162,7 +162,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./io_load_eeg.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Load single EEG file</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Load an EEG file</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./io_load_eeg2_customize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Load an EEG file</span></span></a>
   </div>
 </li>
       </ul>
@@ -179,7 +185,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./utils_load_catalog.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Retrieve a Custom Catalog of your Datasets</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Retrieve a Custom Catalog of your Datasets</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Visualization</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./viz_interactive_plots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Notes on Visualizations:</span></span></a>
   </div>
 </li>
       </ul>
@@ -187,7 +210,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -211,17 +234,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#assign-example-data-filenames" id="toc-assign-example-data-filenames" class="nav-link" data-scroll-target="#assign-example-data-filenames"><span class="header-section-number">2.1.1</span> Assign Example Data Filenames</a></li>
   <li><a href="#load_eeg-view-recording-types" id="toc-load_eeg-view-recording-types" class="nav-link" data-scroll-target="#load_eeg-view-recording-types"><span class="header-section-number">2.1.2</span> load_eeg(): View Recording Types</a></li>
   </ul></li>
-  <li><a href="#example-1-load-a-magstimegi-128-channel-continuous-eeg-file" id="toc-example-1-load-a-magstimegi-128-channel-continuous-eeg-file" class="nav-link" data-scroll-target="#example-1-load-a-magstimegi-128-channel-continuous-eeg-file"><span class="header-section-number">3</span> Example 1: Load a Magstim/EGI 128 Channel Continuous EEG File</a>
+  <li><a href="#example-1-continuous-eeg-file" id="toc-example-1-continuous-eeg-file" class="nav-link" data-scroll-target="#example-1-continuous-eeg-file"><span class="header-section-number">2.2</span> Example 1: Continuous EEG File</a>
   <ul class="collapse">
-  <li><a href="#customize-import-functions" id="toc-customize-import-functions" class="nav-link" data-scroll-target="#customize-import-functions"><span class="header-section-number">3.0.1</span> Customize Import Functions</a></li>
+  <li><a href="#load-data" id="toc-load-data" class="nav-link" data-scroll-target="#load-data"><span class="header-section-number">2.2.1</span> Load Data</a></li>
+  <li><a href="#visualize-data" id="toc-visualize-data" class="nav-link" data-scroll-target="#visualize-data"><span class="header-section-number">2.2.2</span> Visualize Data</a></li>
   </ul></li>
+  <li><a href="#example-2-event-related-recordings" id="toc-example-2-event-related-recordings" class="nav-link" data-scroll-target="#example-2-event-related-recordings"><span class="header-section-number">2.3</span> Example 2: Event-Related Recordings</a>
+  <ul class="collapse">
+  <li><a href="#load-data-1" id="toc-load-data-1" class="nav-link" data-scroll-target="#load-data-1"><span class="header-section-number">2.3.1</span> Load data</a></li>
+  <li><a href="#retrieve-event-structure-and-plot-data" id="toc-retrieve-event-structure-and-plot-data" class="nav-link" data-scroll-target="#retrieve-event-structure-and-plot-data"><span class="header-section-number">2.3.2</span> Retrieve event structure and plot data</a></li>
+  </ul></li>
+  <li><a href="#example-3-eeglab-set-file" id="toc-example-3-eeglab-set-file" class="nav-link" data-scroll-target="#example-3-eeglab-set-file"><span class="header-section-number">2.4</span> Example 3: EEGLAB SET File</a>
+  <ul class="collapse">
+  <li><a href="#load-data-2" id="toc-load-data-2" class="nav-link" data-scroll-target="#load-data-2"><span class="header-section-number">2.4.1</span> Load data</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">2.5</span> Summary</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./io_load_eeg.html">Input/Output</a></li><li class="breadcrumb-item"><a href="./io_load_eeg.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Load single EEG file</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./io_load_eeg.html">Input/Output</a></li><li class="breadcrumb-item"><a href="./io_load_eeg.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Load an EEG file</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Load an EEG file</span></h1>
 </div>
@@ -248,23 +282,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Using file extensions alone is insufficient, as recordings with different channel counts may share the same extension. Users should provide the correct file type and channel montage when using <code>load_eeg()</code>.</p>
 <section id="assign-example-data-filenames" class="level3" data-number="2.1.1">
 <h3 data-number="2.1.1" class="anchored" data-anchor-id="assign-example-data-filenames"><span class="header-section-number">2.1.1</span> Assign Example Data Filenames</h3>
-<div id="7ed65bc1" class="cell" data-execution_count="1">
+<div id="cb1af8b3" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> signalfloweeg.utils <span class="im">import</span> load_catalog</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Using utils.load_catalog() to load an example EEG file</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>catalog <span class="op">=</span> load_catalog(<span class="st">"https://tinyurl.com/unzzmfex"</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># EGI/MAGSTIM 128 Resting State Data</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>continuous_eeg_file <span class="op">=</span> catalog[<span class="st">'demo_rest_state'</span>]</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># EGI/MAGSTIM 128 Auditory Evoked Potentials</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>epoched_eeg_file    <span class="op">=</span> catalog[<span class="st">'demo_auditory_chirp'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>catalog <span class="op">=</span> load_catalog(</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://raw.githubusercontent.com/cincibrainlab/signalfloweeg_py/master/userdata/cchmc_data.yaml"</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># EGI/MAGSTIM 128 Resting State Data</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>resting_raw <span class="op">=</span> catalog[<span class="st">"demo_rest_raw"</span>]</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># EGI/MAGSTIM 128 Auditory Evoked Potentials</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>erp_raw <span class="op">=</span> catalog[<span class="st">"demo_chirp_raw"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="load_eeg-view-recording-types" class="level3" data-number="2.1.2">
 <h3 data-number="2.1.2" class="anchored" data-anchor-id="load_eeg-view-recording-types"><span class="header-section-number">2.1.2</span> load_eeg(): View Recording Types</h3>
 <p>Let’s first see what recording types are available by running the function without any arguments.</p>
-<div id="7f824d23" class="cell" data-execution_count="2">
+<div id="b1594849" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> signalfloweeg.io <span class="im">import</span> load_eeg</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># No arguments to show recording types</span></span>
@@ -273,25 +309,88 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://www.dropbox.com/scl/fi/keuls51ipvvifr254h60t/CleanShot-2024-03-11-at-12.42.30-2x.png?rlkey=9icyz9yzbwouicqmmki7tjqcx&amp;raw=1" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">If load_eeg is run without or with incorrect inputs an informational display will be presented</figcaption>
+<figcaption class="figure-caption">If load_eeg without inputs an informational display will be presented</figcaption>
 </figure>
 </div>
 </section>
 </section>
-<section id="example-1-load-a-magstimegi-128-channel-continuous-eeg-file" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Example 1: Load a Magstim/EGI 128 Channel Continuous EEG File</h1>
-<div id="da6a00b3" class="cell" data-execution_count="3">
+<section id="example-1-continuous-eeg-file" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="example-1-continuous-eeg-file"><span class="header-section-number">2.2</span> Example 1: Continuous EEG File</h2>
+<section id="load-data" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="load-data"><span class="header-section-number">2.2.1</span> Load Data</h3>
+<div id="fe935a12" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> signalfloweeg.io <span class="im">import</span> load_eeg</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># No arguments to show recording types</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>load_eeg(continuous_eeg_file, <span class="st">"EGI128A"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>resting_mne <span class="op">=</span> load_eeg(resting_raw, <span class="st">"EGI_128_RAW"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> mne</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="customize-import-functions" class="level3" data-number="3.0.1">
-<h3 data-number="3.0.1" class="anchored" data-anchor-id="customize-import-functions"><span class="header-section-number">3.0.1</span> Customize Import Functions</h3>
-<p>Experienced programmers can add additional recording types to <code>config/recording_types.yaml</code> and helper functions to <code>load_eeg</code> to support new file types.</p>
-
-
 </section>
+<section id="visualize-data" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="visualize-data"><span class="header-section-number">2.2.2</span> Visualize Data</h3>
+<div id="a010f27b" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib widget </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the data with custom options</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>resting_mne.plot(title<span class="op">=</span><span class="st">"Import Resting file"</span>, lowpass<span class="op">=</span><span class="dv">100</span>, highpass<span class="op">=</span><span class="dv">1</span>, scalings<span class="op">=</span><span class="bu">dict</span>(eeg<span class="op">=</span><span class="fl">20e-6</span>), event_color<span class="op">=</span><span class="st">"red"</span>, remove_dc<span class="op">=</span><span class="va">True</span>, clipping<span class="op">=</span><span class="va">None</span>, decim<span class="op">=</span><span class="dv">3</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://www.dropbox.com/scl/fi/gi1tjs9sxm884yxukj9sc/CleanShot-2024-03-11-at-16.32.18-2x.png?rlkey=f3l94bcyo9f1nwc3zuopjo110&amp;raw=1" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Notebook view of imported raw data</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="example-2-event-related-recordings" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="example-2-event-related-recordings"><span class="header-section-number">2.3</span> Example 2: Event-Related Recordings</h2>
+<section id="load-data-1" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="load-data-1"><span class="header-section-number">2.3.1</span> Load data</h3>
+<div id="aa6eb1c6" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> signalfloweeg.io <span class="im">import</span> load_eeg</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>chirp_mne <span class="op">=</span> load_eeg(erp_raw, <span class="st">"EGI_128_RAW"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="retrieve-event-structure-and-plot-data" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="retrieve-event-structure-and-plot-data"><span class="header-section-number">2.3.2</span> Retrieve event structure and plot data</h3>
+<div id="9a64d580" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib widget </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># (use widget for interactive plots)</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Retrieve Events Structure</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>events <span class="op">=</span> mne.find_events(chirp_mne)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the data with custom options</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>chirp_mne.plot(title<span class="op">=</span><span class="st">"Import ERP file"</span>, lowpass<span class="op">=</span><span class="dv">100</span>, scalings<span class="op">=</span><span class="bu">dict</span>(eeg<span class="op">=</span><span class="fl">20e-6</span>), event_color<span class="op">=</span><span class="st">"red"</span>, remove_dc<span class="op">=</span><span class="va">True</span>, clipping<span class="op">=</span><span class="va">None</span>, decim<span class="op">=</span><span class="dv">3</span>, events<span class="op">=</span>events)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://www.dropbox.com/scl/fi/d8iim34gaf1jhklpp5so7/CleanShot-2024-03-11-at-16.21.18-2x.png?rlkey=4suz67mg4g2qew3f0v164jd4r&amp;raw=1" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Notebook view of imported raw data with events</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="example-3-eeglab-set-file" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="example-3-eeglab-set-file"><span class="header-section-number">2.4</span> Example 3: EEGLAB SET File</h2>
+<p>We often use EEGLAB SET files following a raw import to store data and events. The key advantage is the many MATLAB based raw import tools for different EEG manufacturers. In addition, the SET file can store event markers and other metadata such as channel locations. MNE-Python can import EEGLAB SET files, but it is important to use either the “Raw” (continuous) or “Epochs” (event-related) data types.</p>
+<section id="load-data-2" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="load-data-2"><span class="header-section-number">2.4.1</span> Load data</h3>
+<div id="92bf2acf" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> signalfloweeg.io <span class="im">import</span> load_eeg</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># EEGLAB SET FILE (EPOCHED)</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>eeglab_set_epoched <span class="op">=</span> catalog[<span class="st">"demo_auditory_chirp"</span>]</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>eeglab_mne_epoched <span class="op">=</span> load_eeg(eeglab_set_epoched, <span class="st">"EEGLAB_EPOCHS_SET"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="summary" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="summary"><span class="header-section-number">2.5</span> Summary</h2>
+<p>The <code>load_eeg()</code> function provides a consistent interface for users to import EEG data into MNE objects. Custom import descriptions are located in a user editable YAML file in the <code>config</code> directory. Additional documentation will describe how to add custom import functions.</p>
+
+
 </section>
 
 </main> <!-- /main -->
@@ -619,8 +718,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./utils_load_catalog.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Retrieve a Custom Catalog of your Datasets</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./io_load_eeg2_customize.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Load an EEG file</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

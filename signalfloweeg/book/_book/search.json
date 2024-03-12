@@ -65,44 +65,44 @@
   {
     "objectID": "utils_load_catalog.html#usage",
     "href": "utils_load_catalog.html#usage",
-    "title": "3  Retrieve a Custom Catalog of your Datasets",
-    "section": "3.1 Usage",
-    "text": "3.1 Usage\n\nfrom signalfloweeg.utils import load_catalog\nimport yaml\n\n# Prepare a YAML file\ndata = {\n    'catalog_server': 'serverA',\n    'path1': 'value1',\n    'path2': 'value2',\n    # add more paths as needed\n}\nwith open('example_data_paths.yaml', 'w') as file:\n    yaml.dump(data, file)\n\n# Using a YAML File (e.g., local folder)\nexample_data = load_catalog(\"example_data_paths.yaml\")\n\n# Using a YAML URL (e.g., from Github)\nuser_yaml_link = \"https://tinyurl.com/unzzmfex\"\n\nexample_data_from_url = load_catalog(user_yaml_link)"
+    "title": "4  Retrieve a Custom Catalog of your Datasets",
+    "section": "4.1 Usage",
+    "text": "4.1 Usage\n\nfrom signalfloweeg.utils import load_catalog\nimport yaml\n\n# Prepare a YAML file\ndata = {\n    'catalog_server': 'serverA',\n    'path1': 'value1',\n    'path2': 'value2',\n    # add more paths as needed\n}\nwith open('example_data_paths.yaml', 'w') as file:\n    yaml.dump(data, file)\n\n# Using a YAML File (e.g., local folder)\nexample_data = load_catalog(\"example_data_paths.yaml\")\n\n# Using a YAML URL (e.g., from Github)\nuser_yaml_link = \"https://tinyurl.com/unzzmfex\"\n\nexample_data_from_url = load_catalog(user_yaml_link)"
   },
   {
     "objectID": "utils_load_catalog.html#arguments",
     "href": "utils_load_catalog.html#arguments",
-    "title": "3  Retrieve a Custom Catalog of your Datasets",
-    "section": "3.2 Arguments",
-    "text": "3.2 Arguments\n\nyaml_file : str\n\nPath to the YAML file containing the dataset names and their corresponding paths.\nThe YAML file can also be loaded via URL.\n\n\nThe YAML file should have the following structure:\ncatalog_name: \"Example Data Catalog\"\ncatalog_owner: \"John Doe\"\ncatalog_date: \"2024-03-10\"\ndemo_rest_state: \"/path/to/resting_state_dataset.set\"\ndemo_auditory_chirp: \"/path/to/auditory_chirp_dataset.set\"\ndemo_auditory_assr_folder: \"/path/to/auditory_assr_dataset/\"\nNote: Keys containing ‘catalog_’ are reserved for metadata, and the rest of the keys are used to specify the dataset names and their corresponding files or paths. The user has flexibility to store other useful key-value pairs (i.e., server, user, etc.)."
+    "title": "4  Retrieve a Custom Catalog of your Datasets",
+    "section": "4.2 Arguments",
+    "text": "4.2 Arguments\n\nyaml_file : str\n\nPath to the YAML file containing the dataset names and their corresponding paths.\nThe YAML file can also be loaded via URL.\n\n\nThe YAML file should have the following structure:\ncatalog_name: \"Example Data Catalog\"\ncatalog_owner: \"John Doe\"\ncatalog_date: \"2024-03-10\"\ndemo_rest_state: \"/path/to/resting_state_dataset.set\"\ndemo_auditory_chirp: \"/path/to/auditory_chirp_dataset.set\"\ndemo_auditory_assr_folder: \"/path/to/auditory_assr_dataset/\"\nNote: Keys containing ‘catalog_’ are reserved for metadata, and the rest of the keys are used to specify the dataset names and their corresponding files or paths. The user has flexibility to store other useful key-value pairs (i.e., server, user, etc.)."
   },
   {
     "objectID": "utils_load_catalog.html#returns",
     "href": "utils_load_catalog.html#returns",
-    "title": "3  Retrieve a Custom Catalog of your Datasets",
-    "section": "3.3 Returns",
-    "text": "3.3 Returns\n\ndatasets : dict\n\nA dictionary containing the dataset names as keys and their corresponding paths as values."
+    "title": "4  Retrieve a Custom Catalog of your Datasets",
+    "section": "4.3 Returns",
+    "text": "4.3 Returns\n\ndatasets : dict\n\nA dictionary containing the dataset names as keys and their corresponding paths as values."
   },
   {
     "objectID": "utils_load_catalog.html#example",
     "href": "utils_load_catalog.html#example",
-    "title": "3  Retrieve a Custom Catalog of your Datasets",
-    "section": "3.4 Example",
-    "text": "3.4 Example\nfrom signalfloweeg.utils import load_catalog\n\n# Using a YAML URL (e.g., from Github)\nexample_data_from_url = load_catalog(\"https://tinyurl.com/unzzmfex\")\n\n\n\nFigure 1: Example visual output of load_catalog function: Green represents available datasets and their paths. Red represents placeholders with missing values."
+    "title": "4  Retrieve a Custom Catalog of your Datasets",
+    "section": "4.4 Example",
+    "text": "4.4 Example\nfrom signalfloweeg.utils import load_catalog\n\n# Using a YAML URL (e.g., from Github)\nexample_data_from_url = load_catalog(\"https://tinyurl.com/unzzmfex\")\n\n\n\nFigure 1: Example visual output of load_catalog function: Green represents available datasets and their paths. Red represents placeholders with missing values."
   },
   {
     "objectID": "utils_load_catalog.html#see-also",
     "href": "utils_load_catalog.html#see-also",
-    "title": "3  Retrieve a Custom Catalog of your Datasets",
-    "section": "3.5 See Also",
-    "text": "3.5 See Also"
+    "title": "4  Retrieve a Custom Catalog of your Datasets",
+    "section": "4.5 See Also",
+    "text": "4.5 See Also"
   },
   {
     "objectID": "utils_load_catalog.html#comments",
     "href": "utils_load_catalog.html#comments",
-    "title": "3  Retrieve a Custom Catalog of your Datasets",
-    "section": "3.6 Comments",
-    "text": "3.6 Comments\nThe signalfloweeg package provides a convenient function called load_catalog that allows users to load via file or URL a YAML file containing datasets. This function makes it easy to access and use data in your code without having to manually specify the paths each time. Different YAML catalogs could be created for different users, projects, or servers."
+    "title": "4  Retrieve a Custom Catalog of your Datasets",
+    "section": "4.6 Comments",
+    "text": "4.6 Comments\nThe signalfloweeg package provides a convenient function called load_catalog that allows users to load via file or URL a YAML file containing datasets. This function makes it easy to access and use data in your code without having to manually specify the paths each time. Different YAML catalogs could be created for different users, projects, or servers."
   },
   {
     "objectID": "utils_load_catalog.html",
@@ -123,13 +123,104 @@
     "href": "io_load_eeg.html",
     "title": "2  Load an EEG file",
     "section": "",
-    "text": "3 Example 1: Load a Magstim/EGI 128 Channel Continuous EEG File\nfrom signalfloweeg.io import load_eeg\n\n# No arguments to show recording types\nload_eeg(continuous_eeg_file, \"EGI128A\");"
+    "text": "3"
   },
   {
     "objectID": "io_load_eeg.html#usage",
     "href": "io_load_eeg.html#usage",
     "title": "2  Load an EEG file",
     "section": "2.1 Usage",
-    "text": "2.1 Usage\nImporting raw EEG data can be challenging due to varying formats and channel montages. The load_eeg() function provides a consistent interface for users while allowing customization for each recording file. The function aims to create a valid MNE raw or epochs object with the correct channel montage and event markers.\nUsing file extensions alone is insufficient, as recordings with different channel counts may share the same extension. Users should provide the correct file type and channel montage when using load_eeg().\n\n2.1.1 Assign Example Data Filenames\n\nfrom signalfloweeg.utils import load_catalog\n\n# Using utils.load_catalog() to load an example EEG file\ncatalog = load_catalog(\"https://tinyurl.com/unzzmfex\")\n\n# EGI/MAGSTIM 128 Resting State Data\ncontinuous_eeg_file = catalog['demo_rest_state']\n\n# EGI/MAGSTIM 128 Auditory Evoked Potentials\nepoched_eeg_file    = catalog['demo_auditory_chirp']\n\n\n\n2.1.2 load_eeg(): View Recording Types\nLet’s first see what recording types are available by running the function without any arguments.\n\nfrom signalfloweeg.io import load_eeg\n\n# No arguments to show recording types\nload_eeg();\n\n\n\n\nIf load_eeg is run without or with incorrect inputs an informational display will be presented"
+    "text": "2.1 Usage\nImporting raw EEG data can be challenging due to varying formats and channel montages. The load_eeg() function provides a consistent interface for users while allowing customization for each recording file. The function aims to create a valid MNE raw or epochs object with the correct channel montage and event markers.\nUsing file extensions alone is insufficient, as recordings with different channel counts may share the same extension. Users should provide the correct file type and channel montage when using load_eeg().\n\n2.1.1 Assign Example Data Filenames\n\nfrom signalfloweeg.utils import load_catalog\n\n# Using utils.load_catalog() to load an example EEG file\ncatalog = load_catalog(\n    \"https://raw.githubusercontent.com/cincibrainlab/signalfloweeg_py/master/userdata/cchmc_data.yaml\"\n)\n\n# EGI/MAGSTIM 128 Resting State Data\nresting_raw = catalog[\"demo_rest_raw\"]\n\n# EGI/MAGSTIM 128 Auditory Evoked Potentials\nerp_raw = catalog[\"demo_chirp_raw\"]\n\n\n\n2.1.2 load_eeg(): View Recording Types\nLet’s first see what recording types are available by running the function without any arguments.\n\nfrom signalfloweeg.io import load_eeg\n\n# No arguments to show recording types\nload_eeg();\n\n\n\n\nIf load_eeg without inputs an informational display will be presented"
+  },
+  {
+    "objectID": "io_load_eeg.html#example-1-continuous-eeg-file",
+    "href": "io_load_eeg.html#example-1-continuous-eeg-file",
+    "title": "2  Load an EEG file",
+    "section": "2.2 Example 1: Continuous EEG File",
+    "text": "2.2 Example 1: Continuous EEG File\n\n2.2.1 Load Data\n\nfrom signalfloweeg.io import load_eeg\nresting_mne = load_eeg(resting_raw, \"EGI_128_RAW\")\n\nimport mne\nimport matplotlib\n\n\n\n2.2.2 Visualize Data\n\n%matplotlib widget \n\n# Plot the data with custom options\nresting_mne.plot(title=\"Import Resting file\", lowpass=100, highpass=1, scalings=dict(eeg=20e-6), event_color=\"red\", remove_dc=True, clipping=None, decim=3);\n\n\n\n\nNotebook view of imported raw data"
+  },
+  {
+    "objectID": "io_load_eeg.html#example-2-event-related-recordings",
+    "href": "io_load_eeg.html#example-2-event-related-recordings",
+    "title": "2  Load an EEG file",
+    "section": "2.3 Example 2: Event-Related Recordings",
+    "text": "2.3 Example 2: Event-Related Recordings\n\n2.3.1 Load data\n\nfrom signalfloweeg.io import load_eeg\nchirp_mne = load_eeg(erp_raw, \"EGI_128_RAW\")\n\n\n\n2.3.2 Retrieve event structure and plot data\n\n%matplotlib widget \n\n# (use widget for interactive plots)\n\n# Retrieve Events Structure\nevents = mne.find_events(chirp_mne)\n\n# Plot the data with custom options\nchirp_mne.plot(title=\"Import ERP file\", lowpass=100, scalings=dict(eeg=20e-6), event_color=\"red\", remove_dc=True, clipping=None, decim=3, events=events);\n\n\n\n\nNotebook view of imported raw data with events"
+  },
+  {
+    "objectID": "io_load_eeg.html#notes-on-visualizations",
+    "href": "io_load_eeg.html#notes-on-visualizations",
+    "title": "2  Load an EEG file",
+    "section": "2.4 Notes on Visualizations:",
+    "text": "2.4 Notes on Visualizations:\nWhen plotting EEG data using MATLAB in Jupyter Notebooks or similar notebook environments like Quattro, the choice of magic command impacts the interactivity of the resulting plot:\nInline magic command (%matplotlib inline): - Produces a static, non-interactive plot embedded within the notebook - Faster rendering compared to interactive plots\nWidget magic command (%matplotlib widget): - Creates an interactive plot within the notebook - Allows zooming, panning, and other interactive features - Slower performance compared to the pop-out version using the QT framework\nPop-out version (QT framework): - Generates a separate interactive plot window outside the notebook - Offers the fastest performance among the plotting options\nRemote systems and notebooks: - Notebook environments like Jupyter can be used on remote systems - Enables EEG data analysis and visualization through remote access solutions such as Visual Studio Code Tunnels\nIn summary, while the widget magic command provides interactivity within the notebook, it comes with a performance trade-off. The inline magic command offers faster static plots, and the pop-out version using QT delivers the best performance. Notebooks can be utilized on remote systems, facilitating EEG data analysis and visualization in various settings.\nsee the following link for more information ()[https://mne.tools/dev/install/advanced.html].\n\n2.4.1 Customize Import Functions\nExperienced programmers can add additional recording types to config/recording_types.yaml and helper functions to load_eeg to support new file types.\n# Template for adding new recording types\nRECORDING_TYPE:  # (Recording System)_(Channel Count)_(File_Extenstion)\n    montage: \"MNE montage name\"\n    description: \"DESCRIPTION\"\n\n# Example\nEGI_128_RAW:\n    montage: \"GSN-HydroCel-128\"\n    description: \"EGI 128-channel Raw\"\nNext, add a new function to load_eeg to support the new recording type. The function should return an MNE object with the correct channel montage and event markers. Let’s walk through the process of adding a new function to load_eeg to support a new recording type.\nFirst to the YAML file, add a new recording type:\nNEURONEXUS_30_EDF:\n    montage: \"Custom\"\n    description: \"Neuronexus 30-channel Multielectrode Array\"\nNext, add a new function to load_eeg to support the new recording type:"
+  },
+  {
+    "objectID": "summary.html",
+    "href": "summary.html",
+    "title": "6  Summary",
+    "section": "",
+    "text": "In summary, this book has no content whatsoever."
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97."
+  },
+  {
+    "objectID": "io_load_eeg.html#example-3-eeglab-set-file",
+    "href": "io_load_eeg.html#example-3-eeglab-set-file",
+    "title": "2  Load an EEG file",
+    "section": "2.4 Example 3: EEGLAB SET File",
+    "text": "2.4 Example 3: EEGLAB SET File\nWe often use EEGLAB SET files following a raw import to store data and events. The key advantage is the many MATLAB based raw import tools for different EEG manufacturers. In addition, the SET file can store event markers and other metadata such as channel locations. MNE-Python can import EEGLAB SET files, but it is important to use either the “Raw” (continuous) or “Epochs” (event-related) data types.\n\n2.4.1 Load data\n\nfrom signalfloweeg.io import load_eeg\n\n# EEGLAB SET FILE (EPOCHED)\neeglab_set_epoched = catalog[\"demo_auditory_chirp\"]\neeglab_mne_epoched = load_eeg(eeglab_set_epoched, \"EEGLAB_EPOCHS_SET\")"
+  },
+  {
+    "objectID": "io_load_eeg.html#summary",
+    "href": "io_load_eeg.html#summary",
+    "title": "2  Load an EEG file",
+    "section": "2.5 Summary",
+    "text": "2.5 Summary\nThe load_eeg() function provides a consistent interface for users to import EEG data into MNE objects. Custom import descriptions are located in a user editable YAML file in the config directory. Additional documentation will describe how to add custom import functions."
+  },
+  {
+    "objectID": "io_load_eeg2_customize.html#usage",
+    "href": "io_load_eeg2_customize.html#usage",
+    "title": "3  Load an EEG file",
+    "section": "3.1 Usage",
+    "text": "3.1 Usage\nImporting raw EEG data can be challenging due to varying formats and channel montages. The load_eeg() function provides a consistent interface for users while allowing customization for each recording file. The function aims to create a valid MNE raw or epochs object with the correct channel montage and event markers.\nUsing file extensions alone is insufficient, as recordings with different channel counts may share the same extension. Users should provide the correct file type and channel montage when using load_eeg().\n\n3.1.1 Assign Example Data Filenames\n\nfrom signalfloweeg.utils import load_catalog\n\n# Using utils.load_catalog() to load an example EEG file\ncatalog = load_catalog(\n    \"https://raw.githubusercontent.com/cincibrainlab/signalfloweeg_py/master/userdata/cchmc_data.yaml\"\n)\n\n# EGI/MAGSTIM 128 Resting State Data\nresting_raw = catalog[\"demo_rest_raw\"]\n\n# EGI/MAGSTIM 128 Auditory Evoked Potentials\nerp_raw = catalog[\"demo_chirp_raw\"]\n\n\n\n3.1.2 load_eeg(): View Recording Types\nLet’s first see what recording types are available by running the function without any arguments.\n\nfrom signalfloweeg.io import load_eeg\n\n# No arguments to show recording types\nload_eeg();\n\n\n\n\nIf load_eeg without inputs an informational display will be presented"
+  },
+  {
+    "objectID": "io_load_eeg2_customize.html#example-1-continuous-eeg-file",
+    "href": "io_load_eeg2_customize.html#example-1-continuous-eeg-file",
+    "title": "3  Load an EEG file",
+    "section": "3.2 Example 1: Continuous EEG File",
+    "text": "3.2 Example 1: Continuous EEG File\n\n3.2.1 Load Data\n\nfrom signalfloweeg.io import load_eeg\nresting_mne = load_eeg(resting_raw, \"EGI_128_RAW\")\n\nimport mne\nimport matplotlib\n\n\n\n3.2.2 Visualize Data\n\n%matplotlib widget \n\n# Plot the data with custom options\nresting_mne.plot(title=\"Import Resting file\", lowpass=100, highpass=1, scalings=dict(eeg=20e-6), event_color=\"red\", remove_dc=True, clipping=None, decim=3);\n\n\n\n\nNotebook view of imported raw data"
+  },
+  {
+    "objectID": "io_load_eeg2_customize.html#example-2-event-related-recordings",
+    "href": "io_load_eeg2_customize.html#example-2-event-related-recordings",
+    "title": "3  Load an EEG file",
+    "section": "3.3 Example 2: Event-Related Recordings",
+    "text": "3.3 Example 2: Event-Related Recordings\n\n3.3.1 Load data\n\nfrom signalfloweeg.io import load_eeg\nchirp_mne = load_eeg(erp_raw, \"EGI_128_RAW\")\n\n\n\n3.3.2 Retrieve event structure and plot data\n\n%matplotlib widget \n\n# (use widget for interactive plots)\n\n# Retrieve Events Structure\nevents = mne.find_events(chirp_mne)\n\n# Plot the data with custom options\nchirp_mne.plot(title=\"Import ERP file\", lowpass=100, scalings=dict(eeg=20e-6), event_color=\"red\", remove_dc=True, clipping=None, decim=3, events=events);\n\n\n\n\nNotebook view of imported raw data with events"
+  },
+  {
+    "objectID": "io_load_eeg2_customize.html#example-3-eeglab-set-file",
+    "href": "io_load_eeg2_customize.html#example-3-eeglab-set-file",
+    "title": "3  Load an EEG file",
+    "section": "3.4 Example 3: EEGLAB SET File",
+    "text": "3.4 Example 3: EEGLAB SET File\nWe often use EEGLAB SET files following a raw import to store data and events. The key advantage is the many MATLAB based raw import tools for different EEG manufacturers. In addition, the SET file can store event markers and other metadata such as channel locations. MNE-Python can import EEGLAB SET files, but it is important to use either the “Raw” (continuous) or “Epochs” (event-related) data types.\n\n3.4.1 Load data\n\nfrom signalfloweeg.io import load_eeg\n\n# EEGLAB SET FILE (CONTINUOUS)\neeglab_set = catalog[\"demo_infant_visual_erp\"]\neeglab_mne = load_eeg(file_path=eeglab_set,  recording_type = \"EEGLAB_RAW_SET\")\n\n# EEGLAB SET FILE (EPOCHED)\neeglab_set_epoched = catalog[\"demo_auditory_chirp\"]\neeglab_mne_epoched = load_eeg(eeglab_set_epoched, \"EEGLAB_EPOCHS_SET\")"
+  },
+  {
+    "objectID": "viz_interactive_plots.html",
+    "href": "viz_interactive_plots.html",
+    "title": "5  Notes on Visualizations:",
+    "section": "",
+    "text": "When plotting EEG data using MATLAB in Jupyter Notebooks or similar notebook environments like Quattro, the choice of magic command impacts the interactivity of the resulting plot:\nInline magic command (%matplotlib inline): - Produces a static, non-interactive plot embedded within the notebook - Faster rendering compared to interactive plots\nWidget magic command (%matplotlib widget): - Creates an interactive plot within the notebook - Allows zooming, panning, and other interactive features - Slower performance compared to the pop-out version using the QT framework\nPop-out version (QT framework): - Generates a separate interactive plot window outside the notebook - Offers the fastest performance among the plotting options\nRemote systems and notebooks: - Notebook environments like Jupyter can be used on remote systems - Enables EEG data analysis and visualization through remote access solutions such as Visual Studio Code Tunnels\nIn summary, while the widget magic command provides interactivity within the notebook, it comes with a performance trade-off. The inline magic command offers faster static plots, and the pop-out version using QT delivers the best performance. Notebooks can be utilized on remote systems, facilitating EEG data analysis and visualization in various settings.\nsee the following link for more information ()[https://mne.tools/dev/install/advanced.html]."
+  },
+  {
+    "objectID": "io_load_eeg2_customize.html",
+    "href": "io_load_eeg2_customize.html",
+    "title": "3  Customize Import Functions",
+    "section": "",
+    "text": "Experienced programmers can add additional recording types to config/recording_types.yaml and helper functions to load_eeg to support new file types.\n# Template for adding new recording types\nRECORDING_TYPE:  # (Recording System)_(Channel Count)_(File_Extenstion)\n    montage: \"MNE montage name\"\n    description: \"DESCRIPTION\"\n\n# Example\nEGI_128_RAW:\n    montage: \"GSN-HydroCel-128\"\n    description: \"EGI 128-channel Raw\"\nNext, add a new function to load_eeg to support the new recording type. The function should return an MNE object with the correct channel montage and event markers. Let’s walk through the process of adding a new function to load_eeg to support a new recording type.\nFirst to the YAML file, add a new recording type:\nNEURONEXUS_30_EDF:\n    montage: \"Custom\"\n    description: \"Neuronexus 30-channel Multielectrode Array\"\nNext, add a new function to load_eeg to support the new recording type:\n\nFirst add a new condition to line 49-50 with an elif statement for the new recording type. Name the new function based on the recording syste, e.g., import_neuronexus. The result of this function should output to the variable EEG and be a valid MNE raw or epoched object.\n\n    # Add additional conditions for recording types here\n    # Call the appropriate import function\n    if recording_type == \"EGI_128_RAW\":\n        EEG = import_egi(file_path, recording_type)\n    elif recording_type == \"import_mea30\":\n        EEG = import_mea30(file_path)\n    # New condition for the Neuronexus 30-channel Multielectrode Array\n    elif recording_type == \"NEURONEXUS_30_EDF\":\n        EEG = import_neuronexus(file_path, recording_type)\n\nProceed to creating the function to import the data. The function should return an MNE object with the correct channel montage and event markers. The input arguments should include the file path and recording type. This allows you to make a single function for a recording system that can also be forked for different channel types or file extensions.\n\nFor example, we will be creating a function for the Neuronexus 30-channel Multielectrode Array, however, we will use a single function to support different file extensions and channel counts.\n# Adding custom import functions\ndef import_neuronexus(file_path, recording_type):\n    # Add code to import the Neuronexus 30-channel Multielectrode Array\n    # Return an MNE object with the correct channel montage and event markers\n   if recording_type == \"NEURONEXUS_30_EDF\":\n        # Add code to import the Neuronexus 30-channel Multielectrode Array\n        # Return an MNE object with the correct channel montage and event markers\n    \n    # Alternative file extension (placeholder for development)\n    elif recording_type == \"NEURONEXUS_30_XDF\":\n        # Add code to import the Neuronexus 30-channel Multielectrode Array\n        # Return an MNE object with the correct channel montage and event markers\n   \n    return EEG"
   }
 ]

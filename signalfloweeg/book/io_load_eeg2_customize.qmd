@@ -1,0 +1,62 @@
+# Customize Import Functions
+
+Experienced programmers can add additional recording types to `config/recording_types.yaml` and helper functions to `load_eeg` to support new file types.
+
+```yaml
+# Template for adding new recording types
+RECORDING_TYPE:  # (Recording System)_(Channel Count)_(File_Extenstion)
+    montage: "MNE montage name"
+    description: "DESCRIPTION"
+
+# Example
+EGI_128_RAW:
+    montage: "GSN-HydroCel-128"
+    description: "EGI 128-channel Raw"
+```
+
+Next, add a new function to `load_eeg` to support the new recording type. The function should return an MNE object with the correct channel montage and event markers. Let's walk through the process of adding a new function to `load_eeg` to support a new recording type.
+
+First to the YAML file, add a new recording type:
+
+```yaml
+NEURONEXUS_30_EDF:
+    montage: "Custom"
+    description: "Neuronexus 30-channel Multielectrode Array"
+```
+
+Next, add a new function to `load_eeg` to support the new recording type:
+
+1. First add a new condition to line 49-50 with an `elif` statement for the new recording type. Name the new function based on the recording syste, e.g., `import_neuronexus`. The result of this function should output to the variable EEG and be a valid MNE raw or epoched object.
+
+```python
+    # Add additional conditions for recording types here
+    # Call the appropriate import function
+    if recording_type == "EGI_128_RAW":
+        EEG = import_egi(file_path, recording_type)
+    elif recording_type == "import_mea30":
+        EEG = import_mea30(file_path)
+    # New condition for the Neuronexus 30-channel Multielectrode Array
+    elif recording_type == "NEURONEXUS_30_EDF":
+        EEG = import_neuronexus(file_path, recording_type)
+```
+
+2. Proceed to creating the function to import the data. The function should return an MNE object with the correct channel montage and event markers. The input arguments should include the file path and recording type. This allows you to make a single function for a recording system that can also be forked for different channel types or file extensions.
+
+For example, we will be creating a function for the Neuronexus 30-channel Multielectrode Array, however, we will use a single function to support different file extensions and channel counts. 
+
+```python
+# Adding custom import functions
+def import_neuronexus(file_path, recording_type):
+    # Add code to import the Neuronexus 30-channel Multielectrode Array
+    # Return an MNE object with the correct channel montage and event markers
+   if recording_type == "NEURONEXUS_30_EDF":
+        # Add code to import the Neuronexus 30-channel Multielectrode Array
+        # Return an MNE object with the correct channel montage and event markers
+    
+    # Alternative file extension (placeholder for development)
+    elif recording_type == "NEURONEXUS_30_XDF":
+        # Add code to import the Neuronexus 30-channel Multielectrode Array
+        # Return an MNE object with the correct channel montage and event markers
+   
+    return EEG
+```

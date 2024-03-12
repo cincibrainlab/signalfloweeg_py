@@ -1,0 +1,134 @@
+# 3d Brain Visualization
+
+```{python}
+from nilearn import datasets, plotting
+aal = datasets.fetch_atlas_aal(version='SPM12')
+aal.maps
+
+plotting.plot_roi(aal.maps, title="AAL")
+from nltools import Brain_Data
+
+desikan_killiany = Brain_Data('https://github.com/neurodata/neuroparc/raw/master/atlases/label/Human/Desikan_space-MNI152NLin6_res-1x1x1.nii.gz').to_nifti()
+
+plotting.plot_roi(desikan_killiany, title='Desikan-Killiany',cmap='Paired', colorbar=True)
+
+````
+
+
+```{python}
+# Import packages
+import netplotbrain
+import pandas as pd
+# Define the nodes
+nodes_df = pd.DataFrame({'x': [40, 10, 30, -15, -25], 
+                         'y': [50, 40, -10, -20, 20], 
+                         'z': [20, 30, -10, -15, 30]})
+# Call netplotbrain to plot
+netplotbrain.plot(nodes=nodes_df, arrowaxis=None)
+
+# Define the nodes (5 example nodes)
+nodes_df = pd.DataFrame(data={'x': [40, 10, 30, -15, -25], 
+                              'y': [50, 40, -10, -20, 20], 
+                              'z': [20, 30, -10, -15, 30], 
+                              'communities': [1, 1, 1, 2, 2], 
+                              'degree_centrality': [1, 1, 0.2, 0.8, 0.4]})
+# Call netplotbrain to plot
+netplotbrain.plot(
+    nodes=nodes_df,
+    node_size='degree_centrality',
+    node_color='communities',
+    arrowaxis=None,
+    node_scale=100)
+
+    # Define the atlas by key value words of TemplateFlow name
+nodes={'template': 'MNI152NLin2009cAsym',
+         'atlas': 'Schaefer2018',
+         'desc': '400Parcels7Networks',
+         'resolution': 1}
+## Template (nifti or string)
+netplotbrain.plot(
+    nodes=nodes,
+    arrowaxis=None)
+
+
+# Define the atlas by key value words of TemplateFlow name
+nodes={'template': 'MNI152NLin2009cAsym',
+         'atlas': 'Schaefer2018',
+         'desc': '400Parcels7Networks',
+         'resolution': 1}
+# Plot
+netplotbrain.plot(
+    nodes=nodes,
+    arrowaxis=None,
+    node_type='parcel')     
+
+```
+
+```{python}
+
+# Import packages
+import templateflow.api as tf
+import netplotbrain
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Download atlas information from templateflow
+atlasinfo = tf.get(template='MNI152NLin2009cAsym',
+                   atlas='DKT31',
+                   desc='100Parcels7Networks',
+                   extension='.tsv')
+atlas_df = pd.read_csv(str(atlasinfo), sep='\t')
+atlas_df.head()
+
+```
+
+```{python}
+
+from enigmatoolbox.datasets import load_summary_stats
+
+# Load summary statistics for ENIGMA-OCD
+sum_stats = load_summary_stats('ocd')
+
+# Get case-control cortical thickness and surface area tables
+CT = sum_stats['CortThick_case_vs_controls_adult']
+SA = sum_stats['CortSurf_case_vs_controls_adult']
+
+# Extract Cohen's d values
+CT_d = CT['d_icv']
+SA_d = SA['d_icv']
+
+from enigmatoolbox.utils.parcellation import parcel_to_surface
+from enigmatoolbox.plotting import plot_cortical
+
+# Map parcellated data to the surface
+CT_d_fsa5 = parcel_to_surface(CT_d, 'aparc_fsa5')
+
+# Project the results on the surface brain
+plot_cortical(array_name=CT_d_fsa5, surface_name="fsa5", size=(800, 400),
+              cmap='RdBu_r', color_bar=True, color_range=(-0.5, 0.5))
+
+```
+
+```{python}
+from enigmatoolbox.datasets import load_example_data
+
+# Load all example data from an individual site
+cov, metr1_SubVol, metr2_CortThick, metr3_CortSurf = load_example_data()
+
+from enigmatoolbox.utils.useful import zscore_matrix
+
+# Z-score patients' data relative to controls (lower z-score = more atrophy)
+group = cov['Dx'].to_list()
+controlCode = 0
+SV_z = zscore_matrix(metr1_SubVol_r.iloc[:, 1:-1], group, controlCode)
+CT_z = zscore_matrix(metr2_CortThick.iloc[:, 1:-5], group, controlCode)
+SA_z = zscore_matrix(metr3_CortSurf.iloc[:, 1:-5], group, controlCode)
+
+# Mean z-score values across individuals with from a specific group (e.g., left TLE, that is SDx == 3)
+SV_z_mean = SV_z.iloc[cov[cov['SDx'] == 3].index, :].mean(axis=0)
+CT_z_mean = CT_z.iloc[cov[cov['SDx'] == 3].index, :].mean(axis=0)
+SA_z_mean = SA_z.iloc[cov[cov['SDx'] == 3].index, :].mean(axis=0)
+
+
+```

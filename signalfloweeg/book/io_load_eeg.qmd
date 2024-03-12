@@ -15,20 +15,22 @@ Using file extensions alone is insufficient, as recordings with different channe
 
 ```{python}
 #| output: false
+#| eval: false
 
 from signalfloweeg.utils import load_catalog
 
 # Using utils.load_catalog() to load an example EEG file
-catalog = load_catalog("https://tinyurl.com/unzzmfex")
+catalog = load_catalog(
+    "https://raw.githubusercontent.com/cincibrainlab/signalfloweeg_py/master/userdata/cchmc_data.yaml"
+)
 
 # EGI/MAGSTIM 128 Resting State Data
-continuous_eeg_file = catalog['demo_rest_state']
+resting_raw = catalog["demo_rest_raw"]
 
 # EGI/MAGSTIM 128 Auditory Evoked Potentials
-epoched_eeg_file    = catalog['demo_auditory_chirp']
+erp_raw = catalog["demo_chirp_raw"]
 
 ```
-
 
 ### load_eeg(): View Recording Types
 
@@ -36,7 +38,8 @@ Let's first see what recording types are available by running the function witho
 
 ```{python}
 #| output: false
-#| 
+#| eval: false
+
 from signalfloweeg.io import load_eeg
 
 # No arguments to show recording types
@@ -44,21 +47,86 @@ load_eeg();
 
 ```
 
-![If load_eeg is run without or with incorrect inputs an informational display will be presented](https://www.dropbox.com/scl/fi/keuls51ipvvifr254h60t/CleanShot-2024-03-11-at-12.42.30-2x.png?rlkey=9icyz9yzbwouicqmmki7tjqcx&raw=1)
+![If load_eeg without inputs an informational display will be presented](https://www.dropbox.com/scl/fi/keuls51ipvvifr254h60t/CleanShot-2024-03-11-at-12.42.30-2x.png?rlkey=9icyz9yzbwouicqmmki7tjqcx&raw=1)
 
-# Example 1: Load a Magstim/EGI 128 Channel Continuous EEG File
-
+## Example 1: Continuous EEG File
+### Load Data
 ```{python}
 #| output: false
-#| 
-from signalfloweeg.io import load_eeg
+#| eval: false
 
-# No arguments to show recording types
-load_eeg(continuous_eeg_file, "EGI128A");
+from signalfloweeg.io import load_eeg
+resting_mne = load_eeg(resting_raw, "EGI_128_RAW")
+
+import mne
+import matplotlib
 
 ```
 
+### Visualize Data
 
-### Customize Import Functions
+```{python}
+#| output: false
+#| eval: false
+%matplotlib widget 
 
-Experienced programmers can add additional recording types to `config/recording_types.yaml` and helper functions to `load_eeg` to support new file types.
+# Plot the data with custom options
+resting_mne.plot(title="Import Resting file", lowpass=100, highpass=1, scalings=dict(eeg=20e-6), event_color="red", remove_dc=True, clipping=None, decim=3);
+
+```
+
+![Notebook view of imported raw data](https://www.dropbox.com/scl/fi/gi1tjs9sxm884yxukj9sc/CleanShot-2024-03-11-at-16.32.18-2x.png?rlkey=f3l94bcyo9f1nwc3zuopjo110&raw=1)
+
+
+## Example 2: Event-Related Recordings
+
+### Load data
+
+```{python}
+#| output: false
+#| eval: false
+
+from signalfloweeg.io import load_eeg
+chirp_mne = load_eeg(erp_raw, "EGI_128_RAW")
+
+```
+
+### Retrieve event structure and plot data
+
+```{python}
+#| eval: false
+#| output: false
+%matplotlib widget 
+
+# (use widget for interactive plots)
+
+# Retrieve Events Structure
+events = mne.find_events(chirp_mne)
+
+# Plot the data with custom options
+chirp_mne.plot(title="Import ERP file", lowpass=100, scalings=dict(eeg=20e-6), event_color="red", remove_dc=True, clipping=None, decim=3, events=events);
+
+```
+
+![Notebook view of imported raw data with events](https://www.dropbox.com/scl/fi/d8iim34gaf1jhklpp5so7/CleanShot-2024-03-11-at-16.21.18-2x.png?rlkey=4suz67mg4g2qew3f0v164jd4r&raw=1)
+
+## Example 3: EEGLAB SET File
+
+We often use EEGLAB SET files following a raw import to store data and events. The key advantage is the many MATLAB based raw import tools for different EEG manufacturers. In addition, the SET file can store event markers and other metadata such as channel locations. MNE-Python can import EEGLAB SET files, but it is important to use either the "Raw" (continuous) or "Epochs" (event-related) data types.
+
+### Load data
+
+```{python}
+#| output: false
+#| eval: false
+from signalfloweeg.io import load_eeg
+
+# EEGLAB SET FILE (EPOCHED)
+eeglab_set_epoched = catalog["demo_auditory_chirp"]
+eeglab_mne_epoched = load_eeg(eeglab_set_epoched, "EEGLAB_EPOCHS_SET")
+
+```
+
+## Summary
+
+The `load_eeg()` function provides a consistent interface for users to import EEG data into MNE objects. Custom import descriptions are located in a user editable YAML file in the `config` directory. Additional documentation will describe how to add custom import functions.
