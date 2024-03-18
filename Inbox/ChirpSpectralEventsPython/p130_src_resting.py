@@ -15,12 +15,34 @@ import numpy as np
 import mne
 from mne.datasets import fetch_fsaverage
 
+from signalfloweeg.utils import load_catalog, get_filelist
+
+# ------------------------------------------------------------------------------
+# Loading Local EEG Catalog
+# ------------------------------------------------------------------------------
+#import os
+#import warnings
+#os.environ['REQUESTS_CA_BUNDLE'] = "/usr/local/share/ca-certificates/ca1.crt"
+
+#from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
+# Suppress the InsecureRequestWarning
+#warnings.simplefilter('ignore', InsecureRequestWarning)
+
+
+# Using utils.load_catalog() to load an example EEG file
+catalog = load_catalog(
+    "https://raw.githubusercontent.com/cincibrainlab/signalfloweeg_py/master/userdata/cchmc_projects.yaml"
+)
+filelist = get_filelist(catalog['proj_u54_p1'], 'set', subfolder=True)
+example_file = filelist[0]
+
 # ------------------------------------------------------------------------------
 # Defining Resting State EEG Data File Path
 # ------------------------------------------------------------------------------
 # Define the path to the resting state EEG data file
 # This file is expected to be in EEGLAB .set format
-eeg_file = '/Users/ernie/Documents/ExampleData/APD/D0113_rest_postica.set'
+eeg_file = example_file
 
 # ------------------------------------------------------------------------------
 # Reading Epochs from EEGLAB .set File
@@ -98,7 +120,8 @@ trans = "fsaverage"
 # Constructing Source Space File Path
 # ------------------------------------------------------------------------------
 # Constructing the source space file path. The source space defines 
-# the locations of the dipoles in the brain volume.
+# the locations of the dipoles welcometojakaro
+# the brain volume.
 # Here, 'fsaverage-ico-5-src.fif' is used, which is a standard source 
 # space file for 'fsaverage'.
 src = mne.read_source_spaces(op.join(fs_dir, "bem", "fsaverage-ico-5-src.fif"))
