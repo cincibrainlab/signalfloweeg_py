@@ -28,7 +28,13 @@ RUN mamba install -c conda-forge \
     ipywidgets \
     ipyvolume \
     pyopengl \
-    nodejs && \
+    nodejs \
+    nibabel \
+    h5py \
+    pyedflib \
+    plotly \
+    altair \
+    bokeh && \
     mamba clean -afy
 
 # Install Jupyter Notebook plugin widgets
@@ -40,17 +46,26 @@ RUN mamba install -c conda-forge \
     ipysheet \
     ipytree \
     bqplot \
-    ipyleaflet && \
+    ipyleaflet \
+    jupyter_nbextensions_configurator && \
     mamba clean -afy
 
-# Enable Jupyter Notebook plugin widgets
+# Enable Jupyter Notebook plugin widgets and extensions
 RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
     jupyter labextension install @jupyter-widgets/jupyterlab-manager && \
     jupyter labextension install jupyter-matplotlib && \
     jupyter labextension install ipysheet && \
     jupyter labextension install ipytree && \
     jupyter labextension install bqplot && \
-    jupyter labextension install jupyter-leaflet
+    jupyter labextension install jupyter-leaflet && \
+    jupyter nbextensions_configurator enable --user
+
+# Set environment variables
+ENV JUPYTER_ENABLE_LAB=yes
+
+# Copy sample datasets and notebooks
+COPY sample_data /home/jovyan/sample_data
+COPY notebooks /home/jovyan/notebooks
 
 # Set up Jupyter Notebook configuration
 COPY jupyter_notebook_config.py /etc/jupyter/
