@@ -1,4 +1,4 @@
-# Load an EEG file
+# Load an Custom EEG files
 **Source:** `signalfloweeg.io.load_eeg()`
 
 `load_eeg()` loads an EEG file into an MNE object. 
@@ -17,18 +17,64 @@ Using file extensions alone is insufficient, as recordings with different channe
 #| output: false
 #| eval: false
 
-from signalfloweeg.utils import load_catalog
+from signalfloweeg.utils import Catalog
 
-# Using utils.load_catalog() to load an example EEG file
-catalog = load_catalog(
-    "https://raw.githubusercontent.com/cincibrainlab/signalfloweeg_py/master/userdata/cchmc_data.yaml"
-)
+# Load from userdata/ from github
+cchmc_demo_data = Catalog("https://tinyurl.com/yfudj62c")
+
+cchmc_proj_data = Catalog("https://tinyurl.com/4zte723j")
+
+cchmc_proj_data.get_location('proj_ketamine')
+
+cchmc_proj_data.get_dataset_type('proj_ketamine')
+
+# Check if there is an associated FDT file
+fdt_file_path, fdt_file_present = cchmc_demo_data.get_associated_fdt_file("demo_rest_state")
+#if fdt_file_present:
+#    print(f"Associated FDT file: {fdt_file_path}")
+#else:
+#    print("No associated FDT file found.")
+
+# Retrieve the files for a specific dataset, optionally filtering by extension
+dataset_files = cchmc_demo_data.get_filelist("demo_rest_state", extension=".set")
+#for file_info in dataset_files:
+#    print(f"Folder path: {file_info['folder_path']}")
+#    print(f"File name: {file_info['file_name']}")
+#    print(f"Extension: {file_info['extension']}")
+#    print()
+
+
+# Retrieve the files for a specific dataset, optionally filtering by extension
+dataset_files = cchmc_proj_data.get_filelist("proj_fxschirpsource")
+#for file_info in dataset_files:
+#    print(f"Folder path: {file_info['folder_path']}")
+#    print(f"File name: {file_info['file_name']}")
+#    print(f"Extension: {file_info['extension']}")
+#    print()
+
+
+# Retrieve the files for a specific dataset, optionally filtering by extension
+dataset_files = cchmc_proj_data.get_filelist("proj_fxschirpsource")
+#for file_info in dataset_files:
+#    print(f"Folder path: {file_info['folder_path']}")
+#    print(f"File name: {file_info['file_name']}")
+#    print(f"Extension: {file_info['extension']}")
+#    print()
+
+cchmc_proj_data.summarize_filelist()
+
+cchmc_proj_data.create_yaml_template()
+
+
+```
+
+```
 
 # EGI/MAGSTIM 128 Resting State Data
-resting_raw = catalog["demo_rest_raw"]
+resting_raw = catalog["128_Rest_EyesOpen_D1004"]
 
 # EGI/MAGSTIM 128 Auditory Evoked Potentials
-erp_raw = catalog["demo_chirp_raw"]
+erp_raw = catalog["128_Chirp_D0657"]
 
 ```
 
@@ -96,7 +142,7 @@ chirp_mne = load_eeg(erp_raw, "EGI_128_RAW")
 ```{python}
 #| eval: false
 #| output: false
-%matplotlib widget 
+%matplotlib notebook 
 
 # (use widget for interactive plots)
 

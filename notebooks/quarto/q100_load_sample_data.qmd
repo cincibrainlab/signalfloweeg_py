@@ -1,0 +1,141 @@
+---
+title: "MNE Load Data"
+format: html
+---
+
+```{python}
+
+import mne
+import os.path as op
+
+sample_data_folder = mne.datasets.sample.data_path()
+raw_file = op.join(sample_data_folder, 'MEG', 'sample', 'sample_audvis_raw.fif')
+raw = mne.io.read_raw_fif(raw_file, preload=True)
+```
+
+```{python}
+
+# MNE Example Datasets Cheatsheet
+
+# 1. Sample Dataset
+sample_data_folder = mne.datasets.sample.data_path()
+raw_file = op.join(sample_data_folder, 'MEG', 'sample', 'sample_audvis_raw.fif')
+raw = mne.io.read_raw_fif(raw_file, preload=True)
+# This dataset contains MEG data from an auditory/visual experiment.
+
+# 2. Somatosensory Dataset
+somato_data_folder = mne.datasets.somato.data_path()
+raw_file = op.join(somato_data_folder, 'MEG', 'somato', 'sub-01_ses-meg_task-motor_run-01_meg.fif')
+raw = mne.io.read_raw_fif(raw_file, preload=True)
+# This dataset contains MEG data from a somatosensory experiment.
+
+# 3. Visual Evoked Potential (VEP) Dataset
+vep_data_folder = mne.datasets.visual_evoked_M.data_path()
+raw_file = op.join(vep_data_folder, 'MEG', 'vep', 'vep_raw.fif')
+raw = mne.io.read_raw_fif(raw_file, preload=True)
+# This dataset contains MEG data from a visual evoked potential experiment.
+
+# 4. Brainstorm Tutorial Dataset
+bst_data_folder = mne.datasets.brainstorm.data_path()
+raw_file = op.join(bst_data_folder, 'MEG', 'sample', 'sample_audvis_raw.fif')
+raw = mne.io.read_raw_fif(raw_file, preload=True)
+# This dataset is similar to the Sample Dataset, but is used for the Brainstorm tutorial.
+
+# 5. EEGBCI Dataset
+eegbci_data_folder = mne.datasets.eegbci.data_path()
+raw_file = op.join(eegbci_data_folder, 'MIData', 'sub-01', 'run-01_raw.fif')
+raw = mne.io.read_raw_fif(raw_file, preload=True)
+# This dataset contains EEG data from a motor imagery experiment.
+
+# 6. MEGSIM Dataset
+megsim_data_folder = mne.datasets.megsim.data_path()
+raw_file = op.join(megsim_data_folder, 'MEG', 'simulated', 'sample_audvis_raw.fif')
+raw = mne.io.read_raw_fif(raw_file, preload=True)
+# This dataset contains simulated MEG data for an auditory/visual experiment.
+
+```
+
+```{python}
+
+import ssl
+import urllib3
+
+# Monkey patch the create_urllib3_context function
+def custom_create_urllib3_context(ssl_version=None, cert_reqs=None, options=None, ciphers=None):
+    context = ssl.create_default_context(ssl_version=ssl_version, cert_reqs=cert_reqs, options=options, ciphers=ciphers)
+    context.check_hostname = False
+    context.verify_mode = ssl.CERT_NONE
+    return context
+
+urllib3.util.ssl_.create_urllib3_context = custom_create_urllib3_context
+
+# Make the HTTPS request
+http = urllib3.PoolManager()
+response = http.request('GET', 'https://osf.io')
+
+# 2. Somatosensory Dataset
+somato_data_folder = mne.datasets.somato.data_path()
+raw_file = op.join(somato_data_folder, 'MEG', 'somato', 'sub-01_ses-meg_task-motor_run-01_meg.fif')
+raw = mne.io.read_raw_fif(raw_file, preload=True)
+# This dataset contains MEG data from a somatosensory experiment.
+
+```
+
+```{python}
+import os
+import tempfile
+import yaml
+from urllib.request import urlretrieve
+from zipfile import ZipFile
+
+def download_and_create_yaml(data_url, output_dir=None):
+    """
+    Download a set of files from the provided URL, extract them, and create a YAML file with the file paths.
+
+    Parameters:
+    data_url (str): The URL to download the set of files.
+    output_dir (str, optional): The directory to save the downloaded and extracted files, and the YAML file.
+                               If not provided, a temporary directory will be used.
+
+    Returns:
+    str: The path to the created YAML file.
+    """
+    if output_dir is None:
+        output_dir = tempfile.mkdtemp()
+    else:
+        os.makedirs(output_dir, exist_ok=True)
+
+    zip_file_path = os.path.join(output_dir, "data.zip")
+    try:
+        print(f"Downloading files from {data_url}...")
+        urlretrieve(data_url, zip_file_path)
+        print(f"ZIP file saved to: {zip_file_path}")
+
+        with ZipFile(zip_file_path, 'r') as zip_file:
+            zip_file.extractall(output_dir)
+            print(f"Files extracted to: {output_dir}")
+
+        # Find the set and raw files in the extracted directory
+        data_paths = {}
+        for root, _, files in os.walk(output_dir):
+            for file in files:
+                if file.endswith(".set") or file.endswith(".raw"):
+                    file_path = os.path.join(root, file)
+                    name = os.path.splitext(file)[0]
+                    data_paths[name] = file_path
+
+        yaml_file_path = os.path.join(output_dir, "data_paths.yaml")
+        with open(yaml_file_path, "w") as yaml_file:
+            yaml.dump(data_paths, yaml_file, default_flow_style=False)
+
+        print(f"YAML file created: {yaml_file_path}")
+        return yaml_file_path
+    except Exception as e:
+        print(f"Error downloading or extracting files: {e}")
+        return None
+
+data_url = "https://figshare.com/ndownloader/articles/25414042/versions/1"
+yaml_file_path = download_and_create_yaml(data_url)
+
+
+```
