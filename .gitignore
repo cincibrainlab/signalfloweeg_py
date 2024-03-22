@@ -20,7 +20,15 @@ env/
 # Jupyter Notebook
 .ipynb_checkpoints
 
+signalfloweeg/book/_book/
+
 # macOS
 .DS_Store
 
 
+ca1.crt
+ca2.crt
+ca3.crt
+ca4.crt
+ca5.crt
+ca6.crt
