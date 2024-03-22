@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Module: artifact_rejection
+Module: denoising
 Description: [Insert module description here]
 """
 
-from . import *
+from .asr import *
 
-__all__ = []
+__all__ = ['apply_asr']

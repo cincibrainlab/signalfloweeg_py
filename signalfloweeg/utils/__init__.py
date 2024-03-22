@@ -5,6 +5,6 @@ Description: Module for utility functions
 """
 
 # from . import *
-from .example_data import load_catalog
+from .file_helpers import *
 
-__all__ = ["load_catalog"]
+__all__ = ['Catalog']

@@ -6,6 +6,7 @@ import os
 import mne
 import yaml
 import os
+import numpy as np
 
 
 def load_eeg(file_path=None, recording_type=None):
@@ -72,9 +73,6 @@ def load_eeg(file_path=None, recording_type=None):
         return None
 
     return EEG
-
-
-# ... (import_egi128, import_mea30, and other import functions remain the same)
 
 
 def display_info(import_specs):
@@ -168,6 +166,46 @@ def import_neuronexus(file_path, recording_type):
         pass
    
     return EEG
+
+def get_num_epochs(file_path, recording_type):
+    EEG = load_eeg(file_path, recording_type)
+    
+    if EEG is not None:
+        num_epochs = len(EEG)
+        duration = EEG.times[-1] - EEG.times[0]
+        
+        result = {
+            'file_path': file_path,
+            'num_epochs': num_epochs,
+            'duration': duration
+        }
+        return result
+    else:
+        return None
+
+def get_amplitude_statistics(file_path, recording_type):
+    EEG = load_eeg(file_path, recording_type)
+    
+    if EEG is not None:
+        data = EEG.get_data()  # This will be a 3D array of shape (epochs, channels, time points)
+        
+        # Compute statistics across all epochs and channels
+        mean_amplitude = np.mean(data)
+        max_amplitude = np.max(data)
+        min_amplitude = np.min(data)
+        amplitude_range = max_amplitude - min_amplitude
+    
+        result = {
+            'file_path': file_path,
+            'mean_amplitude': [mean_amplitude],
+            'max_amplitude': [max_amplitude],
+            'min_amplitude': [min_amplitude],
+            'amplitude_range': [amplitude_range]
+        }
+        return result
+    else:
+        return None
+
 
 if __name__ == "__main__":
 
