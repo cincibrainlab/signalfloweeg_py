@@ -17,10 +17,10 @@ env/
 .vscode/
 .idea/
 
+.local/
+
 # Jupyter Notebook
 .ipynb_checkpoints
-
-signalfloweeg/book/_book/
 
 # macOS
 .DS_Store
