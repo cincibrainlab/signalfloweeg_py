@@ -3,7 +3,7 @@
 # original image: quay.io/jupyter/datascience-notebook:latest \
 
 docker run \
-  -v /Users/ernie/Documents:/home/jovyan/srv \
+  -v /srv:/home/jovyan/srv \
   -e DISPLAY="host.docker.internal:0" \
   -e GRANT_SUDO=yes \
   -p 13450:8888 \

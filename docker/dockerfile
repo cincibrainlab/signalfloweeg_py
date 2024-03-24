@@ -1,3 +1,4 @@
+# docker build --platform linux/amd64 -t ghcr.io/cincibrainlab/signalfloweeg-jdatascience:latest .
 ARG REGISTRY=quay.io
 ARG OWNER=jupyter
 ARG BASE_CONTAINER=$REGISTRY/$OWNER/datascience-notebook
