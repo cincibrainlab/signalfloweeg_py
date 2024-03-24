@@ -6,7 +6,7 @@ docker run \
   -v /Users/ernie/Documents:/home/jovyan/srv \
   -e DISPLAY="host.docker.internal:0" \
   -e GRANT_SUDO=yes \
-  -p 8888:8888 \
+  -p 13500:8888 \
   --user root \
   -it \
   --rm \
