@@ -1,0 +1,232 @@
+```{python}
+
+import os.path as op
+import numpy as np
+import mne
+from mne.datasets import fetch_fsaverage
+
+from signalfloweeg.utils import load_catalog, get_filelist
+
+
+# Using utils.load_catalog() to load an example EEG file
+catalog = load_catalog(
+    "https://raw.githubusercontent.com/cincibrainlab/signalfloweeg_py/master/userdata/cchmc_projects.yaml"
+)
+filelist = get_filelist(catalog['proj_u54_p1'], 'set', subfolder=True)
+example_file = filelist[0]
+
+
+# ------------------------------------------------------------------------------
+# Defining Resting State EEG Data File Path
+# ------------------------------------------------------------------------------
+# Define the path to the resting state EEG data file
+# This file is expected to be in EEGLAB .set format
+eeg_file = example_file
+
+# ------------------------------------------------------------------------------
+# Reading Epochs from EEGLAB .set File
+# ------------------------------------------------------------------------------
+# Use MNE to read the epochs from the EEGLAB .set file
+# The read_epochs_eeglab function is used for this purpose
+epochs = mne.io.read_epochs_eeglab(eeg_file)
+
+# ------------------------------------------------------------------------------
+# Creating and Applying Montage
+# ------------------------------------------------------------------------------
+# Creating a standard montage for EGI 128 electrode system
+montage = mne.channels.make_standard_montage('GSN-HydroCel-128')
+# Applying the created montage to the epochs data
+epochs.set_montage(montage)
+print("Montage set to EGI 128")
+
+# ------------------------------------------------------------------------------
+# Getting Current Montage
+# ------------------------------------------------------------------------------
+# Get the current montage from the epochs
+montage = epochs.get_montage()
+
+# ------------------------------------------------------------------------------
+# EEG Reference Setting
+# ------------------------------------------------------------------------------
+# Setting an EEG reference is a crucial preprocessing step in EEG analysis. 
+# Here, we set the EEG reference using the projection method. This method 
+# projects the EEG data onto a reference that is mathematically constructed, 
+# rather than using a physical electrode as the reference. This is particularly 
+# important for inverse modeling, as it ensures that the EEG data is properly 
+# referenced and can be accurately mapped onto the brain model for source localization.
+epochs.set_eeg_reference(projection=True)
+
+# ------------------------------------------------------------------------------
+# Starting Source Localization
+# ------------------------------------------------------------------------------
+# This section marks the beginning of source localization specific processes.
+# Source localization involves mapping the EEG data onto the brain model to
+# identify the origins of the observed electrical activity. This is crucial
+# for understanding the spatial aspects of the neural signals in the context
+# of resting state or task-related EEG studies.
+print("Initiating source localization procedures...")
+
+
+```
+
+```{python}
+
+
+# ------------------------------------------------------------------------------
+# Fetching fsaverage Files
+# ------------------------------------------------------------------------------
+# Fetching the fsaverage MRI subject's files from MNE's data repository.
+# This includes various files like the BEM surfaces, source spaces, etc.
+fs_dir = fetch_fsaverage(verbose=True)
+
+# ------------------------------------------------------------------------------
+# Determining Directory Path
+# ------------------------------------------------------------------------------
+# Determining the directory path where the fsaverage files are stored.
+# This is typically the subjects directory in MNE's data structure.
+subjects_dir = op.dirname(fs_dir)
+
+# ------------------------------------------------------------------------------
+# Setting Subject
+# ------------------------------------------------------------------------------
+# Setting the subject to 'fsaverage'. 'fsaverage' is a standard MRI subject 
+# used in MNE for template MRI data.
+subject = "fsaverage"
+
+# ------------------------------------------------------------------------------
+# Setting Transformation File
+# ------------------------------------------------------------------------------
+# Setting the transformation file to 'fsaverage'. This is a built-in 
+# transformation in MNE that aligns EEG data to the 'fsaverage' brain.
+trans = "fsaverage" 
+
+# ------------------------------------------------------------------------------
+# Constructing Source Space File Path
+# ------------------------------------------------------------------------------
+# Constructing the source space file path. The source space defines 
+# the locations of the dipoles in the brain volume.
+# Here, 'fsaverage-ico-5-src.fif' is used, which is a standard source 
+# space file for 'fsaverage'.
+src = mne.read_source_spaces(op.join(fs_dir, "bem", "fsaverage-ico-5-src.fif"))
+
+# ------------------------------------------------------------------------------
+# Constructing BEM File Path
+# ------------------------------------------------------------------------------
+# Constructing the boundary element model (BEM) file path. The BEM 
+# model is used for forward modeling in MEG/EEG.
+# 'fsaverage-5120-5120-5120-bem-sol.fif' is a high-resolution BEM 
+# solution file for 'fsaverage'.
+bem = op.join(fs_dir, "bem", "fsaverage-5120-5120-5120-bem-sol.fif")
+
+```
+
+```{python}
+
+%matplotlib notebook
+import os
+import mne
+import pyvista as pv
+os.environ["MNE_3D_OPTION_ANTIALIAS"] = "false"
+
+from pyvista.utilities import xvfb
+xvfb.start_xvfb()
+
+mne.viz.set_3d_backend("notebook")
+
+
+# ------------------------------------------------------------------------------
+# EEG Electrode and MRI Alignment Check
+# ------------------------------------------------------------------------------
+# Check that the locations of EEG electrodes is correct with respect to MRI
+mne.viz.plot_alignment(
+    epochs.info,
+    src=src,
+    eeg=["original", "projected"],
+    trans=trans,
+    show_axes=True,
+    mri_fiducials=True,
+    dig="fiducials",
+)
+
+```
+
+```{python}
+
+import pyvista as pv
+cyl = pv.Cylinder()
+p = pv.Plotter()
+p.add_mesh(cyl)
+p.show()
+
+```
+
+```{python}
+    
+import vtk
+from pyvirtualdisplay import Display
+display = Display(visible=0, size=(600, 400))
+display.start()
+print('IMPORT OK')
+
+# notebook plotting: https://docs.pyvista.org/version/stable/user-guide/jupyter/index.html
+import pyvista as pv
+#pv.set_jupyter_backend('trame')
+
+# short example
+sphere = pv.Sphere()
+sphere.plot(notebook=True, window_size=(600,400))
+
+```
+
+```{python}
+import cv2
+import numpy as np
+
+if 1:
+    data_dir = '/kaggle/input/blood-vessel-segmentation'
+    file = [f'{data_dir}/train/kidney_3_sparse/labels/{i:04d}.tif' for i in  range(496, 496+100)]
+    mask=[]
+    for i,f in enumerate(file):
+        print('\r',i, end='')
+        v = cv2.imread(f,cv2.IMREAD_GRAYSCALE)
+        mask.append(v)
+    mask = np.stack(mask)
+    print('')
+    mask = mask/255
+    print(mask.shape)
+    #np.save('truth.npy',mask)
+   
+
+
+pl = pv.Plotter()
+point1 = np.stack(np.where(mask > 0.1)).T
+pd1 = pv.PolyData(point1)
+mesh1 = pd1.glyph(geom=pv.Cube())
+pl.add_mesh(mesh1, color='red')
+pl.show()
+
+```
+
+```{python}
+%matplotlib notebook
+import os
+import mne
+import pyvista as pv
+os.environ["MNE_3D_OPTION_ANTIALIAS"] = "false"
+
+from pyvista.utilities import xvfb
+xvfb.start_xvfb()
+mne.viz.set_browser_backend("matplotlib")
+mne.viz.set_3d_backend("notebook")
+
+# mne.viz.set_3d_backend('pyvistaqt')
+#Brain = mne.viz.get_brain_class(backend='pyvistaqt')
+
+sample_data_folder = mne.datasets.sample.data_path()
+subjects_dir = os.path.join(sample_data_folder, 'subjects')
+Brain = mne.viz.get_brain_class()
+brain = Brain('sample', hemi='lh', surf='pial',
+              subjects_dir=subjects_dir, size=(800, 600))
+brain.add_annotation('aparc.a2009s', borders=False)
+
+```

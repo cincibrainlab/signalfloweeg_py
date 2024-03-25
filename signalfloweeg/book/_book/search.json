@@ -60,7 +60,10 @@
     "href": "index.html",
     "title": "SignalFlowEeg Python Documentation",
     "section": "",
-    "text": "Preface\nThis is a Quarto book. also\nTo learn more about Quarto books visit https://quarto.org/docs/books."
+    "text": "Preface\nThis is a Quarto book. also\nTo learn more about Quarto books visit https://quarto.org/docs/books.",
+    "crumbs": [
+      "Preface"
+    ]
   },
   {
     "objectID": "utils_load_catalog.html#usage",
@@ -123,28 +126,32 @@
     "href": "io_load_eeg.html",
     "title": "2  Load an EEG file",
     "section": "",
-    "text": "3"
+    "text": "2.1 Usage\nImporting raw EEG data can be challenging due to varying formats and channel montages. The load_eeg() function provides a consistent interface for users while allowing customization for each recording file. The function aims to create a valid MNE raw or epochs object with the correct channel montage and event markers.\nUsing file extensions alone is insufficient, as recordings with different channel counts may share the same extension. Users should provide the correct file type and channel montage when using load_eeg().",
+    "crumbs": [
+      "Input/Output",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Load an EEG file</span>"
+    ]
   },
   {
     "objectID": "io_load_eeg.html#usage",
     "href": "io_load_eeg.html#usage",
-    "title": "2  Load an EEG file",
+    "title": "2  Load an Custom EEG files",
     "section": "2.1 Usage",
-    "text": "2.1 Usage\nImporting raw EEG data can be challenging due to varying formats and channel montages. The load_eeg() function provides a consistent interface for users while allowing customization for each recording file. The function aims to create a valid MNE raw or epochs object with the correct channel montage and event markers.\nUsing file extensions alone is insufficient, as recordings with different channel counts may share the same extension. Users should provide the correct file type and channel montage when using load_eeg().\n\n2.1.1 Assign Example Data Filenames\n\nfrom signalfloweeg.utils import load_catalog\n\n# Using utils.load_catalog() to load an example EEG file\ncatalog = load_catalog(\n    \"https://raw.githubusercontent.com/cincibrainlab/signalfloweeg_py/master/userdata/cchmc_data.yaml\"\n)\n\n# EGI/MAGSTIM 128 Resting State Data\nresting_raw = catalog[\"demo_rest_raw\"]\n\n# EGI/MAGSTIM 128 Auditory Evoked Potentials\nerp_raw = catalog[\"demo_chirp_raw\"]\n\n\n\n2.1.2 load_eeg(): View Recording Types\nLet’s first see what recording types are available by running the function without any arguments.\n\nfrom signalfloweeg.io import load_eeg\n\n# No arguments to show recording types\nload_eeg();\n\n\n\n\nIf load_eeg without inputs an informational display will be presented"
+    "text": "2.1 Usage\nImporting raw EEG data can be challenging due to varying formats and channel montages. The load_eeg() function provides a consistent interface for users while allowing customization for each recording file. The function aims to create a valid MNE raw or epochs object with the correct channel montage and event markers.\nUsing file extensions alone is insufficient, as recordings with different channel counts may share the same extension. Users should provide the correct file type and channel montage when using load_eeg().\n\n2.1.1 Assign Example Data Filenames\n\nfrom signalfloweeg.utils import Catalog\n\n# Load from userdata/ from github\ncchmc_demo_data = Catalog(\"https://tinyurl.com/yfudj62c\")\n\ncchmc_proj_data = Catalog(\"https://tinyurl.com/4zte723j\")\n\ncchmc_proj_data.get_location('proj_ketamine')\n\ncchmc_proj_data.get_dataset_type('proj_ketamine')\n\n# Check if there is an associated FDT file\nfdt_file_path, fdt_file_present = cchmc_demo_data.get_associated_fdt_file(\"demo_rest_state\")\n#if fdt_file_present:\n#    print(f\"Associated FDT file: {fdt_file_path}\")\n#else:\n#    print(\"No associated FDT file found.\")\n\n# Retrieve the files for a specific dataset, optionally filtering by extension\ndataset_files = cchmc_demo_data.get_filelist(\"demo_rest_state\", extension=\".set\")\n#for file_info in dataset_files:\n#    print(f\"Folder path: {file_info['folder_path']}\")\n#    print(f\"File name: {file_info['file_name']}\")\n#    print(f\"Extension: {file_info['extension']}\")\n#    print()\n\n\n# Retrieve the files for a specific dataset, optionally filtering by extension\ndataset_files = cchmc_proj_data.get_filelist(\"proj_fxschirpsource\")\n#for file_info in dataset_files:\n#    print(f\"Folder path: {file_info['folder_path']}\")\n#    print(f\"File name: {file_info['file_name']}\")\n#    print(f\"Extension: {file_info['extension']}\")\n#    print()\n\n\n# Retrieve the files for a specific dataset, optionally filtering by extension\ndataset_files = cchmc_proj_data.get_filelist(\"proj_fxschirpsource\")\n#for file_info in dataset_files:\n#    print(f\"Folder path: {file_info['folder_path']}\")\n#    print(f\"File name: {file_info['file_name']}\")\n#    print(f\"Extension: {file_info['extension']}\")\n#    print()\n\ncchmc_proj_data.summarize_filelist()\n\ncchmc_proj_data.create_yaml_template()\n\n\n# EGI/MAGSTIM 128 Resting State Data\nresting_raw = catalog[\"128_Rest_EyesOpen_D1004\"]\n\n# EGI/MAGSTIM 128 Auditory Evoked Potentials\nerp_raw = catalog[\"128_Chirp_D0657\"]\n\n\n\n2.1.2 load_eeg(): View Recording Types\nLet’s first see what recording types are available by running the function without any arguments.\n\nfrom signalfloweeg.io import load_eeg\n\n# No arguments to show recording types\nload_eeg();\n\n\n\n\nIf load_eeg without inputs an informational display will be presented"
   },
   {
     "objectID": "io_load_eeg.html#example-1-continuous-eeg-file",
     "href": "io_load_eeg.html#example-1-continuous-eeg-file",
-    "title": "2  Load an EEG file",
+    "title": "2  Load an Custom EEG files",
     "section": "2.2 Example 1: Continuous EEG File",
     "text": "2.2 Example 1: Continuous EEG File\n\n2.2.1 Load Data\n\nfrom signalfloweeg.io import load_eeg\nresting_mne = load_eeg(resting_raw, \"EGI_128_RAW\")\n\nimport mne\nimport matplotlib\n\n\n\n2.2.2 Visualize Data\n\n%matplotlib widget \n\n# Plot the data with custom options\nresting_mne.plot(title=\"Import Resting file\", lowpass=100, highpass=1, scalings=dict(eeg=20e-6), event_color=\"red\", remove_dc=True, clipping=None, decim=3);\n\n\n\n\nNotebook view of imported raw data"
   },
   {
     "objectID": "io_load_eeg.html#example-2-event-related-recordings",
     "href": "io_load_eeg.html#example-2-event-related-recordings",
-    "title": "2  Load an EEG file",
+    "title": "2  Load an Custom EEG files",
     "section": "2.3 Example 2: Event-Related Recordings",
-    "text": "2.3 Example 2: Event-Related Recordings\n\n2.3.1 Load data\n\nfrom signalfloweeg.io import load_eeg\nchirp_mne = load_eeg(erp_raw, \"EGI_128_RAW\")\n\n\n\n2.3.2 Retrieve event structure and plot data\n\n%matplotlib widget \n\n# (use widget for interactive plots)\n\n# Retrieve Events Structure\nevents = mne.find_events(chirp_mne)\n\n# Plot the data with custom options\nchirp_mne.plot(title=\"Import ERP file\", lowpass=100, scalings=dict(eeg=20e-6), event_color=\"red\", remove_dc=True, clipping=None, decim=3, events=events);\n\n\n\n\nNotebook view of imported raw data with events"
+    "text": "2.3 Example 2: Event-Related Recordings\n\n2.3.1 Load data\n\nfrom signalfloweeg.io import load_eeg\nchirp_mne = load_eeg(erp_raw, \"EGI_128_RAW\")\n\n\n\n2.3.2 Retrieve event structure and plot data\n\n%matplotlib notebook \n\n# (use widget for interactive plots)\n\n# Retrieve Events Structure\nevents = mne.find_events(chirp_mne)\n\n# Plot the data with custom options\nchirp_mne.plot(title=\"Import ERP file\", lowpass=100, scalings=dict(eeg=20e-6), event_color=\"red\", remove_dc=True, clipping=None, decim=3, events=events);\n\n\n\n\nNotebook view of imported raw data with events"
   },
   {
     "objectID": "io_load_eeg.html#notes-on-visualizations",
@@ -170,14 +177,14 @@
   {
     "objectID": "io_load_eeg.html#example-3-eeglab-set-file",
     "href": "io_load_eeg.html#example-3-eeglab-set-file",
-    "title": "2  Load an EEG file",
+    "title": "2  Load an Custom EEG files",
     "section": "2.4 Example 3: EEGLAB SET File",
     "text": "2.4 Example 3: EEGLAB SET File\nWe often use EEGLAB SET files following a raw import to store data and events. The key advantage is the many MATLAB based raw import tools for different EEG manufacturers. In addition, the SET file can store event markers and other metadata such as channel locations. MNE-Python can import EEGLAB SET files, but it is important to use either the “Raw” (continuous) or “Epochs” (event-related) data types.\n\n2.4.1 Load data\n\nfrom signalfloweeg.io import load_eeg\n\n# EEGLAB SET FILE (EPOCHED)\neeglab_set_epoched = catalog[\"demo_auditory_chirp\"]\neeglab_mne_epoched = load_eeg(eeglab_set_epoched, \"EEGLAB_EPOCHS_SET\")"
   },
   {
     "objectID": "io_load_eeg.html#summary",
     "href": "io_load_eeg.html#summary",
-    "title": "2  Load an EEG file",
+    "title": "2  Load an Custom EEG files",
     "section": "2.5 Summary",
     "text": "2.5 Summary\nThe load_eeg() function provides a consistent interface for users to import EEG data into MNE objects. Custom import descriptions are located in a user editable YAML file in the config directory. Additional documentation will describe how to add custom import functions."
   },
@@ -214,7 +221,11 @@
     "href": "viz_interactive_plots.html",
     "title": "5  Notes on Visualizations:",
     "section": "",
-    "text": "When plotting EEG data using MATLAB in Jupyter Notebooks or similar notebook environments like Quattro, the choice of magic command impacts the interactivity of the resulting plot:\nInline magic command (%matplotlib inline): - Produces a static, non-interactive plot embedded within the notebook - Faster rendering compared to interactive plots\nWidget magic command (%matplotlib widget): - Creates an interactive plot within the notebook - Allows zooming, panning, and other interactive features - Slower performance compared to the pop-out version using the QT framework\nPop-out version (QT framework): - Generates a separate interactive plot window outside the notebook - Offers the fastest performance among the plotting options\nRemote systems and notebooks: - Notebook environments like Jupyter can be used on remote systems - Enables EEG data analysis and visualization through remote access solutions such as Visual Studio Code Tunnels\nIn summary, while the widget magic command provides interactivity within the notebook, it comes with a performance trade-off. The inline magic command offers faster static plots, and the pop-out version using QT delivers the best performance. Notebooks can be utilized on remote systems, facilitating EEG data analysis and visualization in various settings.\nsee the following link for more information ()[https://mne.tools/dev/install/advanced.html]."
+    "text": "When plotting EEG data using MATLAB in Jupyter Notebooks or similar notebook environments like Quattro, the choice of magic command impacts the interactivity of the resulting plot:\nInline magic command (%matplotlib inline): - Produces a static, non-interactive plot embedded within the notebook - Faster rendering compared to interactive plots\nWidget magic command (%matplotlib widget): - Creates an interactive plot within the notebook - Allows zooming, panning, and other interactive features - Slower performance compared to the pop-out version using the QT framework\nPop-out version (QT framework): - Generates a separate interactive plot window outside the notebook - Offers the fastest performance among the plotting options\nRemote systems and notebooks: - Notebook environments like Jupyter can be used on remote systems - Enables EEG data analysis and visualization through remote access solutions such as Visual Studio Code Tunnels\nIn summary, while the widget magic command provides interactivity within the notebook, it comes with a performance trade-off. The inline magic command offers faster static plots, and the pop-out version using QT delivers the best performance. Notebooks can be utilized on remote systems, facilitating EEG data analysis and visualization in various settings.\nsee the following link for more information ()[https://mne.tools/dev/install/advanced.html].",
+    "crumbs": [
+      "Visualization",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Notes on Visualizations:</span>"
+    ]
   },
   {
     "objectID": "io_load_eeg2_customize.html",

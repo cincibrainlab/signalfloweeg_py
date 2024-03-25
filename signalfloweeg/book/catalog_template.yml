@@ -1,0 +1,7 @@
+# SignalFlowEeeg Catalog of datasets
+# Replace the following dataset names with your actual dataset names
+# Replace the following file paths with the actual locations of your datasets
+# Specify either a file name or file path for each dataset
+dataset1: /path/to/dataset1
+dataset2: /path/to/dataset2
+dataset3: /path/to/dataset3
