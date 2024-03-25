@@ -56,9 +56,10 @@ RUN apt-get update && apt-get install -y \
     && apt-get install -y code 
 
 USER ${NB_UID}
-RUN echo "alias code='code --no-sandbox'" >> ~/.bashrc
-RUN /opt/conda/envs/signalflowenv/bin/pip install -e git+https://github.com/cincibrainlab/signalfloweeg_py.git#egg=signalfloweeg --src /home/jovyan/src/signalfloweeg_dev && \
-    /opt/conda/envs/signalflowenv/bin/pip install fooof fuzzywuzzy python-Levenshtein meegkit bycycle pyyaml humanize
+RUN echo "alias code='code --no-sandbox'" >> ~/.bashrc && \
+    /opt/conda/envs/signalflowenv/bin/pip install -e git+https://github.com/cincibrainlab/signalfloweeg_py.git#egg=signalfloweeg --src /home/jovyan/src/signalfloweeg_dev && \
+    /opt/conda/envs/signalflowenv/bin/pip install fooof fuzzywuzzy python-Levenshtein meegkit bycycle pyyaml humanize && \
+    sudo ln -s /home/jovyan/src/signalfloweeg_dev/signalfloweeg/ /work/signalfloweeg_module
 
 WORKDIR /home/jovyan
 
