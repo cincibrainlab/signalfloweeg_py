@@ -63,4 +63,5 @@ RUN /opt/conda/envs/signalflowenv/bin/pip install -e git+https://github.com/cinc
 WORKDIR /home/jovyan
 
 # Configure container startup
+# Default password: welcome (see https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html)
 CMD ["start-notebook.py","--PasswordIdentityProvider.hashed_password='argon2:$argon2id$v=19$m=10240,t=10,p=8$vmE0qko04/eNJxcO9NjRkw$i9JRa6BICOuwPySh1EQjjp8SeAUph90UH0dw6A6Kz+Q'"]
