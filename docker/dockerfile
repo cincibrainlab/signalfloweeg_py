@@ -64,4 +64,8 @@ WORKDIR /home/jovyan
 
 # Configure container startup
 # Default password: welcome (see https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html)
+<<<<<<< HEAD
 CMD ["start-notebook.py", "--ServerApp.root_dir=/work", "--PasswordIdentityProvider.hashed_password='argon2:$argon2id$v=19$m=10240,t=10,p=8$vmE0qko04/eNJxcO9NjRkw$i9JRa6BICOuwPySh1EQjjp8SeAUph90UH0dw6A6Kz+Q'"]
+=======
+CMD ["start-notebook.py","--PasswordIdentityProvider.hashed_password='argon2:$argon2id$v=19$m=10240,t=10,p=8$vmE0qko04/eNJxcO9NjRkw$i9JRa6BICOuwPySh1EQjjp8SeAUph90UH0dw6A6Kz+Q'"]
+>>>>>>> 511564a53fc25e5955aa03377c45d97108973454
