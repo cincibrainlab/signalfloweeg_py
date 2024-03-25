@@ -10,7 +10,9 @@ USER root
 
 # Install additional packages
 RUN apt-get update && apt-get install -y nala && \
-    nala install -y libx11-dev wget ca-certificates curl git nano unzip zip software-properties-common build-essential
+    nala install -y libx11-dev wget ca-certificates curl git nano unzip zip software-properties-common build-essential && \
+    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \ 
+    apt-get install -y git-lfs
 
 USER ${NB_UID}
 
