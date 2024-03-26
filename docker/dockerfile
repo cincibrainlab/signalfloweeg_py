@@ -58,7 +58,7 @@ RUN apt-get update && apt-get install -y \
 
 USER ${NB_UID}
 RUN /opt/conda/envs/signalflowenv/bin/pip install -e git+https://github.com/cincibrainlab/signalfloweeg_py.git#egg=signalfloweeg --src /home/jovyan/src/signalfloweeg_dev && \
-    /opt/conda/envs/signalflowenv/bin/pip install fooof fuzzywuzzy python-Levenshtein meegkit bycycle pyyaml humanize
+    /opt/conda/envs/signalflowenv/bin/pip install fooof fuzzywuzzy python-Levenshtein meegkit bycycle pyyaml humanize mypy
 
 USER root
 # Symbolic link to the signalflow module for editing
