@@ -262,3 +262,32 @@ class Catalog:
             yaml.dump(template_data, file, default_flow_style=False)
 
         print(f"YAML template created at: {output_path}")
+
+
+from os import path
+from datetime import datetime
+
+def save_dictionaries(output_folder, base_name, *dictionaries):
+    """
+    Save the passed dictionaries to a single YAML file, with a specified base name for the file, and a header containing the date.
+    Args:
+        output_folder (str): The path to the output folder where the YAML file will be saved.
+        base_name (str): The base name for the output YAML file.
+        *dictionaries: Variable number of dictionaries to be saved.
+    """
+    
+    file_name = f"{base_name}.yml"
+    combined_dict_file = path.join(output_folder, file_name)
+    
+    header_data = {
+        'header': {
+            'file': base_name,
+            'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        }
+    }
+    
+    combined_data = dict(zip(map(str, range(len(dictionaries))), dictionaries))
+    
+    with open(combined_dict_file, 'w') as file:
+        yaml.dump(header_data, file, default_flow_style=False)
+        yaml.dump(combined_data, file, default_flow_style=False)

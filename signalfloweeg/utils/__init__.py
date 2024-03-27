@@ -7,4 +7,4 @@ Description: Module for utility functions
 # from . import *
 from .file_helpers import *
 
-__all__ = ['Catalog']
+__all__ = ['Catalog', 'save_dictionaries']
