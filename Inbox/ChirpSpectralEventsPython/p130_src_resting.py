@@ -151,6 +151,8 @@ print(fwd)
 # period is considered for computing this matrix.
 noise_cov = mne.compute_covariance(epochs, tmax=0.0)
 
+# mne.make_ad_hoc_cov
+
 # ------------------------------------------------------------------------------
 # Evoked Object Creation and Time-Frequency Visualization
 # ------------------------------------------------------------------------------
