@@ -1,0 +1,29 @@
+# Configuration settings
+
+# This file is used to configure the portal
+folder_paths:
+  root: /portal_files
+  uploads: /portal_files/uploads
+  import: /portal_files/import
+  info_archive: /portal_files/info_archive
+  output: /portal_files/output
+
+# List of EEG formats
+eeg_formats:
+  - format_name: 'EGI128'
+    description: 'Adult/Child 128 channel EGI Hydrocel net'
+  - format_name: 'EGI32'
+    description: 'Adult/Child 32 channel EGI Hydrocel net'
+  - format_name: 'MEA30'
+    description: 'NeuroNexus 30 channel MEA'
+  - format_name: 'MEA30 (v2)'
+    description: 'EGI MFF Data Format'
+
+# List of EEG paradigms
+eeg_paradigms:
+  - paradigm_name: 'Resting State'
+    description: 'Subject is at rest with eyes open or closed'
+  - paradigm_name: 'Visual'
+    description: 'Subject is presented with visual stimuli'
+  - paradigm_name: 'Auditory Chirp A'
+    description: 'Subject is presented with auditory chirp stimuli'
