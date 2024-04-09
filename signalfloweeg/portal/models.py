@@ -1,5 +1,8 @@
 from sqlalchemy import Column, Integer, String, Text, Boolean
 from sqlalchemy.orm import declarative_base
+from sqlalchemy import ForeignKey, DateTime
+from sqlalchemy.orm import relationship
+from datetime import datetime
 
 Base = declarative_base()
 
@@ -8,7 +11,9 @@ class EEGFileCatalog(Base):
     id = Column(Integer, primary_key=True)
     filename = Column(String)
     dataset_name = Column(String)
-    dataset_id = Column(String)   
+    dataset_id = Column(String)
+    eeg_format = Column(String)
+    eeg_paradigm = Column(String)   
     storage = Column(Text, unique=True)
     upload_id = Column(String, unique=True)
     size = Column(String)
@@ -28,10 +33,12 @@ class CatalogBase(Base):
     original_name = Column(String)
     dataset_name = Column(String)
     dataset_id = Column(String)
+    eeg_format = Column(String)
+    eeg_paradigm = Column(String)   
     is_set_file = Column(Boolean)
     has_fdt_file = Column(Boolean)
     fdt_filename = Column(String)
-    fdt_upload_id = Column(String)
+    fdt_upload_id = Column(String) 
     hash = Column(String)
 
 class UploadCatalog(CatalogBase):
@@ -53,9 +60,23 @@ class ImportCatalog(CatalogBase):
     total_samples = Column(Integer)
     mne_load_error = Column(Boolean)
 
-class AnalysisCatalog(Base):
-    __tablename__ = 'analysis_catalog'
-    upload_id = Column(String, primary_key=True)  # Override 'upload_id' as the primary key
+class AnalysisJobList(Base):
+    __tablename__ = 'analysis_joblist'
+    
+    id = Column(Integer, primary_key=True)
+    job_id = Column(String)
+    upload_id = Column(String, ForeignKey('import_catalog.upload_id'))
+    eeg_format_id = Column(Integer, ForeignKey('eeg_format.id'))
+    eeg_paradigm_id = Column(Integer, ForeignKey('eeg_paradigm.id'))
+    analysis_id = Column(Integer, ForeignKey('eeg_analysis.id'))
+    status = Column(String)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    parameters = Column(String)
+    result = Column(String)
+    
+    eeg_format = relationship("EegFormat")
+    eeg_paradigm = relationship("EegParadigm")
+    analysis = relationship("EegAnalyses")
 
 class DatasetCatalog(Base):
     __tablename__ = 'dataset_catalog'

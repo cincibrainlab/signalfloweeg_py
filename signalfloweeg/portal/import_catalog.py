@@ -50,6 +50,29 @@ def update_import_catalog():
         session.close()
         print(f"Transferred {len(set_files)} SET files from UploadCatalog to ImportCatalog.")
 
+def generate_joblist():
+    with get_db() as session:
+        # Query the ImportCatalog table to find eligible files
+        eligible_files = session.query(ImportCatalog).\
+        filter(ImportCatalog.status == add_status_code(201)).\
+        filter(ImportCatalog.mne_load_error.is_(False)).\
+        all()
+
+        from rich.console import Console
+        from rich.table import Table
+
+        console = Console()
+        table = Table(title="Eligible Files for Processing")
+        table.add_column("Upload ID", style="cyan", no_wrap=True)
+        table.add_column("Dataset Name", style="magenta", no_wrap=True)
+        table.add_column("EEG Format", style="yellow", no_wrap=True)
+        table.add_column("EEG Paradigm", style="blue", no_wrap=True)
+
+        for file in eligible_files:
+            table.add_row(file.upload_id, file.dataset_name, file.dataset_id, file.eeg_format, file.eeg_paradigm)
+
+        console.print(table)
+
 def copy_import_files(upload_id):
     # Copy the SET and FDT files to the import path
     import_file_paths = get_upload_and_fdt_upload_id(upload_id)
