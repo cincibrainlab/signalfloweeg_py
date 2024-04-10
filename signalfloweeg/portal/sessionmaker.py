@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from signalfloweeg.portal.models import Base, EegFormat, EegParadigm, ImportCatalog, EegAnalyses
+from signalfloweeg.portal.models import Base, EegFormat, EegParadigm, ImportCatalog, EegAnalyses, DatasetCatalog
 from signalfloweeg.portal.portal_utils import load_config
 import logging
 import json
@@ -206,3 +206,41 @@ def generate_database_summary():
             table.add_row(table_name, str(record_count))
         
         console.print(table)
+
+def get_eeg_formats():
+    with get_db() as session:
+        eeg_formats = session.query(EegFormat).all()
+        return [
+            {
+                "id": eeg_format.id,
+                "name": eeg_format.name,
+                "description": eeg_format.description
+            }
+            for eeg_format in eeg_formats
+        ]
+
+def get_eeg_paradigms():
+    with get_db() as session:
+        eeg_paradigms = session.query(EegParadigm).all()
+        return [
+            {
+                "id": eeg_paradigm.id,
+                "name": eeg_paradigm.name,
+                "description": eeg_paradigm.description
+            }
+            for eeg_paradigm in eeg_paradigms
+        ]
+
+def get_dataset_info():
+    with get_db() as session:
+        datasets = session.query(DatasetCatalog).all()
+        return [
+            {
+                "dataset_id": dataset.dataset_id,
+                "dataset_name": dataset.dataset_name,
+                "description": dataset.description,
+                "eeg_format": dataset.eeg_format.name if dataset.eeg_format else None,
+                "eeg_paradigm": dataset.eeg_paradigm.name if dataset.eeg_paradigm else None
+            }
+            for dataset in datasets
+        ]

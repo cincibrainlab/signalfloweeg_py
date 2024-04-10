@@ -35,3 +35,9 @@ eeg_analyses:
     valid_formats: ['EGI128', 'EGI32', 'MEA30', 'MEA30 (v2)']
     valid_paradigms: ['Resting']
     parameters: None
+  - name: 'Yasa-Bandpower-Default'
+    category: 'Power'
+    description: 'Bandpower analysis'
+    valid_formats: ['EGI128', 'EGI32', 'MEA30', 'MEA30 (v2)']
+    valid_paradigms: ['Resting']
+    parameters: None

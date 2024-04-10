@@ -1,7 +1,11 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean
-from sqlalchemy.orm import declarative_base
-from sqlalchemy import ForeignKey, DateTime
-from sqlalchemy.orm import relationship
+from sqlalchemy import (
+    Column, Integer, String, Text, Boolean, 
+    ForeignKey, DateTime
+)
+from sqlalchemy.orm import (
+    declarative_base, relationship
+)
+
 from datetime import datetime
 
 Base = declarative_base()
@@ -80,23 +84,25 @@ class AnalysisJobList(Base):
 
 class DatasetCatalog(Base):
     __tablename__ = 'dataset_catalog'
-    id = Column(Integer, primary_key=True)
     dataset_name = Column(String)
-    dataset_id = Column(String, unique=True)
+    dataset_id = Column(String, primary_key=True)
     description = Column(Text)
-    eeg_format = Column(Integer)
-    is_event_related = Column(Integer)
+    eeg_format_id = Column(Integer, ForeignKey('eeg_format.id'))
+    eeg_paradigm_id = Column(Integer, ForeignKey('eeg_paradigm.id'))
+    
+    eeg_format = relationship("EegFormat")
+    eeg_paradigm = relationship("EegParadigm")
 
 class EegFormat(Base):
     __tablename__ = 'eeg_format'
-    id = Column(Integer, autoincrement=True, unique=True)
-    name = Column(String, unique=True, primary_key=True)
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    name = Column(String, unique=True)
     description = Column(Text)
 
 class EegParadigm(Base):
     __tablename__ = 'eeg_paradigm'
-    id = Column(Integer, autoincrement=True, unique=True)
-    name = Column(String, unique=True, primary_key=True )
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    name = Column(String, unique=True )
     description = Column(Text)
 
 class EegAnalyses(Base):
@@ -108,3 +114,28 @@ class EegAnalyses(Base):
     valid_formats = Column(String)
     valid_paradigms = Column(String)
     parameters = Column(String)  # JSON string to store analysis parameters
+
+
+
+Base = declarative_base()
+
+# class Job(Base):
+#     __tablename__ = 'jobs'
+
+#     id = Column(Integer, primary_key=True)
+#     task_name = Column(String(255), nullable=False)
+#     args = Column(JSONB, default='{}', nullable=False)
+#     kwargs = Column(JSONB, default='{}', nullable=False)
+#     status = Column(String(255), nullable=False, server_default='pending')
+#     result = Column(Text)
+#     error = Column(Text)
+#     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+#     started_at = Column(DateTime)
+#     completed_at = Column(DateTime)
+#     retries = Column(Integer, default=0, nullable=False)
+#     max_retries = Column(Integer, default=3, nullable=False)
+#     queue = Column(String(255), nullable=False, server_default='default')
+#     exchange = Column(String(255), nullable=False, server_default='')
+#     routing_key = Column(String(255), nullable=False, server_default='')
+#     user_id = Column(UUID(as_uuid=True), default=None)  # Optional: Associate tasks with individual users
+#     expiration = Column(DateTime, default=(datetime.utcnow() + timedelta(days=7)))  # Optional: Set an expiration time for each task
