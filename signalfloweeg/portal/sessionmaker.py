@@ -22,34 +22,6 @@ def get_db():
         yield db
     finally:
         db.close()
-
-def remove_foreign_keys(db):
-
-    from sqlalchemy.engine import reflection
-    from sqlalchemy import MetaData, Table, ForeignKeyConstraint
-    from sqlalchemy.schema import DropConstraint
-
-    inspector = reflection.Inspector.from_engine(db.engine)
-    fake_metadata = MetaData()
-
-    fake_tables = []
-    all_fks = []
-
-    for table_name in db.metadata.tables:
-        fks = []
-        for fk in inspector.get_foreign_keys(table_name):
-            if fk['name']:
-                fks.append(ForeignKeyConstraint((),(),name=fk['name']))
-        t = Table(table_name, fake_metadata, *fks)
-        fake_tables.append(t)
-        all_fks.extend(fks)
-
-    connection = db.engine.connect()
-    transaction = connection.begin()
-    for fkc in all_fks:
-        connection.execute(DropConstraint(fkc))
-    transaction.commit()
-
 def drop_all_tables():
     try:
         print("Starting to drop all tables...")
@@ -65,24 +37,18 @@ def drop_all_tables():
 
         # create a Session
         session = Session()
-        remove_foreign_keys(session)
-        upload_catalogs = session.query(ImportCatalog).all()
-        for upload_catalog in upload_catalogs:
-            console.print(f"Upload ID: {upload_catalog.upload_id}, Dataset Name: {upload_catalog.dataset_name}, Original Name: {upload_catalog.original_name}")
 
         # disable foreign key constraint
         print("Disabling foreign key constraint...")
-        session.execute("SET session_replication_role = 'replica';")
+        session.execute("SET CONSTRAINTS ALL DEFERRED;")
         session.commit()
 
         print("Dropping all tables...")
         Base.metadata.drop_all(bind=engine)
-        print("Creating all tables...")
-        #Base.metadata.create_all(bind=engine)
 
         # enable foreign key constraint
         print("Enabling foreign key constraint...")
-        session.execute("SET session_replication_role = 'origin';")
+        session.execute("SET CONSTRAINTS ALL IMMEDIATE;")
         session.commit()
 
         session.close()
@@ -93,7 +59,6 @@ def drop_all_tables():
     finally:
         print("Disposing engine...")
         engine.dispose()
-
 
 def generate_eeg_format_and_paradigm():
     """
