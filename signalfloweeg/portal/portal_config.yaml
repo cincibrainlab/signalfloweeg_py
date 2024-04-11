@@ -8,6 +8,14 @@ folder_paths:
   info_archive: /portal_files/info_archive
   output: /portal_files/output
 
+# This file is used to configure the portal
+folder_paths:
+  root: /Users/ernie/Documents/GitHub/signalflow_portal/portal_files
+  uploads: /Users/ernie/Documents/GitHub/signalflow_portal/portal_files/uploads
+  import: /Users/ernie/Documents/GitHub/signalflow_portal/portal_files/import
+  info_archive: /Users/ernie/Documents/GitHub/signalflow_portal/portal_files/info_archive
+  output: /Users/ernie/Documents/GitHub/signalflow_portal/portal_files/output
+
 # List of EEG formats
 eeg_formats:
   - name: 'EGI128'

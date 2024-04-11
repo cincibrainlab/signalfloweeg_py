@@ -116,7 +116,6 @@ class EegAnalyses(Base):
     parameters = Column(String)  # JSON string to store analysis parameters
 
 
-
 Base = declarative_base()
 
 # class Job(Base):

@@ -3,7 +3,7 @@ import yaml
 import os
 
 # Define the default configuration file name
-YAML_CONFIG = "portal_config.yaml"
+YAML_CONFIG = os.path.join(os.path.dirname(__file__), 'portal_config.yaml')
 
 def load_config(file_path=YAML_CONFIG):
     """
@@ -22,9 +22,12 @@ def load_config(file_path=YAML_CONFIG):
     from rich.console import Console
     console = Console()
     console.print(f"Active portal_config located at: [bold]{config_file_path}[/bold]")
+    
     try:
         with open(file_path, 'r') as stream:
-            return yaml.safe_load(stream)
+            config = yaml.safe_load(stream)
+            console.log(config['folder_paths']['root'])
+            return config
     except FileNotFoundError:
         print(f"File {file_path} not found.")
     except yaml.YAMLError as exc:
