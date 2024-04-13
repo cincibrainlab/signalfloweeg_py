@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from signalfloweeg.portal.models import Base, EegFormat, EegParadigm, ImportCatalog, EegAnalyses, DatasetCatalog
+from signalfloweeg.portal.models import Base, EegFormat, EegParadigm, UploadCatalog, ImportCatalog, EegAnalyses, DatasetCatalog
 from signalfloweeg.portal.portal_utils import load_config
 import logging
 import json
@@ -173,6 +173,23 @@ def generate_eeg_format_and_paradigm():
 
         logging.info("EEGFormat and EEGParadigm records generated successfully.")
         session.close()
+
+def get_upload_catalog():
+    with get_db() as session:
+        upload_catalog = session.query(UploadCatalog).all()
+        return [
+            {
+                "upload_id": upload.upload_id,
+                "fdt_id": upload.fdt_upload_id,
+                "original_name": upload.original_name,
+                "eeg_format": upload.eeg_format,
+                "is_set_file": upload.is_set_file,
+                "has_fdt_file": upload.has_fdt_file,
+                "fdt_filename": upload.fdt_filename
+            }
+            for upload in upload_catalog
+        ]
+
 
 def get_import_info(upload_id: str):
     """
