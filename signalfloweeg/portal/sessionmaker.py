@@ -22,43 +22,14 @@ def get_db():
         yield db
     finally:
         db.close()
-def drop_all_tables():
-    try:
-        print("Starting to drop all tables...")
-        generate_database_summary()
-        from rich.console import Console
-        console = Console()
-        console.print("[bold magenta]Dropping all tables[/bold magenta] - This function is responsible for dropping all existing tables in the database, disabling foreign key constraints to avoid errors, and then recreating the tables based on the current schema. It's a critical operation, typically used during development or to reset the database to a clean state.")
-        engine = create_engine(db_url)
-        print(f"Database URL: {db_url}")
-        print(f"Engine: {engine}")  
-        # create a configured "Session" class
-        Session = sessionmaker(bind=engine)
-
-        # create a Session
-        session = Session()
-
-        # disable foreign key constraint
-        print("Disabling foreign key constraint...")
-        session.execute("SET CONSTRAINTS ALL DEFERRED;")
-        session.commit()
-
-        print("Dropping all tables...")
-        Base.metadata.drop_all(bind=engine)
-
-        # enable foreign key constraint
-        print("Enabling foreign key constraint...")
-        session.execute("SET CONSTRAINTS ALL IMMEDIATE;")
-        session.commit()
-
-        session.close()
-
-        logging.info("All tables dropped successfully.")
-    except Exception as e:
-        logging.error(f"Failed to drop all tables: {e}")
-    finally:
-        print("Disposing engine...")
-        engine.dispose()
+ 
+def get_engine_and_session():
+    engine = create_engine(db_url)
+    print(f"Database URL: {db_url}")
+    print(f"Engine: {engine}")  
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    return engine, session
 
 def generate_eeg_format_and_paradigm():
     """
@@ -266,43 +237,8 @@ def generate_database_summary():
         
         console.print(table)
 
-def get_eeg_formats():
-    with get_db() as session:
-        eeg_formats = session.query(EegFormat).all()
-        return [
-            {
-                "id": eeg_format.id,
-                "name": eeg_format.name,
-                "description": eeg_format.description
-            }
-            for eeg_format in eeg_formats
-        ]
 
-def get_eeg_paradigms():
-    with get_db() as session:
-        eeg_paradigms = session.query(EegParadigm).all()
-        return [
-            {
-                "id": eeg_paradigm.id,
-                "name": eeg_paradigm.name,
-                "description": eeg_paradigm.description
-            }
-            for eeg_paradigm in eeg_paradigms
-        ]
 
-def get_dataset_info():
-    with get_db() as session:
-        datasets = session.query(DatasetCatalog).all()
-        return [
-            {
-                "dataset_id": dataset.dataset_id,
-                "dataset_name": dataset.dataset_name,
-                "description": dataset.description,
-                "eeg_format": dataset.eeg_format.name if dataset.eeg_format else None,
-                "eeg_paradigm": dataset.eeg_paradigm.name if dataset.eeg_paradigm else None
-            }
-            for dataset in datasets
-        ]
 
 def get_eligible_files():
     from rich.console import Console
