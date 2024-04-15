@@ -1,28 +1,59 @@
 from contextlib import contextmanager
 from sqlalchemy import create_engine
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import sessionmaker
-from signalfloweeg.portal.models import Base, EegFormat, EegParadigm, UploadCatalog, ImportCatalog, EegAnalyses, DatasetCatalog
+
+from signalfloweeg.portal.models import *
+
 from signalfloweeg.portal.portal_utils import load_config
 import logging
 import json
 
-
 db_url = 'postgresql://sfportal:sfportal@localhost:3002/sfportal'
-engine = create_engine(db_url)
+default_db_url = 'postgresql://sfportal:sfportal@localhost:3002/postgres'  # Default or administrative database
+
+engine = create_engine(db_url, echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger('sqlalchemy.engine')
+
+# To see all SQL queries
+logger.setLevel(logging.INFO)
+
+def create_database(engine):
+    # Connect to the default database to create a new database with specified credentials
+    conn = engine.connect()
+    conn.execute("COMMIT")  # End the open transaction
+    try:
+        conn.execute(f"CREATE DATABASE sfportal WITH OWNER sfportal ENCODING 'UTF8' CONNECTION LIMIT -1")
+    except OperationalError as e:
+        print(f"Database already exists: {e}")
+    finally:
+        conn.close()
 def create_tables():
     Base.metadata.create_all(bind=engine)
-
+    
 @contextmanager
 def get_db():
+    # Create an engine connected to the default database
+    default_engine = create_engine(default_db_url)
+    create_database(default_engine)  # Create the database if it doesn't exist
+
+    # Now connect to the new or existing database
+    engine = create_engine(db_url, echo=True)
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     db = SessionLocal()
     try:
         create_tables()  # Create tables if they don't exist
         yield db
     finally:
         db.close()
+
+
  
+
 def get_engine_and_session():
     engine = create_engine(db_url)
     print(f"Database URL: {db_url}")

@@ -5,8 +5,11 @@ from sqlalchemy import (
 from sqlalchemy.orm import (
     declarative_base, relationship
 )
-
+from sqlalchemy import create_engine
 from datetime import datetime
+from sqlalchemy_utils import database_exists, create_database, drop_database
+
+import signalfloweeg.portal as portal
 
 Base = declarative_base()
 
@@ -115,26 +118,43 @@ class EegAnalyses(Base):
     valid_paradigms = Column(String)
     parameters = Column(String)  # JSON string to store analysis parameters
 
+def create_tables(db_url, reset=False):
+    # Create the database engine
+    engine = create_engine(db_url, echo=False)
 
-Base = declarative_base()
+    if reset:
+        # Drop the database if reset is True
+        if database_exists(engine.url):
+            drop_database(engine.url)
+            print("Database sfportal dropped.")
 
-# class Job(Base):
-#     __tablename__ = 'jobs'
+    # Check if the database exists, and create it if it doesn't
+    if not database_exists(engine.url):
+        create_database(engine.url)
+        print("Database sfportal created.")
+    else:
+        print("Database sfportal already exists.")
 
-#     id = Column(Integer, primary_key=True)
-#     task_name = Column(String(255), nullable=False)
-#     args = Column(JSONB, default='{}', nullable=False)
-#     kwargs = Column(JSONB, default='{}', nullable=False)
-#     status = Column(String(255), nullable=False, server_default='pending')
-#     result = Column(Text)
-#     error = Column(Text)
-#     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
-#     started_at = Column(DateTime)
-#     completed_at = Column(DateTime)
-#     retries = Column(Integer, default=0, nullable=False)
-#     max_retries = Column(Integer, default=3, nullable=False)
-#     queue = Column(String(255), nullable=False, server_default='default')
-#     exchange = Column(String(255), nullable=False, server_default='')
-#     routing_key = Column(String(255), nullable=False, server_default='')
-#     user_id = Column(UUID(as_uuid=True), default=None)  # Optional: Associate tasks with individual users
-#     expiration = Column(DateTime, default=(datetime.utcnow() + timedelta(days=7)))  # Optional: Set an expiration time for each task
+    # Create the tables
+    try:
+        Base.metadata.create_all(engine)
+        print("Tables created successfully.")
+    except Exception as e:
+        print("Error occurred during table creation:", e)
+        
+def initialize_database():
+    from rich.console import Console
+    console = Console()
+
+    config = portal.portal_utils.load_config()
+    db_url = config["database"]["url"]
+    initialize_db = config["database"]["initialize"]
+
+    console.print("[bold]Initializing or resetting database with the following parameters:[/bold]")
+    console.print(f"Database URL: [green]{db_url}[/green]")
+    console.print(f"Reset flag: [green]{initialize_db}[/green]")
+
+    create_tables(db_url=db_url, reset=initialize_db)
+
+if __name__ == "__main__":
+    initialize_database()
