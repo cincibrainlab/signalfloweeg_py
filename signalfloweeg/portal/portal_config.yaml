@@ -1,7 +1,7 @@
 # Configuration settings
 database:
   url: postgresql://sfportal:sfportal@localhost:3002/sfportal
-  initialize: False
+  reset: False
 
 # This file is used to configure the portal
 folder_paths:

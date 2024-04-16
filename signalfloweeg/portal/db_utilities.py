@@ -2,9 +2,78 @@ import logging
 from signalfloweeg.portal.models import Base
 import signalfloweeg.portal.models as models
 from signalfloweeg.portal.sessionmaker import (
+    get_db,
     get_engine_and_session,
     generate_database_summary
 )
+
+def populate_support_tables():
+    """
+    Populates EEGFormat and EEGParadigm records from a YAML file.
+
+    """
+    # Assuming load_config, get_db and EegFormat are defined elsewhere
+    Session = sessionmaker(bind=get_db())
+
+    console = Console()
+
+    with Session() as session:
+
+        def process_items(items, model, title):
+            table = Table(title=f"[bold]{title}[/bold]")
+            table.add_column("Name", style="cyan", no_wrap=True)
+            table.add_column("Description", style="magenta")
+            for item in items:
+                if not session.query(model).filter_by(name=item["name"]).first():
+                    session.add(
+                        model(name=item["name"], description=item["description"])
+                    )
+                    session.commit()
+                table.add_row(item["name"], item["description"])
+            console.print(table)
+            console.print()
+
+        process_items(config["eeg_formats"], EegFormat, "EEG Formats")
+        process_items(config["eeg_paradigms"], EegParadigm, "EEG Paradigms")
+
+        # Assuming EEG Analyses are also to be processed in a similar fashion
+        for analysis_data in config["eeg_analyses"]:
+            if (
+                not session.query(EegAnalyses)
+                .filter_by(name=analysis_data["name"])
+                .first()
+            ):
+                eeg_analysis = EegAnalyses(
+                    name=analysis_data["name"],
+                    category=analysis_data["category"],
+                    description=analysis_data["description"],
+                    valid_formats=json.dumps(analysis_data["valid_formats"]),
+                    valid_paradigms=json.dumps(analysis_data["valid_paradigms"]),
+                    parameters=json.dumps(analysis_data["parameters"]),
+                )
+                session.merge(eeg_analysis)
+                session.commit()
+
+            # Display analysis details
+            analysis_table = Table(
+                title=f"[bold]Analysis Name: {analysis_data['name']}[/bold]"
+            )
+            analysis_table.add_column("Category", style="cyan", no_wrap=True)
+            analysis_table.add_column("Description", style="magenta")
+            analysis_table.add_column("Valid Formats", style="green")
+            analysis_table.add_column("Valid Paradigms", style="yellow")
+            analysis_table.add_column("Parameters", style="blue")
+            analysis_table.add_row(
+                analysis_data["category"],
+                analysis_data["description"],
+                str(analysis_data["valid_formats"]),
+                str(analysis_data["valid_paradigms"]),
+                str(analysis_data["parameters"]),
+            )
+            console.print(analysis_table)
+            console.print()
+
+
 def drop_all_tables():
     success = False
     try:

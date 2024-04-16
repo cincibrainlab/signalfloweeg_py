@@ -1,9 +1,12 @@
 import hashlib
 import yaml
 import os
+from rich.console import Console
+
 
 # Define the default configuration file name
-YAML_CONFIG = os.path.join(os.path.dirname(__file__), 'portal_config.yaml')
+YAML_CONFIG = os.path.join(os.path.dirname(__file__), "portal_config.yaml")
+
 
 def load_config(file_path=YAML_CONFIG):
     """
@@ -19,19 +22,19 @@ def load_config(file_path=YAML_CONFIG):
         config_file_path = file_path
     else:
         config_file_path = os.path.join(os.path.dirname(__file__), file_path)
-    from rich.console import Console
+
     console = Console()
-    console.print(f"Active portal_config located at: [bold]{config_file_path}[/bold]")
-    
+    console.print(f"Using: [bold]{config_file_path}[/bold]")
+
     try:
-        with open(file_path, 'r') as stream:
+        with open(file_path, "r") as stream:
             config = yaml.safe_load(stream)
-            console.log(config['folder_paths']['root'])
             return config
     except FileNotFoundError:
         print(f"File {file_path} not found.")
     except yaml.YAMLError as exc:
         print(exc)
+
 
 def create_file_hash(file_path):
     """
@@ -44,10 +47,11 @@ def create_file_hash(file_path):
         str: The hexadecimal representation of the hash.
     """
     hash_blake2 = hashlib.blake2b()
-    with open(file_path, 'rb') as f:
+    with open(file_path, "rb") as f:
         for chunk in iter(lambda: f.read(4096), b""):
             hash_blake2.update(chunk)
     return hash_blake2.hexdigest()
+
 
 def add_status_code(code):
     """
@@ -60,12 +64,12 @@ def add_status_code(code):
         str: The corresponding status string.
     """
     if code == 200:
-        return 'NEW'
+        return "NEW"
     elif code == 201:
-        return 'IMPORTED'
+        return "IMPORTED"
     elif code == 204:
-        return 'DELETED'
+        return "DELETED"
     elif code == 500:
-        return 'LOAD_ERROR'
+        return "LOAD_ERROR"
     else:
-        return 'UNHANDLED'
+        return "UNHANDLED"
