@@ -7,31 +7,25 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 from rich.console import Console
 from rich.table import Table
-
-import signalfloweeg.portal.portal_utils as portal_utils
+from signalfloweeg.portal.db_connection import get_db_url
 
 Base = declarative_base()
-config = portal_utils.load_config()
+
 console = Console()
 
 
-class EEGFileCatalog(Base):
-    __tablename__ = "eeg_file_catalog"
-    id = Column(Integer, primary_key=True)
-    filename = Column(String)
-    dataset_name = Column(String)
-    dataset_id = Column(String)
-    eeg_format = Column(String)
-    eeg_paradigm = Column(String)
-    storage = Column(Text, unique=True)
-    upload_id = Column(String, unique=True)
-    size = Column(String)
-    hash = Column(String)
-    has_fdt_file = Column(Boolean)
-    fdt_filename = Column(String)
-    set_filename = Column(String)
-    status = Column(String)
-    remove_upload = Column(Boolean)
+class ConfigDB(Base):
+    __tablename__ = "config"
+    id = Column(Integer, primary_key=True, default=1)
+    database = Column(String, nullable=False)
+    frontend = Column(String, nullable=False)
+    api = Column(String, nullable=False)
+    folder_paths = Column(Text, nullable=False)
+    eeg_formats = Column(Text, nullable=False)
+    eeg_paradigms = Column(Text, nullable=False)
+    eeg_analyses = Column(Text, nullable=False)
+
+    __table_args__ = ({"sqlite_autoincrement": True},)
 
 
 class CatalogBase(Base):
@@ -132,9 +126,8 @@ class EegAnalyses(Base):
     parameters = Column(String)  # JSON string to store analysis parameters
 
 
-def initialize_database():
-    db_url = config["database"]["url"]
-    reset = config["database"]["reset"]
+def initialize_database(reset=False):
+    db_url = get_db_url()
 
     console.print(
         "[bold]Initializing or resetting database with the following parameters:[/bold]"
@@ -148,11 +141,15 @@ def initialize_database():
     db_status = {"force_reset": reset, "database_exists": database_exists(conn.url)}
 
     rich_print("[bold magenta]Database Status:[/bold magenta]", db_status)
-    if db_status["force_reset"]:
-        drop_database(conn.url)
-        console.print("Database dropped successfully.")
 
-    if db_status["database_exists"]:
+    if db_status["force_reset"]:
+        if db_status["database_exists"]:
+            drop_database(conn.url)
+            console.print("Database dropped successfully.")
+        else:
+            console.print("Database does not exist, no need to drop.")
+
+    if db_status["database_exists"] and not db_status["force_reset"]:
         console.print("Database sfportal present.")
     else:
         create_database(conn.url)
@@ -173,4 +170,5 @@ def initialize_database():
 
 
 if __name__ == "__main__":
-    initialize_database()
+    reset = True
+    initialize_database(reset)
