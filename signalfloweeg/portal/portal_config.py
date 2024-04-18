@@ -1,11 +1,14 @@
 import json
 from sqlalchemy.exc import SQLAlchemyError
-from signalfloweeg.portal.models import ConfigDB
+from signalfloweeg.portal.models import ConfigDB, Startup, initialize_database
 import yaml
 import os
 from rich.console import Console
 
 from signalfloweeg.portal.db_connection import get_session
+
+console = Console()
+console.print("[bold]Module portal_config is currently running...[/bold]")
 
 
 def is_config_table_present():
@@ -46,7 +49,7 @@ def load_config():
         config_file_path = os.path.join(os.path.dirname(__file__), file_path)
 
     console = Console()
-    console.print(f"Using: [bold]{config_file_path}[/bold]")
+    #console.print(f"Using: [bold]{config_file_path}[/bold]")
 
     try:
         with open(file_path, "r") as stream:
@@ -78,6 +81,10 @@ def load_config_from_yaml():
 
             session.commit()
 
+            add_eeg_format_to_db()
+            add_eeg_paradigm_to_db()
+            add_eeg_analysis_to_db()
+            
             # Adding rich print out in a table format for debugging
             from rich.table import Table
 
@@ -99,6 +106,72 @@ def load_config_from_yaml():
         print(f"Database error when updating configuration: {e}")
         session.rollback()
 
+def add_eeg_format_to_db():
+    from signalfloweeg.portal.models import EegFormat
+
+    eeg_formats_list = get_eeg_formats_dict()  # Assuming this returns a list of dictionaries
+    with get_session() as session:
+        # Drop the existing table if it exists
+        EegFormat.__table__.drop(session.bind, checkfirst=True)
+        # Create a new table
+        EegFormat.__table__.create(session.bind)
+
+        for eeg_format in eeg_formats_list:
+            new_format = EegFormat(name=eeg_format['name'], description=eeg_format['description'])
+            session.add(new_format)
+        try:
+            session.commit()
+            print("Added all new EEG formats.")
+        except SQLAlchemyError as e:
+            print(f"Failed to add new EEG formats: {e}")
+            session.rollback()
+
+def add_eeg_paradigm_to_db():
+    from signalfloweeg.portal.models import EegParadigm
+
+    eeg_paradigms_list = get_eeg_paradigms_dict()  # Assuming this returns a list of dictionaries
+    with get_session() as session:
+        # Drop the existing table if it exists
+        EegParadigm.__table__.drop(session.bind, checkfirst=True)
+        # Create a new table
+        EegParadigm.__table__.create(session.bind)
+
+        for eeg_paradigm in eeg_paradigms_list:
+            new_paradigm = EegParadigm(name=eeg_paradigm['name'], description=eeg_paradigm['description'])
+            session.add(new_paradigm)
+        try:
+            session.commit()
+            print("Added all new EEG paradigms.")
+        except SQLAlchemyError as e:
+            print(f"Failed to add new EEG paradigms: {e}")
+            session.rollback()
+
+def add_eeg_analysis_to_db():
+    from signalfloweeg.portal.models import EegAnalyses
+
+    eeg_analyses_list = get_eeg_analyses_dict()  # Assuming this returns a list of dictionaries
+    with get_session() as session:
+        # Drop the existing table if it exists
+        EegAnalyses.__table__.drop(session.bind, checkfirst=True)
+        # Create a new table
+        EegAnalyses.__table__.create(session.bind)
+
+        for eeg_analysis in eeg_analyses_list:
+            new_analysis = EegAnalyses(
+                name=eeg_analysis['name'],
+                description=eeg_analysis['description'],
+                category=eeg_analysis['category'],
+                valid_formats=json.dumps(eeg_analysis['valid_formats']),
+                valid_paradigms=json.dumps(eeg_analysis['valid_paradigms']),
+                parameters=json.dumps(eeg_analysis.get('parameters', {}))  # Default to empty JSON if not provided
+            )
+            session.add(new_analysis)
+        try:
+            session.commit()
+            print("Added all new EEG analyses.")
+        except SQLAlchemyError as e:
+            print(f"Failed to add new EEG analyses: {e}")
+            session.rollback()
 
 def json_to_dict(json_str):
     try:
@@ -132,6 +205,15 @@ def get_frontend_info():
             print(f"Database error when retrieving frontend info: {e}")
     return {}
 
+def get_api_info():
+    with get_session() as session:
+        try:
+            config_db = session.query(ConfigDB).first()
+            if config_db:
+                return json_to_dict(config_db.api)
+        except SQLAlchemyError as e:
+            print(f"Database error when retrieving api info: {e}")
+    return {}
 
 def get_folder_paths():
     with get_session() as session:
@@ -144,7 +226,7 @@ def get_folder_paths():
     return {}
 
 
-def get_eeg_formats():
+def get_eeg_formats_dict():
     with get_session() as session:
         try:
             config_db = session.query(ConfigDB).first()
@@ -155,7 +237,7 @@ def get_eeg_formats():
     return []
 
 
-def get_eeg_paradigms():
+def get_eeg_paradigms_dict():
     with get_session() as session:
         try:
             config_db = session.query(ConfigDB).first()
@@ -166,7 +248,7 @@ def get_eeg_paradigms():
     return []
 
 
-def get_eeg_analyses():
+def get_eeg_analyses_dict():
     with get_session() as session:
         try:
             config_db = session.query(ConfigDB).first()
@@ -203,30 +285,35 @@ def get_all_config_parameters():
     return {}
 
 
-def set_portal_config(script_path):
+def set_portal_config_path(script_path):
     try:
+        initialize_database(reset=False)
+        if not os.path.exists(script_path):
+            return "Invalid script path"
         with get_session() as session:
             # Check if the config_db already exists, if so, update it
-            config_db = session.query(ConfigDB).filter_by(id=1).first()
-            if not config_db:
-                config_db = ConfigDB(id=1)
-                session.add(config_db)
+            startup_record = session.query(Startup).filter_by(id=1).first()
+            if not startup_record:
+                startup_record = Startup(id=1)
+                session.add(startup_record)
 
-            config_db.sf_config_path = script_path
-            session.merge(config_db)
+            startup_record.sf_config_path = script_path
+            session.add(startup_record)
             session.commit()
-            config_db = session.query(ConfigDB).filter_by(id=1).first()
+            startup_record = session.query(Startup).filter_by(id=1).first()
 
             # Adding rich print out in a table format for debugging
             from rich.table import Table
 
-            table = Table(title="ConfigDB Update Portal Script Path")
+            table = Table(title="Startup Update")
             table.add_column("Column", style="cyan")
             table.add_column("Value", style="magenta")
             table.add_row("portal_script", script_path)
 
             console = Console()
             console.print(table)
+
+            load_config_from_yaml()
 
     except SQLAlchemyError as e:
         print(f"Database error when updating configuration: {e}")
@@ -236,12 +323,14 @@ def set_portal_config(script_path):
 def get_portal_config_path():
     with get_session() as session:
         try:
-            config_db = session.query(ConfigDB).filter_by(id=1).first()
-            if config_db:
-                return (config_db.sf_config_path,)
+            startup_record = session.query(Startup).filter_by(id=1).first()
+            if startup_record:
+                return (startup_record.sf_config_path)
+            else:
+                return None
         except SQLAlchemyError as e:
             print(f"Database error when retrieving portal config: {e}")
-    return {}
+    return {"sf_config_path": None}
 
 
 def test_functions():
@@ -266,7 +355,8 @@ def test_functions():
 
 
 if __name__ == "__main__":
+    print(is_config_table_present())
     print(get_portal_config_path())
     load_config_from_yaml()
     # config_db = get_all_config_parameters()
-    test_functions()
+    #test_functions()

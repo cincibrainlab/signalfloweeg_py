@@ -1,11 +1,12 @@
-from signalfloweeg.portal.sessionmaker import get_db
+from signalfloweeg.portal.db_connection import get_session
 from signalfloweeg.portal.models import (
-    EegFormat, 
+    EegFormat,
     EegParadigm
     )
+from signalfloweeg.portal.portal_config import get_eeg_formats_dict
 
 def get_eeg_formats():
-    with get_db() as session:
+    with get_session() as session:
         eeg_formats = session.query(EegFormat).all()
         return [
             {
@@ -16,8 +17,9 @@ def get_eeg_formats():
             for eeg_format in eeg_formats
         ]
 
+
 def get_eeg_paradigms():
-    with get_db() as session:
+    with get_session() as session:
         eeg_paradigms = session.query(EegParadigm).all()
         return [
             {
@@ -27,3 +29,7 @@ def get_eeg_paradigms():
             }
             for eeg_paradigm in eeg_paradigms
         ]
+
+if __name__ == "__main__":
+    print(get_eeg_formats())
+    print(get_eeg_paradigms())

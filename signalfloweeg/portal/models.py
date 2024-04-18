@@ -13,18 +13,22 @@ Base = declarative_base()
 
 console = Console()
 
+class Startup(Base):
+    __tablename__ = "startup_table"
+    id = Column(Integer, primary_key=True, default=1)
+    sf_config_path = Column(String, nullable=True)
+    __table_args__ = ({"sqlite_autoincrement": True},)
 
 class ConfigDB(Base):
     __tablename__ = "config"
     id = Column(Integer, primary_key=True, default=1)
-    database = Column(String, nullable=False)
-    frontend = Column(String, nullable=False)
-    api = Column(String, nullable=False)
-    sf_config_path = Column(String, nullable=True)
-    folder_paths = Column(Text, nullable=False)
-    eeg_formats = Column(Text, nullable=False)
-    eeg_paradigms = Column(Text, nullable=False)
-    eeg_analyses = Column(Text, nullable=False)
+    database = Column(String, nullable=True)
+    frontend = Column(String, nullable=True)
+    api = Column(String, nullable=True)
+    folder_paths = Column(Text, nullable=True)
+    eeg_formats = Column(Text, nullable=True)
+    eeg_paradigms = Column(Text, nullable=True)
+    eeg_analyses = Column(Text, nullable=True)
 
     __table_args__ = ({"sqlite_autoincrement": True},)
 
@@ -77,31 +81,22 @@ class AnalysisJobList(Base):
     id = Column(Integer, primary_key=True)
     job_id = Column(String)
     upload_id = Column(String, ForeignKey("import_catalog.upload_id"))
-    eeg_format_id = Column(Integer, ForeignKey("eeg_format.id"))
-    eeg_paradigm_id = Column(Integer, ForeignKey("eeg_paradigm.id"))
-    analysis_id = Column(Integer, ForeignKey("eeg_analysis.id"))
+    eeg_format_name = Column(String)
+    eeg_paradigm_name = Column(String)
+    eeg_analysis_name = Column(String)
     status = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow)
     parameters = Column(String)
     result = Column(String)
-
-    eeg_format = relationship("EegFormat")
-    eeg_paradigm = relationship("EegParadigm")
-    analysis = relationship("EegAnalyses")
-
 
 class DatasetCatalog(Base):
     __tablename__ = "dataset_catalog"
     dataset_name = Column(String)
     dataset_id = Column(String, primary_key=True)
     description = Column(Text)
-    eeg_format_id = Column(Integer, ForeignKey("eeg_format.id"))
-    eeg_paradigm_id = Column(Integer, ForeignKey("eeg_paradigm.id"))
-
-    eeg_format = relationship("EegFormat")
-    eeg_paradigm = relationship("EegParadigm")
-
-
+    eeg_format_name = Column(String)
+    eeg_paradigm_name = Column(String)
+    
 class EegFormat(Base):
     __tablename__ = "eeg_format"
     id = Column(Integer, autoincrement=True, primary_key=True)
@@ -117,7 +112,7 @@ class EegParadigm(Base):
 
 
 class EegAnalyses(Base):
-    __tablename__ = "eeg_analysis"
+    __tablename__ = "eeg_analyses"
     id = Column(Integer, primary_key=True)
     name = Column(String)
     description = Column(Text)
@@ -162,13 +157,13 @@ def initialize_database(reset=False):
     table_verification = Table(title="Table Verification")
     table_verification.add_column("Table Name", style="cyan")
     table_verification.add_column("Status", style="green")
-    table_verification.add_column("Message", style="magenta")
+    table_verification.add_column("Fields", style="magenta")
     for table in created_tables:
+        table_fields = ", ".join([column.name for column in Base.metadata.tables[table].columns])
         table_verification.add_row(
-            table, "Verified", f"Table {table} verified successfully."
+            table, "Verified", f"Table name: {table}, Fields: {table_fields}"
         )
     console.print(table_verification)
-
 
 if __name__ == "__main__":
     reset = True
