@@ -3,6 +3,12 @@ database:
   url: postgresql://sfportal:sfportal@localhost:3002/sfportal
   reset: False
 
+frontend:
+  url: http://localhost:5173
+
+api:
+  port: 8001
+
 # This file is used to configure the portal
 folder_paths:
   root: /portal_files

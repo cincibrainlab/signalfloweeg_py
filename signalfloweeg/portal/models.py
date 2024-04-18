@@ -20,6 +20,7 @@ class ConfigDB(Base):
     database = Column(String, nullable=False)
     frontend = Column(String, nullable=False)
     api = Column(String, nullable=False)
+    sf_config_path = Column(String, nullable=True)
     folder_paths = Column(Text, nullable=False)
     eeg_formats = Column(Text, nullable=False)
     eeg_paradigms = Column(Text, nullable=False)

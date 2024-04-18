@@ -7,7 +7,6 @@ from rich.console import Console
 
 from signalfloweeg.portal.db_connection import get_session
 
-YAML_CONFIG = os.path.join(os.path.dirname(__file__), "portal_config.yaml")
 
 def is_config_table_present():
     """
@@ -27,7 +26,8 @@ def is_config_table_present():
         print(f"Error checking for ConfigDB table: {e}")
         return False
 
-def load_config(file_path=YAML_CONFIG):
+
+def load_config():
     """
     Loads the YAML configuration file.
 
@@ -37,6 +37,9 @@ def load_config(file_path=YAML_CONFIG):
     Returns:
         dict: The loaded YAML configuration as a dictionary, or None if an error occurs.
     """
+
+    file_path = get_portal_config_path()
+
     if os.path.isfile(file_path):
         config_file_path = file_path
     else:
@@ -64,7 +67,7 @@ def load_config_from_yaml():
             if not config_db:
                 config_db = ConfigDB(id=1)
                 session.add(config_db)
-            
+
             config_db.database = json.dumps(data["database"])
             config_db.frontend = json.dumps(data["frontend"])
             config_db.api = json.dumps(data["api"])
@@ -91,10 +94,11 @@ def load_config_from_yaml():
             table.add_row("eeg_analyses", json.dumps(data["eeg_analyses"]))
             console = Console()
             console.print(table)
-            
+
     except SQLAlchemyError as e:
         print(f"Database error when updating configuration: {e}")
         session.rollback()
+
 
 def json_to_dict(json_str):
     try:
@@ -102,6 +106,7 @@ def json_to_dict(json_str):
     except json.JSONDecodeError as e:
         print(f"Error decoding JSON: {e}")
         return {}
+
 
 def get_database_info():
     with get_session() as session:
@@ -116,6 +121,7 @@ def get_database_info():
             print(f"Database error when retrieving database info: {e}")
     return {}
 
+
 def get_frontend_info():
     with get_session() as session:
         try:
@@ -125,6 +131,7 @@ def get_frontend_info():
         except SQLAlchemyError as e:
             print(f"Database error when retrieving frontend info: {e}")
     return {}
+
 
 def get_folder_paths():
     with get_session() as session:
@@ -136,6 +143,7 @@ def get_folder_paths():
             print(f"Database error when retrieving folder paths: {e}")
     return {}
 
+
 def get_eeg_formats():
     with get_session() as session:
         try:
@@ -145,6 +153,7 @@ def get_eeg_formats():
         except SQLAlchemyError as e:
             print(f"Database error when retrieving EEG formats: {e}")
     return []
+
 
 def get_eeg_paradigms():
     with get_session() as session:
@@ -156,6 +165,7 @@ def get_eeg_paradigms():
             print(f"Database error when retrieving EEG paradigms: {e}")
     return []
 
+
 def get_eeg_analyses():
     with get_session() as session:
         try:
@@ -166,6 +176,7 @@ def get_eeg_analyses():
             print(f"Database error when retrieving EEG analyses: {e}")
     return []
 
+
 def get_all_config_parameters():
     with get_session() as session:
         try:
@@ -174,13 +185,62 @@ def get_all_config_parameters():
                 return {
                     "database_url": config_db.database_url,
                     "database_reset": config_db.database_reset,
-                    "folder_paths": json_to_dict(config_db.folder_paths) if config_db.folder_paths else {},
-                    "eeg_formats": json_to_dict(config_db.eeg_formats) if config_db.eeg_formats else [],
-                    "eeg_paradigms": json_to_dict(config_db.eeg_paradigms) if config_db.eeg_paradigms else [],
-                    "eeg_analyses": json_to_dict(config_db.eeg_analyses) if config_db.eeg_analyses else [],
+                    "folder_paths": json_to_dict(config_db.folder_paths)
+                    if config_db.folder_paths
+                    else {},
+                    "eeg_formats": json_to_dict(config_db.eeg_formats)
+                    if config_db.eeg_formats
+                    else [],
+                    "eeg_paradigms": json_to_dict(config_db.eeg_paradigms)
+                    if config_db.eeg_paradigms
+                    else [],
+                    "eeg_analyses": json_to_dict(config_db.eeg_analyses)
+                    if config_db.eeg_analyses
+                    else [],
                 }
         except SQLAlchemyError as e:
             print(f"Database error when retrieving all config_db parameters: {e}")
+    return {}
+
+
+def set_portal_config(script_path):
+    try:
+        with get_session() as session:
+            # Check if the config_db already exists, if so, update it
+            config_db = session.query(ConfigDB).filter_by(id=1).first()
+            if not config_db:
+                config_db = ConfigDB(id=1)
+                session.add(config_db)
+
+            config_db.sf_config_path = script_path
+            session.merge(config_db)
+            session.commit()
+            config_db = session.query(ConfigDB).filter_by(id=1).first()
+
+            # Adding rich print out in a table format for debugging
+            from rich.table import Table
+
+            table = Table(title="ConfigDB Update Portal Script Path")
+            table.add_column("Column", style="cyan")
+            table.add_column("Value", style="magenta")
+            table.add_row("portal_script", script_path)
+
+            console = Console()
+            console.print(table)
+
+    except SQLAlchemyError as e:
+        print(f"Database error when updating configuration: {e}")
+        session.rollback()
+
+
+def get_portal_config_path():
+    with get_session() as session:
+        try:
+            config_db = session.query(ConfigDB).filter_by(id=1).first()
+            if config_db:
+                return (config_db.sf_config_path,)
+        except SQLAlchemyError as e:
+            print(f"Database error when retrieving portal config: {e}")
     return {}
 
 
@@ -204,10 +264,9 @@ def test_functions():
     eeg_analyses = get_eeg_analyses()
     console.print("[bold green]EEG Analyses:[/bold green]", eeg_analyses)
 
+
 if __name__ == "__main__":
+    print(get_portal_config_path())
     load_config_from_yaml()
-    #config_db = get_all_config_parameters()
+    # config_db = get_all_config_parameters()
     test_functions()
-
-
-
