@@ -1,8 +1,7 @@
 from signalfloweeg.portal.db_connection import get_session
 from signalfloweeg.portal.models import (
     EegFormat,
-    EegParadigm,
-    Users
+    EegParadigm
     )
 
 def get_eeg_formats():
@@ -28,17 +27,6 @@ def get_eeg_paradigms():
                 "description": eeg_paradigm.description
             }
             for eeg_paradigm in eeg_paradigms
-        ]
-
-def get_emails():
-    with get_session() as session:
-        users = session.query(Users).all()
-        return [
-            {
-                "id": user.user_id,
-                "name": user.email
-            }
-            for user in users
         ]
 
 if __name__ == "__main__":

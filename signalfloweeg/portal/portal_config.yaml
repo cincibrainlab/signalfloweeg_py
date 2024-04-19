@@ -9,6 +9,14 @@ frontend:
 api:
   port: 8001
 
+users:
+  - email: 'ernest.pedapati@cchmc.org'
+  - email: 'grace.westerkamp@cchmc.org'
+  - email: 'carrie.randle@ucr.edu'
+  - email: 'nate.suer@cchmc.org'
+  - email: 'yanshen.liu@cchmc.org'
+
+
 # This file is used to configure the portal
 folder_paths:
   root: /portal_files

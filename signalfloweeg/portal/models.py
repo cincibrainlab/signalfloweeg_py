@@ -7,6 +7,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 from rich.console import Console
 from rich.table import Table
+
 from signalfloweeg.portal.db_connection import get_db_url
 
 Base = declarative_base()
@@ -19,12 +20,23 @@ class Startup(Base):
     sf_config_path = Column(String, nullable=True)
     __table_args__ = ({"sqlite_autoincrement": True},)
 
+class Users(Base):
+    __tablename__ = "users"
+    id = None
+    user_id = Column(String, primary_key=True)
+    username = Column(String, unique=True, nullable=True)
+    email = Column(String, unique=True, nullable=True)
+    hashed_password = Column(String, nullable=True)
+    is_active = Column(Boolean, default=True)
+    is_superuser = Column(Boolean, default=True)
+
 class ConfigDB(Base):
     __tablename__ = "config"
     id = Column(Integer, primary_key=True, default=1)
     database = Column(String, nullable=True)
     frontend = Column(String, nullable=True)
     api = Column(String, nullable=True)
+    users = Column(Text, nullable=True)
     folder_paths = Column(Text, nullable=True)
     eeg_formats = Column(Text, nullable=True)
     eeg_paradigms = Column(Text, nullable=True)

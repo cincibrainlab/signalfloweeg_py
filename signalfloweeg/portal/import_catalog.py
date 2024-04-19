@@ -3,14 +3,9 @@ from shutil import copy
 import os
 from signalfloweeg.portal.sessionmaker import get_db
 from signalfloweeg.portal.models import UploadCatalog, ImportCatalog
-from signalfloweeg.portal.portal_utils import add_status_code, load_config
+from signalfloweeg.portal.portal_utils import add_status_code
 from signalfloweeg.portal.upload_catalog import get_upload_and_fdt_upload_id
 from signalfloweeg.portal.signal_utils import get_core_eeg_info
-
-config = load_config()
-UPLOAD_PATH = config['folder_paths']['uploads']
-IMPORT_PATH = config['folder_paths']['import']
-INFO_PATH = config['folder_paths']['info_archive']
 
 def update_import_catalog():
     with get_db() as session:
