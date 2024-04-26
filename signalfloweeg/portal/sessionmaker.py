@@ -256,7 +256,7 @@ def generate_database_summary():
         session (sqlalchemy.orm.Session): The database session.
     
     Returns:
-        dict: A dictionary containing the table names and record counts.
+        dict: A JSON-compatible dictionary containing the table names and record counts.
     """
     with get_db() as session:
         print(f"Database URL: {db_url}")
@@ -270,19 +270,23 @@ def generate_database_summary():
             record_count = session.query(table).count()
             record_counts[table.name] = record_count
         
-        # Create a rich table to display the information
+        # Return a JSON-compatible dictionary instead of printing a table
+        database_summary = {
+            "Database URL": db_url,
+            "Engine": str(engine),
+            "Table Count": table_count,
+            "Record Counts": record_counts
+        }
+
         from rich.console import Console
-        from rich.table import Table
-        
         console = Console()
-        table = Table(title="Database Summary")
-        table.add_column("Table", style="cyan", no_wrap=True)
-        table.add_column("Records", style="magenta", justify="right")
-        
+        summary_text = f"Database Summary (sessionmaker):\nDatabase URL: {db_url}\nEngine: {str(engine)}\nTable Count: {table_count}\n"
         for table_name, record_count in record_counts.items():
-            table.add_row(table_name, str(record_count))
+            summary_text += f"Table: {table_name} - Records: {record_count}\n"
+        console.print(summary_text)
         
-        console.print(table)
+        return database_summary
+        
 
 def get_eeg_formats():
     with get_db() as session:
