@@ -1,14 +1,14 @@
 
 from shutil import copy
 import os
-from signalfloweeg.portal.sessionmaker import get_db
+from signalfloweeg.portal.db_connection import get_session
 from signalfloweeg.portal.models import UploadCatalog, ImportCatalog
 from signalfloweeg.portal.portal_utils import add_status_code
 from signalfloweeg.portal.upload_catalog import get_upload_and_fdt_upload_id
 from signalfloweeg.portal.signal_utils import get_core_eeg_info
 
 def update_import_catalog():
-    with get_db() as session:
+    with get_session() as session:
         set_files = session.query(UploadCatalog).filter(UploadCatalog.is_set_file).all()
         for file in set_files:
             # Check if the record already exists in the ImportCatalog
@@ -18,10 +18,14 @@ def update_import_catalog():
             else:
                 set_dest_path, fdt_dest_path = copy_import_files(file.upload_id)
                 core_info = get_core_eeg_info(set_dest_path)
+                print(f"Before ImportCatalog creation: eeg_format={file.eeg_format}, eeg_paradigm={file.eeg_paradigm}")
                 import_record = ImportCatalog(
                     original_name=file.original_name,
                     dataset_name=file.dataset_name,
                     dataset_id=file.dataset_id,
+                    eeg_format=file.eeg_format,
+                    eeg_paradigm=file.eeg_paradigm,
+                    upload_email=file.upload_email,
                     date_added=file.date_added,
                     upload_id=file.upload_id,  # Assuming the import_id can be the same as upload_id for simplicity
                     remove_import=file.remove_upload,
@@ -46,7 +50,7 @@ def update_import_catalog():
         print(f"Transferred {len(set_files)} SET files from UploadCatalog to ImportCatalog.")
 
 def generate_joblist():
-    with get_db() as session:
+    with get_session() as session:
         # Query the ImportCatalog table to find eligible files
         eligible_files = session.query(ImportCatalog).\
         filter(ImportCatalog.status == add_status_code(201)).\
@@ -98,7 +102,7 @@ def clean_import_files(upload_id):
         print(f"Removed FDT file {fdt_dest_path}")
     
 def update_core_eeg_info():
-    with get_db() as session:
+    with get_session() as session:
         for record in session.query(ImportCatalog).all():
             if record.is_set_file:
                 set_dest_path, fdt_dest_path = copy_import_files(record.upload_id)
@@ -109,7 +113,7 @@ def update_core_eeg_info():
         session.close()
 
 def get_first_upload_id():
-    with get_db() as session:
+    with get_session() as session:
         first_import_record = session.query(ImportCatalog).first()
         session.close()
         if first_import_record:
@@ -127,7 +131,7 @@ def get_import_ids():
     Returns:
         dict: A dictionary containing the upload_ids.
     """
-    with get_db() as session:
+    with get_session() as session:
         import_records = session.query(ImportCatalog.upload_id).all()
         
         # Create a rich table to display the upload_ids
@@ -147,7 +151,7 @@ def get_import_ids():
 
 
 def get_upload_id_by_record_number(record_number=None):
-    with get_db() as session:
+    with get_session() as session:
         if record_number is not None:
             try:
                 record = session.query(ImportCatalog).offset(record_number - 1).first()

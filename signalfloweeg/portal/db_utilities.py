@@ -1,11 +1,8 @@
 import logging
 from rich.console import Console
 from rich.table import Table
-
 from signalfloweeg.portal.db_connection import get_session
-
 import signalfloweeg.portal.models as models
-
 
 def generate_database_summary():
     """
@@ -27,17 +24,19 @@ def generate_database_summary():
             record_counts[table.name] = record_count
 
         console = Console()
-        table = Table(title="Database Summary")
+        table = Table(title="Database Summary (DB Utilities)")
         table.add_column("Table", style="cyan", no_wrap=True)
         table.add_column("Records", style="green", justify="right")
 
+        json_summary = {}
+
         for table_name, record_count in record_counts.items():
             table.add_row(table_name, str(record_count))
+            json_summary[table_name] = record_count
 
         console.print(table)
-
-
-
+        return json_summary
+    
 def drop_all_tables():
     success = False
     try:
@@ -104,3 +103,6 @@ def drop_table(table_name):
         logging.info("Disposing engine...")
         engine.dispose()
         return {"success": success, "message": f"Table {table_name} dropped successfully." if success else f"Failed to drop table {table_name}."}
+
+
+

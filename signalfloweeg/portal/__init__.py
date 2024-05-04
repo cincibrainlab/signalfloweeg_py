@@ -7,7 +7,7 @@ Description: Module for handling portal
 # Importing modules to be accessible as part of the portal package
 from . import models
 from . import db_connection
-from . import db_datasets
+from . import dataset_catalog
 from . import db_utilities
 from . import import_catalog
 

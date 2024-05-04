@@ -1,6 +1,8 @@
 from contextlib import contextmanager
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.exc import SQLAlchemyError
+import logging
 
 
 db_url = "postgresql://sfportal:sfportal@localhost:3002/sfportal"
@@ -31,3 +33,18 @@ def get_engine():
         return engine
     finally:
         session.close()
+
+def is_database_connected():
+    """
+    Check if the database is connected.
+
+    Returns:
+        bool: True if the database is connected, False otherwise.
+    """
+    try:
+        with get_session() as session:
+            session.execute("SELECT 1")
+            return True
+    except SQLAlchemyError as e:
+        logging.error(f"Database connection error: {e}")
+        return False

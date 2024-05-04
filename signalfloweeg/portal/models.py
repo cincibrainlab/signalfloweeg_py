@@ -7,6 +7,9 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 from rich.console import Console
 from rich.table import Table
+from sqlalchemy import ForeignKey, DateTime
+from sqlalchemy.orm import relationship, backref
+from sqlalchemy.ext.declarative import declared_attr
 
 from signalfloweeg.portal.db_connection import get_db_url
 
@@ -44,7 +47,25 @@ class ConfigDB(Base):
 
     __table_args__ = ({"sqlite_autoincrement": True},)
 
+class DatasetCatalog(Base):
+    __tablename__ = "dataset_catalog"
+    dataset_name = Column(String)
+    dataset_id = Column(String, primary_key=True)
+    description = Column(Text)
 
+class EegFormat(Base):
+    __tablename__ = "eeg_format"
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    name = Column(String, unique=True)
+    description = Column(Text)
+
+
+class EegParadigm(Base):
+    __tablename__ = "eeg_paradigm"
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    name = Column(String, unique=True)
+    description = Column(Text)
+    
 class CatalogBase(Base):
     __abstract__ = True
     id = Column(Integer, primary_key=True)
@@ -52,16 +73,31 @@ class CatalogBase(Base):
     upload_id = Column(String, unique=True)
     date_added = Column(String)
     original_name = Column(String)
-    dataset_name = Column(String)
-    dataset_id = Column(String)
     eeg_format = Column(String)
     eeg_paradigm = Column(String)
     is_set_file = Column(Boolean)
     has_fdt_file = Column(Boolean)
     fdt_filename = Column(String)
     fdt_upload_id = Column(String)
+    upload_email = Column(String)    
     hash = Column(String)
 
+    @declared_attr
+    def dataset_id(cls):
+        # Defines a foreign key field, allowing subclass-specific customization
+        return Column(String, ForeignKey("dataset_catalog.dataset_id"))
+
+    @declared_attr
+    def dataset(cls):
+        backref_name = f"{cls.__name__.lower()}_entries"
+        # Defines a relationship, dynamically linked to the subclass's foreign key
+        return relationship("DatasetCatalog", backref=backref(backref_name, cascade="all, delete-orphan"))
+
+# Explanation of changes:
+# @declared_attr: Used here to ensure that the foreign key and relationship are set up correctly for each subclass,
+# allowing SQLAlchemy to manage the inheritance and linkage dynamically.
+# This method allows each subclass that inherits from CatalogBase to have its specific linkage to the DatasetCatalog,
+# facilitating correct ORM behavior across different inheriting models.
 
 class UploadCatalog(CatalogBase):
     __tablename__ = "upload_catalog"
@@ -71,7 +107,6 @@ class UploadCatalog(CatalogBase):
     )  # Override 'upload_id' as the primary key
     size = Column(String)
     remove_upload = Column(Boolean)
-
 
 class ImportCatalog(CatalogBase):
     __tablename__ = "import_catalog"
@@ -89,7 +124,6 @@ class ImportCatalog(CatalogBase):
 
 class AnalysisJobList(Base):
     __tablename__ = "analysis_joblist"
-
     id = Column(Integer, primary_key=True)
     job_id = Column(String)
     upload_id = Column(String, ForeignKey("import_catalog.upload_id"))
@@ -100,27 +134,8 @@ class AnalysisJobList(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     parameters = Column(String)
     result = Column(String)
-
-class DatasetCatalog(Base):
-    __tablename__ = "dataset_catalog"
-    dataset_name = Column(String)
-    dataset_id = Column(String, primary_key=True)
-    description = Column(Text)
-    eeg_format_name = Column(String)
-    eeg_paradigm_name = Column(String)
     
-class EegFormat(Base):
-    __tablename__ = "eeg_format"
-    id = Column(Integer, autoincrement=True, primary_key=True)
-    name = Column(String, unique=True)
-    description = Column(Text)
 
-
-class EegParadigm(Base):
-    __tablename__ = "eeg_paradigm"
-    id = Column(Integer, autoincrement=True, primary_key=True)
-    name = Column(String, unique=True)
-    description = Column(Text)
 
 
 class EegAnalyses(Base):

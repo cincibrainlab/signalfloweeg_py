@@ -123,7 +123,7 @@ def generate_database_summary():
             record_counts[table.name] = record_count
 
         console = Console()
-        table = Table(title="Database Summary")
+        table = Table(title="Database Summary (SessionMaker)")
         table.add_column("Table", style="cyan", no_wrap=True)
         table.add_column("Records", style="magenta", justify="right")
 

@@ -1,4 +1,5 @@
-from signalfloweeg.portal.sessionmaker import get_db
+from signalfloweeg.portal.db_connection import get_session
+
 from signalfloweeg.portal.models import (
     DatasetCatalog
 )
@@ -22,14 +23,14 @@ import logging
 
 def clear_table_dataset():
     logging.debug("Attempting to clear dataset information from the database.")
-    with get_db() as session:
+    with get_session() as session:
         session.query(DatasetCatalog).delete(synchronize_session=False)
         session.commit()
     logging.info("Dataset information cleared successfully.")
 
 def clear_table(table_name):
     logging.debug(f"Attempting to drop and recreate {table_name} table in the database.")
-    with get_db() as session:
+    with get_session() as session:
         table_class = getattr(models, table_name)
         table_class.__table__.drop(session.bind)
         table_class.__table__.create(session.bind)
@@ -37,12 +38,12 @@ def clear_table(table_name):
     logging.info(f"{table_name} table dropped and recreated successfully.")
 
 def delete_dataset_info(dataset_id):
-    with get_db() as session:
+    with get_session() as session:
         session.query(DatasetCatalog).filter(DatasetCatalog.dataset_id == dataset_id).delete()
         session.commit()
 
 def get_info():
-    with get_db() as session:
+    with get_session() as session:
         datasets = session.query(DatasetCatalog).all()
         return [
             {
@@ -55,23 +56,32 @@ def get_info():
             for dataset in datasets
         ]
 
+def add_dataset(dataset_catalog_entry: DatasetCatalog):
+    with get_session() as session:
+        # Check if a dataset with the provided ID already exists
+        existing_dataset = session.query(DatasetCatalog).filter_by(dataset_id=dataset_catalog_entry.dataset_id).first()
+        if not existing_dataset:
+            # Create a new dataset entry if it does not exist
+            session.add(dataset_catalog_entry)
+            session.commit()
 
-def add_record(dataset_name, description, eeg_format_id, eeg_paradigm_id):
-    with get_db() as session:
-        dataset_id = str(uuid.uuid4())
-        dataset = DatasetCatalog(
-            dataset_id=dataset_id,
-            dataset_name=dataset_name,
-            description=description,
-            eeg_format_id=eeg_format_id,
-            eeg_paradigm_id=eeg_paradigm_id
-        )
-        session.add(dataset)
-        session.commit()
+        # Return the dataset details whether it was newly created or already existed
         return {
-            "id": dataset.dataset_id,
-            "name": dataset.dataset_name,
-            "description": dataset.description,
-            "eeg_format": dataset.eeg_format.name if dataset.eeg_format else None,
-            "eeg_paradigm": dataset.eeg_paradigm.name if dataset.eeg_paradigm else None
+            "id": dataset_catalog_entry.dataset_id,
+            "name": dataset_catalog_entry.dataset_name,
+            "description": dataset_catalog_entry.description
         }
+
+def update_dataset(dataset_catalog_entry: DatasetCatalog):
+    with get_session() as session:
+        # Fetch the existing dataset by ID
+        existing_dataset = session.query(DatasetCatalog).filter_by(dataset_id=dataset_catalog_entry.dataset_id).first()
+        if existing_dataset:
+            # Update the existing dataset entry
+            existing_dataset.dataset_name = dataset_catalog_entry.dataset_name
+            existing_dataset.description = dataset_catalog_entry.description
+            session.commit()
+            return existing_dataset
+        else:
+            # If the dataset does not exist, return an error message
+            return {"error": "Dataset not found"}

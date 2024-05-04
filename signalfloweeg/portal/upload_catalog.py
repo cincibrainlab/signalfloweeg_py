@@ -1,7 +1,8 @@
 
-from signalfloweeg.portal.sessionmaker import get_db
+from signalfloweeg.portal.db_connection import get_session
 from signalfloweeg.portal.models import DatasetCatalog, UploadCatalog
 from signalfloweeg.portal.portal_utils import create_file_hash, add_status_code, load_config
+from signalfloweeg.portal.dataset_catalog import add_dataset
 
 from sqlalchemy.exc import IntegrityError
 
@@ -46,12 +47,15 @@ def extract_metadata(info_file, folder_path=UPLOAD_PATH):
         'date_added': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         'size': file_metadata.get('Size', 'NA'),
         'original_name': file_metadata['MetaData'].get('filename', 'NA'),
-        'hash': create_file_hash(os.path.join(folder_path, os.path.basename(file_metadata['Storage'].get('Path', ''))))
+        'hash': create_file_hash(os.path.join(folder_path, os.path.basename(file_metadata['Storage'].get('Path', '')))),
+        'eeg_format': file_metadata['MetaData'].get('eegFormat', 'NA'),
+        'eeg_paradigm': file_metadata['MetaData'].get('eegParadigm', 'NA'),
+        'upload_email': file_metadata['MetaData'].get('emailSelection', 'NA'),
     }
     return row
 
 def align_fdt_files(folder_path=UPLOAD_PATH):
-    with get_db() as session:
+    with get_session() as session:
         for row in session.query(UploadCatalog).all():
             if row.original_name.endswith('.set'):
                 row.is_set_file = True
@@ -70,19 +74,21 @@ def align_fdt_files(folder_path=UPLOAD_PATH):
         session.commit()
         session.close()
 
+
 def ingest_info_files(info_files):
-    
-    with get_db() as session:
+    with get_session() as session:
         # Function to add metadata to the database
         for info_file in info_files:
             row = extract_metadata(info_file)
-            dataset_name = row['dataset_name']
-            dataset_id = row['dataset_id']
-            dataset = session.query(DatasetCatalog).filter_by(dataset_id=dataset_id).first()
-            if not dataset:
-                dataset = DatasetCatalog(dataset_name=dataset_name, dataset_id=dataset_id, description='NA')
-                session.add(dataset)
-                session.commit()
+
+            dataset_entry = DatasetCatalog(
+                dataset_id=row['dataset_id'],
+                dataset_name=row['dataset_name'],
+                description=''
+                )
+            
+            add_dataset(dataset_entry)
+            
             eeg_file = UploadCatalog(**row)
             try:
                 session.merge(eeg_file)
@@ -95,7 +101,7 @@ def ingest_info_files(info_files):
         session.close()
 
 def get_upload_and_fdt_upload_id(upload_id):
-    with get_db() as session:
+    with get_session() as session:
         file_record = session.query(UploadCatalog).filter(UploadCatalog.upload_id == upload_id).first()
         # get upload paths
         set_upload_path = os.path.join(UPLOAD_PATH, upload_id)
@@ -118,7 +124,7 @@ def get_upload_and_fdt_upload_id(upload_id):
     return results
     
 def delete_uploads_and_save_info_files():
-    with get_db() as session:
+    with get_session() as session:
         for row in session.query(UploadCatalog).all():
             if row.remove_upload:
                 os.remove(os.path.join(UPLOAD_PATH, row.original_name))
