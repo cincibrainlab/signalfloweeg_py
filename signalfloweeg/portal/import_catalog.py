@@ -21,7 +21,6 @@ def update_import_catalog():
                 print(f"Before ImportCatalog creation: eeg_format={file.eeg_format}, eeg_paradigm={file.eeg_paradigm}")
                 import_record = ImportCatalog(
                     original_name=file.original_name,
-                    dataset_name=file.dataset_name,
                     dataset_id=file.dataset_id,
                     eeg_format=file.eeg_format,
                     eeg_paradigm=file.eeg_paradigm,

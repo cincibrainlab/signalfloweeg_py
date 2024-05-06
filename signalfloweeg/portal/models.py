@@ -10,6 +10,7 @@ from rich.table import Table
 from sqlalchemy import ForeignKey, DateTime
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declared_attr
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from signalfloweeg.portal.db_connection import get_db_url
 
@@ -92,6 +93,14 @@ class CatalogBase(Base):
         backref_name = f"{cls.__name__.lower()}_entries"
         # Defines a relationship, dynamically linked to the subclass's foreign key
         return relationship("DatasetCatalog", backref=backref(backref_name, cascade="all, delete-orphan"))
+
+    @hybrid_property
+    def dataset_name(self):
+        return self.dataset.dataset_name if self.dataset else None
+
+    @hybrid_property
+    def dataset_description(self):
+        return self.dataset.description if self.dataset else None
 
 # Explanation of changes:
 # @declared_attr: Used here to ensure that the foreign key and relationship are set up correctly for each subclass,

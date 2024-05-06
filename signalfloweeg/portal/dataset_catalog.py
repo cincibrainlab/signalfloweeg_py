@@ -56,10 +56,11 @@ def get_info():
             for dataset in datasets
         ]
 
-def add_dataset(dataset_catalog_entry: DatasetCatalog):
+def add_dataset_catalog(dataset_catalog_entry: DatasetCatalog):
+    print(f"📊 Adding dataset: {dataset_catalog_entry}")
     with get_session() as session:
         # Check if a dataset with the provided ID already exists
-        existing_dataset = session.query(DatasetCatalog).filter_by(dataset_id=dataset_catalog_entry.dataset_id).first()
+        existing_dataset = session.query(DatasetCatalog).filter_by(dataset_id=dataset_catalog_entry["dataset_id"]).first()
         if not existing_dataset:
             # Create a new dataset entry if it does not exist
             session.add(dataset_catalog_entry)
@@ -85,3 +86,5 @@ def update_dataset(dataset_catalog_entry: DatasetCatalog):
         else:
             # If the dataset does not exist, return an error message
             return {"error": "Dataset not found"}
+
+

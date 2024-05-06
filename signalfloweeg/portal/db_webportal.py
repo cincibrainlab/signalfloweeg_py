@@ -7,6 +7,7 @@ from signalfloweeg.portal.models import (
     ImportCatalog,
     DatasetCatalog
     )
+from sqlalchemy.sql import func
 
 def get_eeg_formats():
     with get_session() as session:
@@ -59,6 +60,7 @@ def get_upload_catalog():
                 "fdt_filename": upload_record.fdt_filename,
                 "dataset_id": upload_record.dataset_id,
                 "dataset_name": upload_record.dataset_name,
+                "dataset_description": upload_record.dataset_description,
                 "eeg_paradigm": upload_record.eeg_paradigm,
                 "status": upload_record.status,
                 "date_added": upload_record.date_added,
@@ -82,6 +84,7 @@ def get_import_catalog():
                 "fdt_upload_id": import_record.fdt_upload_id,  # Updated key to fdt_upload_id
                 "dataset_id": import_record.dataset_id,
                 "dataset_name": import_record.dataset_name,
+                "dataset_description": import_record.dataset_description,
                 "eeg_format": import_record.eeg_format,
                 "eeg_paradigm": import_record.eeg_paradigm,
                 "status": import_record.status,
@@ -108,6 +111,42 @@ def get_dataset_catalog():
             }
             for dataset in dataset_catalog
         ]
+
+def get_dataset_stats():
+    with get_session() as session:
+        # Query to get all datasets
+        dataset_catalog = session.query(DatasetCatalog).all()
+        # Query to count number of import_catalog records associated with each dataset_id
+        import_counts = session.query(
+            ImportCatalog.dataset_id, 
+            func.count(ImportCatalog.dataset_id).label('file_count')
+        ).group_by(ImportCatalog.dataset_id).all()
+        # Convert list of tuples into a dictionary for quick lookup
+        count_dict = {dataset_id: count for dataset_id, count in import_counts}
+        
+        return [
+            {
+                "dataset_name": dataset.dataset_name,
+                "dataset_id": dataset.dataset_id,
+                "description": dataset.description,
+                "file_count": count_dict.get(dataset.dataset_id, 0)  # Default to 0 if no records found
+            }
+            for dataset in dataset_catalog
+        ]
+
+def merge_two_datasets(dataset_id1, dataset_id2):
+    with get_session() as session:
+        # Query to get all import_catalog records with dataset_id1
+        records1 = session.query(ImportCatalog).filter(ImportCatalog.dataset_id == dataset_id1).all()
+        # Query to get all import_catalog records with dataset_id2
+        records2 = session.query(ImportCatalog).filter(ImportCatalog.dataset_id == dataset_id2).all()
+        
+        # Update all records with dataset_id2 to dataset_id1
+        for record in records2:
+            record.dataset_id = dataset_id1
+        
+        session.commit()
+        return len(records2)
 
 if __name__ == "__main__":
     print(get_eeg_formats())
