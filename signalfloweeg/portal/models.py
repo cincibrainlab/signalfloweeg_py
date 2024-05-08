@@ -1,32 +1,49 @@
-from sqlalchemy import (
-    Column, Integer, String, Text, Boolean, 
-    ForeignKey, DateTime
-)
-from sqlalchemy.orm import (
-    declarative_base, relationship
-)
-
+from sqlalchemy import Column, Integer, String, Text, Boolean
+from sqlalchemy.orm import declarative_base
+from sqlalchemy import create_engine
+from sqlalchemy_utils import database_exists, create_database, drop_database
+from sqlalchemy import ForeignKey, DateTime
+from sqlalchemy.orm import relationship
 from datetime import datetime
+from rich.console import Console
+from rich.table import Table
+
+from signalfloweeg.portal.db_connection import get_db_url
 
 Base = declarative_base()
 
-class EEGFileCatalog(Base):
-    __tablename__ = 'eeg_file_catalog'
-    id = Column(Integer, primary_key=True)
-    filename = Column(String)
-    dataset_name = Column(String)
-    dataset_id = Column(String)
-    eeg_format = Column(String)
-    eeg_paradigm = Column(String)   
-    storage = Column(Text, unique=True)
-    upload_id = Column(String, unique=True)
-    size = Column(String)
-    hash = Column(String)
-    has_fdt_file = Column(Boolean)
-    fdt_filename = Column(String)
-    set_filename = Column(String)
-    status = Column(String)
-    remove_upload = Column(Boolean)
+console = Console()
+
+class Startup(Base):
+    __tablename__ = "startup_table"
+    id = Column(Integer, primary_key=True, default=1)
+    sf_config_path = Column(String, nullable=True)
+    __table_args__ = ({"sqlite_autoincrement": True},)
+
+class Users(Base):
+    __tablename__ = "users"
+    id = None
+    user_id = Column(String, primary_key=True)
+    username = Column(String, unique=True, nullable=True)
+    email = Column(String, unique=True, nullable=True)
+    hashed_password = Column(String, nullable=True)
+    is_active = Column(Boolean, default=True)
+    is_superuser = Column(Boolean, default=True)
+
+class ConfigDB(Base):
+    __tablename__ = "config"
+    id = Column(Integer, primary_key=True, default=1)
+    database = Column(String, nullable=True)
+    frontend = Column(String, nullable=True)
+    api = Column(String, nullable=True)
+    users = Column(Text, nullable=True)
+    folder_paths = Column(Text, nullable=True)
+    eeg_formats = Column(Text, nullable=True)
+    eeg_paradigms = Column(Text, nullable=True)
+    eeg_analyses = Column(Text, nullable=True)
+
+    __table_args__ = ({"sqlite_autoincrement": True},)
+
 
 class CatalogBase(Base):
     __abstract__ = True
@@ -38,76 +55,77 @@ class CatalogBase(Base):
     dataset_name = Column(String)
     dataset_id = Column(String)
     eeg_format = Column(String)
-    eeg_paradigm = Column(String)   
+    eeg_paradigm = Column(String)
     is_set_file = Column(Boolean)
     has_fdt_file = Column(Boolean)
     fdt_filename = Column(String)
-    fdt_upload_id = Column(String) 
+    fdt_upload_id = Column(String)
     hash = Column(String)
 
-class UploadCatalog(CatalogBase):
 
-    __tablename__ = 'upload_catalog'
+class UploadCatalog(CatalogBase):
+    __tablename__ = "upload_catalog"
     id = None  # Disable the 'id' column for UploadCatalog
-    upload_id = Column(String, primary_key=True)  # Override 'upload_id' as the primary key
+    upload_id = Column(
+        String, primary_key=True
+    )  # Override 'upload_id' as the primary key
     size = Column(String)
     remove_upload = Column(Boolean)
-    
+
+
 class ImportCatalog(CatalogBase):
-    __tablename__ = 'import_catalog'
+    __tablename__ = "import_catalog"
     id = None  # Disable the 'id' column for UploadCatalog
-    upload_id = Column(String, primary_key=True)  # Override 'upload_id' as the primary key
-    remove_import = Column(Boolean, name='remove')
+    upload_id = Column(
+        String, primary_key=True
+    )  # Override 'upload_id' as the primary key
+    remove_import = Column(Boolean, name="remove")
     sample_rate = Column(Integer)
     n_channels = Column(Integer)
     n_epochs = Column(Integer)
     total_samples = Column(Integer)
     mne_load_error = Column(Boolean)
 
+
 class AnalysisJobList(Base):
-    __tablename__ = 'analysis_joblist'
-    
+    __tablename__ = "analysis_joblist"
+
     id = Column(Integer, primary_key=True)
     job_id = Column(String)
-    upload_id = Column(String, ForeignKey('import_catalog.upload_id'))
-    eeg_format_id = Column(Integer, ForeignKey('eeg_format.id'))
-    eeg_paradigm_id = Column(Integer, ForeignKey('eeg_paradigm.id'))
-    analysis_id = Column(Integer, ForeignKey('eeg_analysis.id'))
+    upload_id = Column(String, ForeignKey("import_catalog.upload_id"))
+    eeg_format_name = Column(String)
+    eeg_paradigm_name = Column(String)
+    eeg_analysis_name = Column(String)
     status = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow)
     parameters = Column(String)
     result = Column(String)
-    
-    eeg_format = relationship("EegFormat")
-    eeg_paradigm = relationship("EegParadigm")
-    analysis = relationship("EegAnalyses")
 
 class DatasetCatalog(Base):
-    __tablename__ = 'dataset_catalog'
+    __tablename__ = "dataset_catalog"
     dataset_name = Column(String)
     dataset_id = Column(String, primary_key=True)
     description = Column(Text)
-    eeg_format_id = Column(Integer, ForeignKey('eeg_format.id'))
-    eeg_paradigm_id = Column(Integer, ForeignKey('eeg_paradigm.id'))
+    eeg_format_name = Column(String)
+    eeg_paradigm_name = Column(String)
     
-    eeg_format = relationship("EegFormat")
-    eeg_paradigm = relationship("EegParadigm")
-
 class EegFormat(Base):
-    __tablename__ = 'eeg_format'
+    __tablename__ = "eeg_format"
     id = Column(Integer, autoincrement=True, primary_key=True)
     name = Column(String, unique=True)
     description = Column(Text)
 
+
 class EegParadigm(Base):
-    __tablename__ = 'eeg_paradigm'
+    __tablename__ = "eeg_paradigm"
     id = Column(Integer, autoincrement=True, primary_key=True)
-    name = Column(String, unique=True )
+    name = Column(String, unique=True)
     description = Column(Text)
 
+
 class EegAnalyses(Base):
-    __tablename__ = 'eeg_analysis'   
-    id = Column(Integer, primary_key=True)    
+    __tablename__ = "eeg_analyses"
+    id = Column(Integer, primary_key=True)
     name = Column(String)
     description = Column(Text)
     category = Column(String)
@@ -116,25 +134,49 @@ class EegAnalyses(Base):
     parameters = Column(String)  # JSON string to store analysis parameters
 
 
-Base = declarative_base()
+def initialize_database(reset=False):
+    db_url = get_db_url()
 
-# class Job(Base):
-#     __tablename__ = 'jobs'
+    console.print(
+        "[bold]Initializing or resetting database with the following parameters:[/bold]"
+    )
+    console.print(f"Database URL: [green]{db_url}[/green]")
+    console.print(f"Reset flag: [green]{reset}[/green]")
 
-#     id = Column(Integer, primary_key=True)
-#     task_name = Column(String(255), nullable=False)
-#     args = Column(JSONB, default='{}', nullable=False)
-#     kwargs = Column(JSONB, default='{}', nullable=False)
-#     status = Column(String(255), nullable=False, server_default='pending')
-#     result = Column(Text)
-#     error = Column(Text)
-#     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
-#     started_at = Column(DateTime)
-#     completed_at = Column(DateTime)
-#     retries = Column(Integer, default=0, nullable=False)
-#     max_retries = Column(Integer, default=3, nullable=False)
-#     queue = Column(String(255), nullable=False, server_default='default')
-#     exchange = Column(String(255), nullable=False, server_default='')
-#     routing_key = Column(String(255), nullable=False, server_default='')
-#     user_id = Column(UUID(as_uuid=True), default=None)  # Optional: Associate tasks with individual users
-#     expiration = Column(DateTime, default=(datetime.utcnow() + timedelta(days=7)))  # Optional: Set an expiration time for each task
+    conn = create_engine(db_url, echo=False)
+    from rich import print as rich_print
+
+    db_status = {"force_reset": reset, "database_exists": database_exists(conn.url)}
+
+    rich_print("[bold magenta]Database Status:[/bold magenta]", db_status)
+
+    if db_status["force_reset"]:
+        if db_status["database_exists"]:
+            drop_database(conn.url)
+            console.print("Database dropped successfully.")
+        else:
+            console.print("Database does not exist, no need to drop.")
+
+    if db_status["database_exists"] and not db_status["force_reset"]:
+        console.print("Database sfportal present.")
+    else:
+        create_database(conn.url)
+        console.print("Database sfportal created.")
+
+    Base.metadata.create_all(conn)
+    created_tables = conn.dialect.get_table_names(conn)
+
+    table_verification = Table(title="Table Verification")
+    table_verification.add_column("Table Name", style="cyan")
+    table_verification.add_column("Status", style="green")
+    table_verification.add_column("Fields", style="magenta")
+    for table in created_tables:
+        table_fields = ", ".join([column.name for column in Base.metadata.tables[table].columns])
+        table_verification.add_row(
+            table, "Verified", f"Table name: {table}, Fields: {table_fields}"
+        )
+    console.print(table_verification)
+
+if __name__ == "__main__":
+    reset = True
+    initialize_database(reset)
