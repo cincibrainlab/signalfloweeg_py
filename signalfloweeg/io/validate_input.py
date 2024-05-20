@@ -6,7 +6,6 @@ Description: [Insert module description here]
 
 # Imports
 import numpy as np
-import mne
 
 import mne
 

@@ -8,7 +8,7 @@ Description: [Insert module description here]
 import numpy as np
 import mne
 
-def filter_data(data, low_freq, high_freq):
+def bandpass_filter(data, low_freq, high_freq):
     """
     Filter the input data using a bandpass filter.
 
@@ -21,6 +21,49 @@ def filter_data(data, low_freq, high_freq):
     - numpy.ndarray: Filtered data array.
     """
     # Function implementation goes here
+    
     pass
 
 # Add your module-specific functions and classes here
+def highpass_filter(data, low_freq):
+    """
+    Filter the input data using a highpass filter.
+
+    Parameters:
+    - data (numpy.ndarray): Input data array.
+    - low_freq (float): Lower frequency bound of the highpass filter.
+
+    Returns:
+    - numpy.ndarray: Filtered data array.
+    """
+    # Function implementation goes here
+    pass
+
+def lowpas_filter(data, high_freq):
+    """
+    Filter the input data using a lowpass filter.
+
+    Parameters:
+    - data (numpy.ndarray): Input data array.
+    - high_freq (float): Upper frequency bound of the lowpass filter.
+
+    Returns:
+    - numpy.ndarray: Filtered data array.
+    """
+    # Function implementation goes here
+    pass
+
+def notch_filter(data, freq, notch_width):
+    """
+    Filter the input data using a notch filter.
+
+    Parameters:
+    - data (numpy.ndarray): Input data array.
+    - freq (float): Frequency to filter out.
+    - notch_width (float): Width of the notch filter.
+
+    Returns:
+    - numpy.ndarray: Filtered data array.
+    """
+    # Function implementation goes here
+    pass
