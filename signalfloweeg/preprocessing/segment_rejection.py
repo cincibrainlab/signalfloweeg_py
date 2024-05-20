@@ -12,7 +12,7 @@ def manual_segment_rejection(data: mne.io.Raw):
     """
     # Function implementation goes here
     data.load_data()
-    eog_events = mne.preprocessing.find_eog_events(data)
+    eog_events = mne.preprocessing.find_eog_events(data,ch_name='E127')
     onsets = eog_events[:, 0] / data.info["sfreq"] - 0.25
     durations = [0.5] * len(eog_events)
     descriptions = ["bad blink"] * len(eog_events)
@@ -22,7 +22,8 @@ def manual_segment_rejection(data: mne.io.Raw):
     data.set_annotations(blink_annot)
     
     eeg_picks = mne.pick_types(data.info, meg=False, eeg=True)
-    fig = data.plot(events=eog_events, order=eeg_picks)
+    fig = data.plot(events=eog_events, order=eeg_picks, n_channels=50, title="SignalFlowEGG")
     fig.fake_keypress("a")  # Simulates user pressing 'a' on the keyboard.
-    
+    end = input("Press enter to continue")
+    data.interpolate_bads(reset_bads=False)
     return data
