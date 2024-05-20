@@ -8,62 +8,70 @@ Description: [Insert module description here]
 import numpy as np
 import mne
 
-def bandpass_filter(data, low_freq, high_freq):
+def bandpass_filter(data: mne.io.Raw, low_freq: float = 2, high_freq: float = 50):
     """
     Filter the input data using a bandpass filter.
 
     Parameters:
-    - data (numpy.ndarray): Input data array.
+    - data (mne.io.Raw): Input data object.
     - low_freq (float): Lower frequency bound of the bandpass filter.
     - high_freq (float): Upper frequency bound of the bandpass filter.
 
     Returns:
-    - numpy.ndarray: Filtered data array.
+    - mne.io.Raw: Filtered data object.
     """
     # Function implementation goes here
-    
-    pass
+    data.load_data()
+    data.filter(l_freq=low_freq,h_freq=high_freq)
+    return data
 
-# Add your module-specific functions and classes here
-def highpass_filter(data, low_freq):
-    """
-    Filter the input data using a highpass filter.
+def highpass_filter(data: mne.io.Raw, low_freq: float = 2):
+    """ 
+    Filter the input data using a bandpass filter.
 
     Parameters:
-    - data (numpy.ndarray): Input data array.
-    - low_freq (float): Lower frequency bound of the highpass filter.
+    - data (mne.io.Raw): Input data object.
+    - low_freq (float): Lower frequency bound of the bandpass filter.
 
     Returns:
-    - numpy.ndarray: Filtered data array.
+    - mne.io.Raw: Filtered data object.
     """
     # Function implementation goes here
-    pass
+    data.load_data()
+    data.filter(l_freq=low_freq, h_freq=None)
+    return data
 
-def lowpas_filter(data, high_freq):
+def lowpass_filter(data: mne.io.Raw, high_freq: float = 50):
     """
-    Filter the input data using a lowpass filter.
+    Filter the input data using a bandpass filter.
 
     Parameters:
-    - data (numpy.ndarray): Input data array.
-    - high_freq (float): Upper frequency bound of the lowpass filter.
+    - data (mne.io.Raw): Input data object.
+    - high_freq (float): Upper frequency bound of the bandpass filter.
 
     Returns:
-    - numpy.ndarray: Filtered data array.
+    - mne.io.Raw: Filtered data object.
     """
     # Function implementation goes here
-    pass
+    data.load_data()
+    data.filter(l_freq=None, h_freq=high_freq)
+    return data
 
-def notch_filter(data, freq, notch_width):
+def notch_filter(data: mne.io.Raw, freq: float = 60, notch_width: float = 5):
     """
     Filter the input data using a notch filter.
 
     Parameters:
-    - data (numpy.ndarray): Input data array.
+    - data (mne.io.Raw): Input data object.
     - freq (float): Frequency to filter out.
     - notch_width (float): Width of the notch filter.
 
     Returns:
-    - numpy.ndarray: Filtered data array.
+    - mne.io.Raw: Filtered data object.
     """
     # Function implementation goes here
-    pass
+    data.load_data()
+    data.notch_filter(freqs= freq, notch_widths= notch_width)
+    return data
+
+
