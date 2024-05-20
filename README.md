@@ -24,3 +24,26 @@ Features
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
+
+## Preproccessing functions to make first 
+import set
+
+FILTERS: 
+notch (57-63hz) - DONE, Gavin
+lowpass of 100 hz  - DONE, Gavin
+highpass of 0.5 hz  - DONE, Gavin
+
+resample (to 500 for human data, to 625 for mouse)
+epoching! (1 sec trials)
+Reject bad channels
+reject bad segments (aka visual continuous artifact rejection) - Working, Gavin
+channel interpolation
+average re-reference
+ICA (decompose by ICA, aka independent component analysis) - Working, Nate
+reject independent components (aka visual component rejection) - Working, Nate
+export set
+SET to Excel 
+Calc power (and other analyses)
+
+
+
