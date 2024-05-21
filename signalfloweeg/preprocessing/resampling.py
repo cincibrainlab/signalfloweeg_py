@@ -9,7 +9,12 @@ import numpy as np
 import mne
 
 # Functions and classes
-def dummy_function():
-    pass
+def resample(data:mne.io.Raw, sampling_freq:float = 500):
+    raw_downsampled_poly = data.copy().resample(
+        sfreq=sampling_freq,
+        method="polyphase",
+        verbose=False,
+    )
+    return raw_downsampled_poly
 
 # Add your module-specific functions and classes here

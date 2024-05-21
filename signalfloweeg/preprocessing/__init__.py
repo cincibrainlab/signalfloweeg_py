@@ -8,5 +8,6 @@ from . import *
 from . import filtering
 from . import segment_rejection
 from . import ica
+from . import resampling
 
 __all__ = []
