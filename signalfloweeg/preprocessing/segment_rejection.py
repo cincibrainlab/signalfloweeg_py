@@ -22,9 +22,7 @@ def manual_segment_rejection(data: mne.io.Raw):
     data.set_annotations(blink_annot)
     
     eeg_picks = mne.pick_types(data.info, meg=False, eeg=True)
-    fig = data.plot(events=eog_events, order=eeg_picks, n_channels=50, title="SignalFlowEGG")
-    fig.fake_keypress("a")  # Simulates user pressing 'a' on the keyboard.
-    end = input("Press enter to continue\n")
-    data.drop_bad()
+    data.plot(events=eog_events, order=eeg_picks, n_channels=50, title="SignalFlowEGG", block=True)
+    data.interpolate_bads(reset_bads=True)
     
     return data
