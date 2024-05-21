@@ -8,7 +8,7 @@ Description: [Insert module description here]
 import numpy as np
 import mne
 
-def bandpass_filter(data: mne.io.Raw, low_freq: float = 2, high_freq: float = 50):
+def bandpass_filter(data: mne.io.Raw, low_freq: float = 0.5, high_freq: float = 100):
     """
     Filter the input data using a bandpass filter.
 
@@ -25,7 +25,7 @@ def bandpass_filter(data: mne.io.Raw, low_freq: float = 2, high_freq: float = 50
     data.filter(l_freq=low_freq,h_freq=high_freq)
     return data
 
-def highpass_filter(data: mne.io.Raw, low_freq: float = 2):
+def highpass_filter(data: mne.io.Raw, low_freq: float = 0.5):
     """ 
     Filter the input data using a bandpass filter.
 
@@ -41,7 +41,7 @@ def highpass_filter(data: mne.io.Raw, low_freq: float = 2):
     data.filter(l_freq=low_freq, h_freq=None)
     return data
 
-def lowpass_filter(data: mne.io.Raw, high_freq: float = 50):
+def lowpass_filter(data: mne.io.Raw, high_freq: float = 100):
     """
     Filter the input data using a bandpass filter.
 
@@ -57,7 +57,7 @@ def lowpass_filter(data: mne.io.Raw, high_freq: float = 50):
     data.filter(l_freq=None, h_freq=high_freq)
     return data
 
-def notch_filter(data: mne.io.Raw, freq: float = 60, notch_width: float = 5):
+def notch_filter(data: mne.io.Raw, freq: float = 60, notch_width: float = 3):
     """
     Filter the input data using a notch filter.
 
