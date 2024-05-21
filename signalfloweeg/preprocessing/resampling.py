@@ -21,11 +21,11 @@ def resample(data: mne.io.Raw, sampling_freq: float = 500):
         mne.io.Raw: The resampled data.
 
     """
-    raw_downsampled_poly = data.copy().resample(
+    data.resample(
         sfreq=sampling_freq,
         method="polyphase",
         verbose=False,
     )
-    return raw_downsampled_poly
+    return data
 
 # Add your module-specific functions and classes here
