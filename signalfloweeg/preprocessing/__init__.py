@@ -9,5 +9,6 @@ from . import filtering
 from . import segment_and_channel_rejection
 from . import ica
 from . import resampling
+from . import export
 
 __all__ = []

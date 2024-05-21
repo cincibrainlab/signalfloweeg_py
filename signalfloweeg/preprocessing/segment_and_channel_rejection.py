@@ -23,6 +23,21 @@ def manual_segment_and_channel_rejection(data: mne.io.Raw):
     
     eeg_picks = mne.pick_types(data.info, meg=False, eeg=True)
     data.plot(events=eog_events, order=eeg_picks, n_channels=50, title="SignalFlowEGG", block=True)
+    
+    return data
+
+def interpolate_bads(data: mne.io.Raw):
+    """
+    Interpolate bad channels
+    Resets the bad channels to empty list after interpolation
+
+    Parameters:
+    - data (mne.io.Raw): Input data object.
+
+    Returns:
+    - mne.io.Raw: Output data object.
+    """
+    # Function implementation goes here
     data.interpolate_bads(reset_bads=True)
     
     return data

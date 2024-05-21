@@ -37,11 +37,11 @@ resample (to 500 for human data, to 625 for mouse) - DONE, Gavin
 reject bad segments (aka visual continuous artifact rejection) - Working, Gavin
 ICA (decompose by ICA, aka independent component analysis) - Done, Nate
 reject independent components (aka visual component rejection) - Working, Nate - Need input on manual removal
-<!-- Reject bad channels --> - Part of segment rejection - Done 
-channel interpolation 
+<!-- Reject bad channels --> - Part of segment rejection - Done, Gavin
+channel interpolation - Done, Gavin
 average re-reference
 epoching! (1 sec trials)
-export set
+export set  - Done, Gavin
 SET to Excel 
 Calc power (and other analyses)
 
