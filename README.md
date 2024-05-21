@@ -35,15 +35,18 @@ highpass of 0.5 hz  - DONE, Gavin
 
 resample (to 500 for human data, to 625 for mouse) - DONE, Gavin
 reject bad segments (aka visual continuous artifact rejection) - Working, Gavin
-ICA (decompose by ICA, aka independent component analysis) - Done, Nate
+ICA (decompose by ICA, aka independent component analysis) - DONE, Nate
 reject independent components (aka visual component rejection) - Working, Nate - Need input on manual removal
-<!-- Reject bad channels --> - Part of segment rejection - Done, Gavin
-channel interpolation - Done, Gavin
+<!-- Reject bad channels --> - Part of segment rejection - DONE, Gavin
+channel interpolation - DONE, Gavin
 average re-reference
-epoching! (1 sec trials)
-export set  - Done, Gavin
+epoching! (1 sec trials) - DONE, Gavin
+epoching! (dims)
+export set  - DONE, Gavin
 SET to Excel 
 Calc power (and other analyses)
 
+Additional
+HEATMAP - DONE, Gavin
 
 
