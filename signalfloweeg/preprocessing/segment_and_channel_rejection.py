@@ -26,6 +26,11 @@ def manual_segment_and_channel_rejection(data: mne.io.Raw):
     
     return data
 
+#TODO
+def ICA_rejection(data: mne.io.Raw):
+    pass
+
+
 def interpolate_bads(data: mne.io.Raw):
     """
     Interpolate bad channels

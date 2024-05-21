@@ -10,5 +10,6 @@ from . import segment_and_channel_rejection
 from . import ica
 from . import resampling
 from . import export
+from . import epoching
 
 __all__ = []

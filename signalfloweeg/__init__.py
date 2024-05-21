@@ -5,6 +5,7 @@ Description: A Python package for EEG signal processing and analysis
 """
 from . import preprocessing
 from . import utils
+from . import viz
 
 __version__ = '0.1.3'  # Update this with your desired version number
 
