@@ -1,6 +1,6 @@
 import mne
 
-def manual_segment_rejection(data: mne.io.Raw):
+def manual_segment_and_channel_rejection(data: mne.io.Raw):
     """
     Remove segments of data manually
 

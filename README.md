@@ -33,14 +33,14 @@ notch (57-63hz) - DONE, Gavin
 lowpass of 100 hz  - DONE, Gavin
 highpass of 0.5 hz  - DONE, Gavin
 
-resample (to 500 for human data, to 625 for mouse)
-epoching! (1 sec trials)
-Reject bad channels
+resample (to 500 for human data, to 625 for mouse) - DONE, Gavin
 reject bad segments (aka visual continuous artifact rejection) - Working, Gavin
-channel interpolation
+ICA (decompose by ICA, aka independent component analysis) - Done, Nate
+reject independent components (aka visual component rejection) - Working, Nate - Need input on manual removal
+<!-- Reject bad channels --> - Part of segment rejection - Done 
+channel interpolation 
 average re-reference
-ICA (decompose by ICA, aka independent component analysis) - Working, Nate
-reject independent components (aka visual component rejection) - Working, Nate
+epoching! (1 sec trials)
 export set
 SET to Excel 
 Calc power (and other analyses)
