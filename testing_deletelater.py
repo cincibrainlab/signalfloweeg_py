@@ -1,13 +1,29 @@
 import signalfloweeg 
 import mne 
 
-filepath = "/home/cbl/Desktop/Test_Data/0012_rest.set"
+filepath = "/home/cbl/Downloads/0700_1_to_0800_4_aaebci_NS_09-05-2023_20230905_121427.set"
 EEG = mne.io.read_raw_eeglab(filepath)
-filtered_eeg = signalfloweeg.preprocessing.filtering.bandpass_filter(EEG, 2, 50)
-filtered_eeg = signalfloweeg.preprocessing.filtering.notch_filter(filtered_eeg, 60)
-filtered_eeg = signalfloweeg.preprocessing.resampling.resample(filtered_eeg, 500)
-epochs = signalfloweeg.preprocessing.epoching.epoch_time(filtered_eeg, 1)
 
+chirp_electrode_labels = {'E23', 'E18', 'E16', 'E10', 'E3', 'E28', 'E24', 'E19', 'E11', 'E4', 'E124', 'E117',
+                          'E29', 'E20', 'E12', 'E5', 'E118', 'E111', 'E13', 'E6', 'E112', 'E7', 'E106'}
+
+all_channels = EEG.ch_names
+
+        # Identify the channels to remove
+channels_to_remove = set(all_channels) - chirp_electrode_labels
+
+        # Drop the unwanted channels from the raw data
+EEG.drop_channels(channels_to_remove)
+
+print(f"Remaining channels: {EEG.ch_names}")
+# print(EEG.info)
+# filtered_eeg = signalfloweeg.preprocessing.filtering.bandpass_filter(EEG,2,50)
+# filtered_eeg = signalfloweeg.preprocessing.filtering.notch_filter(filtered_eeg, 60)
+# filtered_eeg = signalfloweeg.preprocessing.resampling.resample(filtered_eeg, 500)
+epochs = signalfloweeg.preprocessing.epoching.epoch_time(EEG, 5)
+
+
+print(epochs.info)
 signalfloweeg.viz.heatmap.heatmap_power(epochs)
 
 

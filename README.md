@@ -39,11 +39,11 @@ ICA (decompose by ICA, aka independent component analysis) - DONE, Nate
 reject independent components (aka visual component rejection) - Working, Nate - Need input on manual removal
 <!-- Reject bad channels --> - Part of segment rejection - DONE, Gavin
 channel interpolation - DONE, Gavin
-average re-reference
+average re-reference - DONE, Gavin
 epoching! (1 sec trials) - DONE, Gavin
-epoching! (dims)
+epoching! (dins)
 export set  - DONE, Gavin
-SET to Excel 
+SET to Excel
 Calc power (and other analyses)
 
 Additional
