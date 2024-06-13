@@ -131,6 +131,19 @@ class ImportCatalog(CatalogBase):
     mne_load_error = Column(Boolean)
 
 
+class AnalysisConfig(Base):
+    __tablename__ = "analysis_configs"
+    id = Column(String, primary_key=True)
+    function_name = Column(String, nullable=False)
+    description = Column(String, nullable=True)
+    eeg_formats = Column(String, nullable=False)
+    eeg_paradigms = Column(String, nullable=False)
+    parameters = Column(String, nullable=False)
+    version = Column(String, nullable=False)
+    active = Column(Boolean, default=True)  # New field to mark if active or not
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
 class AnalysisJobList(Base):
     __tablename__ = "analysis_joblist"
     id = Column(Integer, primary_key=True)
@@ -144,8 +157,6 @@ class AnalysisJobList(Base):
     parameters = Column(String)
     result = Column(String)
     
-
-
 
 class EegAnalyses(Base):
     __tablename__ = "eeg_analyses"

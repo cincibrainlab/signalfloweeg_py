@@ -43,7 +43,8 @@ def is_database_connected():
     """
     try:
         with get_session() as session:
-            session.execute("SELECT 1")
+            from sqlalchemy import text
+            session.execute(text("SELECT 1"))
             return True
     except SQLAlchemyError as e:
         logging.error(f"Database connection error: {e}")
