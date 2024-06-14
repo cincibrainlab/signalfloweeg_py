@@ -123,7 +123,7 @@ class ImportCatalog(CatalogBase):
     upload_id = Column(
         String, primary_key=True
     )  # Override 'upload_id' as the primary key
-    remove_import = Column(Boolean, name="remove")
+    remove_import = Column(Boolean)
     sample_rate = Column(Integer)
     n_channels = Column(Integer)
     n_epochs = Column(Integer)

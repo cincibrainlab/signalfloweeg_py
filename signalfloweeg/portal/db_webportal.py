@@ -89,6 +89,7 @@ def get_import_catalog():
                 "eeg_paradigm": import_record.eeg_paradigm,
                 "status": import_record.status,
                 "date_added": import_record.date_added,
+                "remove_import": import_record.remove_import,
                 "hash": import_record.hash,
                 "sample_rate": import_record.sample_rate,  # Added sample_rate
                 "n_channels": import_record.n_channels,  # Added n_channels

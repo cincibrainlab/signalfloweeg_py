@@ -56,7 +56,7 @@ def check_database_and_tables():
         'config': ['id', 'database', 'frontend', 'api', 'folder_paths', 'eeg_formats', 'eeg_paradigms', 'eeg_analyses'],
         'upload_catalog': ['status', 'date_added', 'original_name', 'dataset_id', 'eeg_format', 'eeg_paradigm', 'is_set_file', 'has_fdt_file', 'fdt_filename', 'fdt_upload_id', 'hash', 'upload_id', 'size', 'remove_upload'],
         'dataset_catalog': ['dataset_name', 'dataset_id', 'description'],
-        'import_catalog': ['status', 'date_added', 'original_name', 'dataset_id', 'eeg_format', 'eeg_paradigm', 'is_set_file', 'has_fdt_file', 'fdt_filename', 'fdt_upload_id', 'hash', 'upload_id', 'remove', 'sample_rate', 'n_channels', 'n_epochs', 'total_samples', 'mne_load_error'],
+        'import_catalog': ['status', 'date_added', 'original_name', 'dataset_id', 'eeg_format', 'eeg_paradigm', 'is_set_file', 'has_fdt_file', 'fdt_filename', 'fdt_upload_id', 'hash', 'upload_id', 'remove_import', 'sample_rate', 'n_channels', 'n_epochs', 'total_samples', 'mne_load_error'],
         'analysis_joblist': ['id', 'job_id', 'upload_id', 'eeg_format_name', 'eeg_paradigm_name', 'eeg_analysis_name', 'status', 'created_at', 'parameters', 'result'],
         'eeg_paradigm': ['id', 'name', 'description'],
         'eeg_analyses': ['id', 'name', 'description', 'category', 'valid_formats', 'valid_paradigms', 'parameters'],
