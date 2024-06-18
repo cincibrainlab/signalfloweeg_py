@@ -11,6 +11,7 @@ from sqlalchemy import ForeignKey, DateTime
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy import inspect
 
 from signalfloweeg.portal.db_connection import get_db_url
 
@@ -196,10 +197,13 @@ def initialize_database(reset=False):
         console.print("Database sfportal present.")
     else:
         create_database(conn.url)
+        print(conn.url)
         console.print("Database sfportal created.")
 
     Base.metadata.create_all(conn)
-    created_tables = conn.dialect.get_table_names(conn)
+    inspector = inspect(conn)
+    created_tables = inspector.get_table_names()
+    #created_tables = conn.dialect.get_table_names(conn)
 
     table_verification = Table(title="Table Verification")
     table_verification.add_column("Table Name", style="cyan")

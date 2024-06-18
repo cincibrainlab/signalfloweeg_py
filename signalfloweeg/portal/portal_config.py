@@ -1,16 +1,15 @@
-
 import json
 from sqlalchemy.exc import SQLAlchemyError
-from signalfloweeg.portal.models import (
-    ConfigDB, Startup, initialize_database, Users
-)
+from signalfloweeg.portal.models import ConfigDB, Startup
 import yaml
 import os
 from rich.console import Console
 from sqlalchemy import inspect
-
+from sqlalchemy.orm import declarative_base
 
 from signalfloweeg.portal.db_connection import get_session, get_engine
+
+Base = declarative_base()
 
 console = Console()
 console.print("[bold]Module portal_config is currently running...[/bold]")
@@ -23,7 +22,6 @@ def get_portal_config_path():
             return startup_record.sf_config_path
         else:
             return None
-
 
 
 def is_config_table_present():
@@ -40,6 +38,7 @@ def is_config_table_present():
         print(f"Error checking for ConfigDB table: {e}")
         return False
 
+
 def check_database_and_tables():
     """
     Verify the presence and structure of required tables in the database.
@@ -51,17 +50,87 @@ def check_database_and_tables():
     engine = get_engine()
     inspector = inspect(engine)
     tables = inspector.get_table_names()
+
     required_tables = {
-        'startup_table': ['id', 'sf_config_path'],
-        'config': ['id', 'database', 'frontend', 'api', 'folder_paths', 'eeg_formats', 'eeg_paradigms', 'eeg_analyses'],
-        'upload_catalog': ['status', 'date_added', 'original_name', 'dataset_id', 'eeg_format', 'eeg_paradigm', 'is_set_file', 'has_fdt_file', 'fdt_filename', 'fdt_upload_id', 'hash', 'upload_id', 'size', 'remove_upload'],
-        'dataset_catalog': ['dataset_name', 'dataset_id', 'description'],
-        'import_catalog': ['status', 'date_added', 'original_name', 'dataset_id', 'eeg_format', 'eeg_paradigm', 'is_set_file', 'has_fdt_file', 'fdt_filename', 'fdt_upload_id', 'hash', 'upload_id', 'remove_import', 'sample_rate', 'n_channels', 'n_epochs', 'total_samples', 'mne_load_error'],
-        'analysis_joblist': ['id', 'job_id', 'upload_id', 'eeg_format_name', 'eeg_paradigm_name', 'eeg_analysis_name', 'status', 'created_at', 'parameters', 'result'],
-        'eeg_paradigm': ['id', 'name', 'description'],
-        'eeg_analyses': ['id', 'name', 'description', 'category', 'valid_formats', 'valid_paradigms', 'parameters'],
-        'eeg_format': ['id', 'name', 'description'],
-        'users': ['user_id', 'username', 'email', 'hashed_password', 'is_active', 'is_superuser']
+        "startup_table": ["id", "sf_config_path"],
+        "config": [
+            "id",
+            "database",
+            "frontend",
+            "api",
+            "folder_paths",
+            "eeg_formats",
+            "eeg_paradigms",
+            "eeg_analyses",
+        ],
+        "upload_catalog": [
+            "status",
+            "date_added",
+            "original_name",
+            "dataset_id",
+            "eeg_format",
+            "eeg_paradigm",
+            "is_set_file",
+            "has_fdt_file",
+            "fdt_filename",
+            "fdt_upload_id",
+            "hash",
+            "upload_id",
+            "size",
+            "remove_upload",
+        ],
+        "dataset_catalog": ["dataset_name", "dataset_id", "description"],
+        "import_catalog": [
+            "status",
+            "date_added",
+            "original_name",
+            "dataset_id",
+            "eeg_format",
+            "eeg_paradigm",
+            "is_set_file",
+            "has_fdt_file",
+            "fdt_filename",
+            "fdt_upload_id",
+            "hash",
+            "upload_id",
+            "remove_import",
+            "sample_rate",
+            "n_channels",
+            "n_epochs",
+            "total_samples",
+            "mne_load_error",
+        ],
+        "analysis_joblist": [
+            "id",
+            "job_id",
+            "upload_id",
+            "eeg_format_name",
+            "eeg_paradigm_name",
+            "eeg_analysis_name",
+            "status",
+            "created_at",
+            "parameters",
+            "result",
+        ],
+        "eeg_paradigm": ["id", "name", "description"],
+        "eeg_analyses": [
+            "id",
+            "name",
+            "description",
+            "category",
+            "valid_formats",
+            "valid_paradigms",
+            "parameters",
+        ],
+        "eeg_format": ["id", "name", "description"],
+        "users": [
+            "user_id",
+            "username",
+            "email",
+            "hashed_password",
+            "is_active",
+            "is_superuser",
+        ],
     }
 
     missing_tables = []
@@ -71,16 +140,27 @@ def check_database_and_tables():
         if table not in tables:
             missing_tables.append(table)
         else:
-            columns = [column['name'] for column in inspector.get_columns(table)]
+            columns = [column["name"] for column in inspector.get_columns(table)]
             if not all(field in columns for field in fields):
                 incorrect_structure.append(table)
 
+    # Check for missing tables and print them
     if missing_tables:
         console.print(f"[red]Missing tables:[/red] {missing_tables}")
+        for table in missing_tables:
+            console.print(f"[red]Missing table:[/red] {table}")
+        return False
+
+    # Check for tables with incorrect structure and print them
     if incorrect_structure:
         console.print(f"[red]Tables with incorrect structure:[/red] {incorrect_structure}")
+        for table in incorrect_structure:
+            console.print(f"[red]Table with incorrect structure:[/red] {table}")
+        return False
 
-    return not missing_tables and not incorrect_structure
+    # If no issues, print success message
+    console.print("[green]All required tables and structures are present.[/green]")
+    return True
 
 def load_config():
     """
@@ -101,6 +181,8 @@ def load_config():
         print(f"File {file_path} not found.")
     except yaml.YAMLError as exc:
         print(exc)
+
+
 def load_config_from_yaml():
     """
     Load configuration from YAML and update the database accordingly.
@@ -129,7 +211,9 @@ def load_config_from_yaml():
                 config_db.eeg_paradigms = json.dumps(data["eeg_paradigms"])
                 config_db.eeg_analyses = json.dumps(data["eeg_analyses"])
             except KeyError as e:
-                console.print(f"[red]Error: Missing expected configuration key {e} in portal.yaml[/red]")
+                console.print(
+                    f"[red]Error: Missing expected configuration key {e} in portal.yaml[/red]"
+                )
                 return False
 
             session.commit()
@@ -138,7 +222,7 @@ def load_config_from_yaml():
             add_eeg_paradigm_to_db()
             add_email_to_db()
             add_eeg_analysis_to_db()
-            
+
             from rich.table import Table
 
             table = Table(title="ConfigDB Update Debug")
@@ -162,6 +246,7 @@ def load_config_from_yaml():
         session.rollback()
         return False
 
+
 def add_eeg_format_to_db():
     """
     Add EEG format data to the database.
@@ -174,7 +259,9 @@ def add_eeg_format_to_db():
         EegFormat.__table__.create(session.bind)
 
         for eeg_format in eeg_formats_list:
-            new_format = EegFormat(name=eeg_format['name'], description=eeg_format['description'])
+            new_format = EegFormat(
+                name=eeg_format["name"], description=eeg_format["description"]
+            )
             session.add(new_format)
         try:
             session.commit()
@@ -182,6 +269,7 @@ def add_eeg_format_to_db():
         except SQLAlchemyError as e:
             console.print(f"❌ Failed to add new EEG formats: {e}")
             session.rollback()
+
 
 def add_eeg_paradigm_to_db():
     """
@@ -195,7 +283,9 @@ def add_eeg_paradigm_to_db():
         EegParadigm.__table__.create(session.bind)
 
         for eeg_paradigm in eeg_paradigms_list:
-            new_paradigm = EegParadigm(name=eeg_paradigm['name'], description=eeg_paradigm['description'])
+            new_paradigm = EegParadigm(
+                name=eeg_paradigm["name"], description=eeg_paradigm["description"]
+            )
             session.add(new_paradigm)
         try:
             session.commit()
@@ -203,6 +293,7 @@ def add_eeg_paradigm_to_db():
         except SQLAlchemyError as e:
             console.print(f"❌ Failed to add new EEG paradigms: {e}")
             session.rollback()
+
 
 def add_eeg_analysis_to_db():
     """
@@ -217,12 +308,12 @@ def add_eeg_analysis_to_db():
 
         for eeg_analysis in eeg_analyses_list:
             new_analysis = EegAnalyses(
-                name=eeg_analysis['name'],
-                description=eeg_analysis['description'],
-                category=eeg_analysis['category'],
-                valid_formats=json.dumps(eeg_analysis['valid_formats']),
-                valid_paradigms=json.dumps(eeg_analysis['valid_paradigms']),
-                parameters=json.dumps(eeg_analysis.get('parameters', {}))
+                name=eeg_analysis["name"],
+                description=eeg_analysis["description"],
+                category=eeg_analysis["category"],
+                valid_formats=json.dumps(eeg_analysis["valid_formats"]),
+                valid_paradigms=json.dumps(eeg_analysis["valid_paradigms"]),
+                parameters=json.dumps(eeg_analysis.get("parameters", {})),
             )
             session.add(new_analysis)
         try:
@@ -231,6 +322,7 @@ def add_eeg_analysis_to_db():
         except SQLAlchemyError as e:
             console.print(f"❌ Failed to add new EEG analyses: {e}")
             session.rollback()
+
 
 def add_email_to_db():
     """
@@ -246,8 +338,8 @@ def add_email_to_db():
         import hashlib
 
         for email in emails_list:
-            hashed_user_id = hashlib.sha256(email['email'].encode()).hexdigest()
-            new_email = Users(user_id=hashed_user_id, email=email['email'])
+            hashed_user_id = hashlib.sha256(email["email"].encode()).hexdigest()
+            new_email = Users(user_id=hashed_user_id, email=email["email"])
             session.merge(new_email)
         try:
             session.commit()
@@ -255,6 +347,7 @@ def add_email_to_db():
         except SQLAlchemyError as e:
             console.print(f"❌ Failed to add new emails: {e}")
             session.rollback()
+
 
 def json_to_dict(json_str):
     """
@@ -271,6 +364,7 @@ def json_to_dict(json_str):
     except json.JSONDecodeError as e:
         print(f"Error decoding JSON: {e}")
         return {}
+
 
 def get_database_info():
     """
@@ -291,6 +385,7 @@ def get_database_info():
             print(f"Database error when retrieving database info: {e}")
     return {}
 
+
 def get_frontend_info():
     """
     Retrieve frontend configuration information from the database.
@@ -306,6 +401,7 @@ def get_frontend_info():
         except SQLAlchemyError as e:
             console.print(f"❌ Database error when retrieving frontend info: {e}")
     return {}
+
 
 def get_api_info():
     """
@@ -323,6 +419,7 @@ def get_api_info():
             console.print(f"❌ Database error when retrieving api info: {e}")
     return {}
 
+
 def get_folder_paths():
     """
     Retrieve folder paths configuration from the database.
@@ -338,6 +435,7 @@ def get_folder_paths():
         except SQLAlchemyError as e:
             console.print(f"❌ Database error when retrieving folder paths: {e}")
     return {}
+
 
 def get_eeg_formats_dict():
     """
@@ -355,6 +453,7 @@ def get_eeg_formats_dict():
             console.print(f"❌ Database error when retrieving EEG formats: {e}")
     return []
 
+
 def get_eeg_paradigms_dict():
     """
     Retrieve EEG paradigms configuration from the database.
@@ -371,6 +470,7 @@ def get_eeg_paradigms_dict():
             console.print(f"❌ Database error when retrieving EEG paradigms: {e}")
     return []
 
+
 def get_eeg_analyses_dict():
     """
     Retrieve EEG analyses configuration from the database.
@@ -386,6 +486,7 @@ def get_eeg_analyses_dict():
         except SQLAlchemyError as e:
             console.print(f"❌ Database error when retrieving EEG analyses: {e}")
     return []
+
 
 def get_users_dict():
     """
@@ -432,8 +533,11 @@ def get_all_config_parameters():
                     else [],
                 }
         except SQLAlchemyError as e:
-            console.print(f"❌ Database error when retrieving all config_db parameters: {e}")
+            console.print(
+                f"❌ Database error when retrieving all config_db parameters: {e}"
+            )
     return {}
+
 
 def test_functions():
     """
@@ -454,10 +558,11 @@ def test_functions():
     eeg_analyses = get_eeg_analyses_dict()
     console.print("[bold green]EEG Analyses:[/bold green]", eeg_analyses)
 
+
 if __name__ == "__main__":
     check_database_and_tables()
-    print(is_config_table_present())
-    print(get_portal_config_path())
-    load_config_from_yaml()
+    # print(is_config_table_present())
+    # print(get_portal_config_path())
+    # load_config_from_yaml()
     # config_db = get_all_config_parameters()
-    #test_functions()
+    # test_functions()

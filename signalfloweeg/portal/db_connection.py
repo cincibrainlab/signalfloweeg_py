@@ -2,6 +2,8 @@ from contextlib import contextmanager
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import text
+from sqlalchemy_utils.functions import drop_database, create_database
 import logging
 
 
@@ -49,3 +51,10 @@ def is_database_connected():
     except SQLAlchemyError as e:
         logging.error(f"Database connection error: {e}")
         return False
+    
+def delete_database():
+    drop_database(db_url)
+    create_database(db_url)
+
+
+#delete_database()
