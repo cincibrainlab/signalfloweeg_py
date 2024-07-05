@@ -1,60 +1,29 @@
-from contextlib import contextmanager
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy import text
-from sqlalchemy_utils.functions import drop_database, create_database
-import logging
+from motor.motor_asyncio import AsyncIOMotorClient
+from pymongo.server_api import ServerApi
+from rich.console import Console
 
+MONGO_URL = "mongodb://localhost:3002"
+DATABASE_NAME = "sfportal"
 
-db_url = "postgresql://sfportal:sfportal@localhost:3002/sfportal"
+client = AsyncIOMotorClient(MONGO_URL, server_api=ServerApi('1'))
+db = client[DATABASE_NAME]
+console = Console()
 
+async def get_database():
+    return db
 
-@contextmanager
-def get_session():
-    # Now connect to the new or existing database
-    engine = create_engine(db_url, echo=False)
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    session = SessionLocal()
+async def get_database_url():
+    return MONGO_URL
+
+async def is_database_connected():
     try:
-        yield session
-    finally:
-        session.close()
-
-
-def get_db_url():
-    return db_url
-
-
-def get_engine():
-    # Now connect to the new or existing database
-    engine = create_engine(db_url, echo=False)
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    session = SessionLocal()
-    try:
-        return engine
-    finally:
-        session.close()
-
-def is_database_connected():
-    """
-    Check if the database is connected.
-
-    Returns:
-        bool: True if the database is connected, False otherwise.
-    """
-    try:
-        with get_session() as session:
-            from sqlalchemy import text
-            session.execute(text("SELECT 1"))
-            return True
-    except SQLAlchemyError as e:
-        logging.error(f"Database connection error: {e}")
+        db = await get_database()
+        await db.command('ping')
+        return True
+    except Exception:
+        console.print("❌ Failed to connect to the database")
         return False
-    
-def delete_database():
-    drop_database(db_url)
-    create_database(db_url)
 
+async def delete_database():
+    await client.drop_database(DATABASE_NAME)
 
-#delete_database()
