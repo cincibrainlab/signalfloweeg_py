@@ -1,177 +1,134 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean
-from sqlalchemy.orm import declarative_base
-from sqlalchemy import create_engine
-from sqlalchemy_utils import database_exists, create_database, drop_database
-from sqlalchemy import ForeignKey, DateTime
-from sqlalchemy.orm import relationship
 from datetime import datetime
+from typing import Optional, List
+from pydantic import BaseModel, Field
+from bson import ObjectId
+from pymongo import MongoClient
+from pymongo.errors import ServerSelectionTimeoutError
 from rich.console import Console
 from rich.table import Table
-from sqlalchemy import ForeignKey, DateTime
-from sqlalchemy.orm import relationship, backref
-from sqlalchemy.ext.declarative import declared_attr
-from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy import inspect
 
-from signalfloweeg.portal.db_connection import get_db_url
+class PyObjectId(ObjectId):
+    @classmethod
+    def __get_validators__(cls):
+        yield cls.validate
 
-Base = declarative_base()
+    @classmethod
+    def validate(cls, v):
+        if not ObjectId.is_valid(v):
+            raise ValueError("Invalid ObjectId")
+        return ObjectId(v)
 
-console = Console()
+    @classmethod
+    def __get_pydantic_json_schema__(cls, core_schema, handler):
+        json_schema = handler(core_schema)
+        json_schema.update(type="string")
+        return json_schema
 
-class Startup(Base):
-    __tablename__ = "startup_table"
-    id = Column(Integer, primary_key=True, default=1)
-    sf_config_path = Column(String, nullable=True)
-    __table_args__ = ({"sqlite_autoincrement": True},)
+class MongoBaseModel(BaseModel):
+    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
 
-class Users(Base):
-    __tablename__ = "users"
-    id = None
-    user_id = Column(String, primary_key=True)
-    username = Column(String, unique=True, nullable=True)
-    email = Column(String, unique=True, nullable=True)
-    hashed_password = Column(String, nullable=True)
-    is_active = Column(Boolean, default=True)
-    is_superuser = Column(Boolean, default=True)
+    model_config = {
+        "populate_by_name": True,
+        "json_encoders": {ObjectId: str}
+    }
 
-class ConfigDB(Base):
-    __tablename__ = "config"
-    id = Column(Integer, primary_key=True, default=1)
-    database = Column(String, nullable=True)
-    frontend = Column(String, nullable=True)
-    api = Column(String, nullable=True)
-    users = Column(Text, nullable=True)
-    folder_paths = Column(Text, nullable=True)
-    eeg_formats = Column(Text, nullable=True)
-    eeg_paradigms = Column(Text, nullable=True)
-    eeg_analyses = Column(Text, nullable=True)
+class Startup(MongoBaseModel):
+    sf_config_path: Optional[str] = None
 
-    __table_args__ = ({"sqlite_autoincrement": True},)
+class Users(MongoBaseModel):
+    user_id: str
+    username: Optional[str] = None
+    email: Optional[str] = None
 
-class DatasetCatalog(Base):
-    __tablename__ = "dataset_catalog"
-    dataset_name = Column(String)
-    dataset_id = Column(String, primary_key=True)
-    description = Column(Text)
+class ConfigDB(MongoBaseModel):
+    database: Optional[str] = None
+    frontend: Optional[str] = None
+    api: Optional[str] = None
+    users: Optional[str] = None
+    folder_paths: Optional[str] = None
+    eeg_formats: Optional[str] = None
+    eeg_paradigms: Optional[str] = None
+    eeg_analyses: Optional[str] = None
 
-class EegFormat(Base):
-    __tablename__ = "eeg_format"
-    id = Column(Integer, autoincrement=True, primary_key=True)
-    name = Column(String, unique=True)
-    description = Column(Text)
+class DatasetCatalog(MongoBaseModel):
+    dataset_name: str
+    dataset_id: str
+    description: Optional[str] = None
 
+class EegFormat(MongoBaseModel):
+    name: str
+    description: Optional[str] = None
 
-class EegParadigm(Base):
-    __tablename__ = "eeg_paradigm"
-    id = Column(Integer, autoincrement=True, primary_key=True)
-    name = Column(String, unique=True)
-    description = Column(Text)
-    
-class CatalogBase(Base):
-    __abstract__ = True
-    id = Column(Integer, primary_key=True)
-    status = Column(String)
-    upload_id = Column(String, unique=True)
-    date_added = Column(String)
-    original_name = Column(String)
-    eeg_format = Column(String)
-    eeg_paradigm = Column(String)
-    is_set_file = Column(Boolean)
-    has_fdt_file = Column(Boolean)
-    fdt_filename = Column(String)
-    fdt_upload_id = Column(String)
-    upload_email = Column(String)    
-    hash = Column(String)
+class EegParadigm(MongoBaseModel):
+    name: str
+    description: Optional[str] = None
 
-    @declared_attr
-    def dataset_id(cls):
-        # Defines a foreign key field, allowing subclass-specific customization
-        return Column(String, ForeignKey("dataset_catalog.dataset_id"))
-
-    @declared_attr
-    def dataset(cls):
-        backref_name = f"{cls.__name__.lower()}_entries"
-        # Defines a relationship, dynamically linked to the subclass's foreign key
-        return relationship("DatasetCatalog", backref=backref(backref_name, cascade="all, delete-orphan"))
-
-    @hybrid_property
-    def dataset_name(self):
-        return self.dataset.dataset_name if self.dataset else None
-
-    @hybrid_property
-    def dataset_description(self):
-        return self.dataset.description if self.dataset else None
-
-# Explanation of changes:
-# @declared_attr: Used here to ensure that the foreign key and relationship are set up correctly for each subclass,
-# allowing SQLAlchemy to manage the inheritance and linkage dynamically.
-# This method allows each subclass that inherits from CatalogBase to have its specific linkage to the DatasetCatalog,
-# facilitating correct ORM behavior across different inheriting models.
+class CatalogBase(MongoBaseModel):
+    status: Optional[str] = None
+    upload_id: str
+    date_added: str
+    original_name: str
+    eeg_format: Optional[str] = None
+    eeg_paradigm: Optional[str] = None
+    is_set_file: bool
+    has_fdt_file: bool
+    fdt_filename: Optional[str] = None
+    fdt_upload_id: Optional[str] = None
+    upload_email: Optional[str] = None
+    hash: str
+    dataset_id: str
 
 class UploadCatalog(CatalogBase):
-    __tablename__ = "upload_catalog"
-    id = None  # Disable the 'id' column for UploadCatalog
-    upload_id = Column(
-        String, primary_key=True
-    )  # Override 'upload_id' as the primary key
-    size = Column(String)
-    remove_upload = Column(Boolean)
+    size: Optional[str] = None
+    remove_upload: bool = False
 
 class ImportCatalog(CatalogBase):
-    __tablename__ = "import_catalog"
-    id = None  # Disable the 'id' column for UploadCatalog
-    upload_id = Column(
-        String, primary_key=True
-    )  # Override 'upload_id' as the primary key
-    remove_import = Column(Boolean)
-    sample_rate = Column(Integer)
-    n_channels = Column(Integer)
-    n_epochs = Column(Integer)
-    total_samples = Column(Integer)
-    mne_load_error = Column(Boolean)
+    remove_import: bool = False
+    sample_rate: Optional[int] = None
+    n_channels: Optional[int] = None
+    n_epochs: Optional[int] = None
+    total_samples: Optional[int] = None
+    mne_load_error: bool = False
 
+class AnalysisConfig(MongoBaseModel):
+    function_name: str
+    description: Optional[str] = None
+    eeg_formats: str
+    eeg_paradigms: str
+    parameters: str
+    version: str
+    active: bool = True
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-class AnalysisConfig(Base):
-    __tablename__ = "analysis_configs"
-    id = Column(String, primary_key=True)
-    function_name = Column(String, nullable=False)
-    description = Column(String, nullable=True)
-    eeg_formats = Column(String, nullable=False)
-    eeg_paradigms = Column(String, nullable=False)
-    parameters = Column(String, nullable=False)
-    version = Column(String, nullable=False)
-    active = Column(Boolean, default=True)  # New field to mark if active or not
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+class AnalysisJobList(MongoBaseModel):
+    job_id: str
+    upload_id: str
+    eeg_format_name: str
+    eeg_paradigm_name: str
+    eeg_analysis_name: str
+    status: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    parameters: Optional[str] = None
+    result: Optional[str] = None
 
-class AnalysisJobList(Base):
-    __tablename__ = "analysis_joblist"
-    id = Column(Integer, primary_key=True)
-    job_id = Column(String)
-    upload_id = Column(String, ForeignKey("import_catalog.upload_id"))
-    eeg_format_name = Column(String)
-    eeg_paradigm_name = Column(String)
-    eeg_analysis_name = Column(String)
-    status = Column(String)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    parameters = Column(String)
-    result = Column(String)
-    
+class EegAnalyses(MongoBaseModel):
+    name: str
+    description: Optional[str] = None
+    category: Optional[str] = None
+    valid_formats: Optional[str] = None
+    valid_paradigms: Optional[str] = None
+    parameters: Optional[str] = None
 
-class EegAnalyses(Base):
-    __tablename__ = "eeg_analyses"
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    description = Column(Text)
-    category = Column(String)
-    valid_formats = Column(String)
-    valid_paradigms = Column(String)
-    parameters = Column(String)  # JSON string to store analysis parameters
-
+def get_db_url():
+    # Implement this function to return the MongoDB connection string
+    # For example:
+    return "mongodb://localhost:3002"
 
 def initialize_database(reset=False):
     db_url = get_db_url()
+    db_name = "sfportal"  # Set your desired database name
+    console = Console()
 
     console.print(
         "[bold]Initializing or resetting database with the following parameters:[/bold]"
@@ -179,43 +136,43 @@ def initialize_database(reset=False):
     console.print(f"Database URL: [green]{db_url}[/green]")
     console.print(f"Reset flag: [green]{reset}[/green]")
 
-    conn = create_engine(db_url, echo=False)
-    from rich import print as rich_print
+    client = MongoClient(db_url)
 
-    db_status = {"force_reset": reset, "database_exists": database_exists(conn.url)}
+    try:
+        # Check if the connection is successful
+        client.server_info()
+    except ServerSelectionTimeoutError:
+        console.print("[bold red]Error: Unable to connect to the MongoDB server.[/bold red]")
+        return
 
-    rich_print("[bold magenta]Database Status:[/bold magenta]", db_status)
+    db = client[db_name]
 
-    if db_status["force_reset"]:
-        if db_status["database_exists"]:
-            drop_database(conn.url)
-            console.print("Database dropped successfully.")
-        else:
-            console.print("Database does not exist, no need to drop.")
+    if reset:
+        client.drop_database(db_name)
+        console.print(f"Database '{db_name}' dropped successfully.")
 
-    if db_status["database_exists"] and not db_status["force_reset"]:
-        console.print("Database sfportal present.")
-    else:
-        create_database(conn.url)
-        print(conn.url)
-        console.print("Database sfportal created.")
+    # Create collections based on your models
+    collections = [
+        "startup", "users", "config", "dataset_catalog", "eeg_formats",
+        "eeg_paradigms", "upload_catalog", "import_catalog", "analysis_config",
+        "analysis_joblist", "eeg_analyses"
+    ]
 
-    Base.metadata.create_all(conn)
-    inspector = inspect(conn)
-    created_tables = inspector.get_table_names()
-    #created_tables = conn.dialect.get_table_names(conn)
+    for collection_name in collections:
+        if collection_name not in db.list_collection_names():
+            db.create_collection(collection_name)
 
-    table_verification = Table(title="Table Verification")
-    table_verification.add_column("Table Name", style="cyan")
+    # Verify collections
+    table_verification = Table(title="Collection Verification")
+    table_verification.add_column("Collection Name", style="cyan")
     table_verification.add_column("Status", style="green")
-    table_verification.add_column("Fields", style="magenta")
-    for table in created_tables:
-        table_fields = ", ".join([column.name for column in Base.metadata.tables[table].columns])
-        table_verification.add_row(
-            table, "Verified", f"Table name: {table}, Fields: {table_fields}"
-        )
+
+    for collection_name in collections:
+        if collection_name in db.list_collection_names():
+            table_verification.add_row(collection_name, "Verified")
+        else:
+            table_verification.add_row(collection_name, "Not Found")
+
     console.print(table_verification)
 
-if __name__ == "__main__":
-    reset = True
-    initialize_database(reset)
+    console.print(f"Database '{db_name}' initialized successfully.")

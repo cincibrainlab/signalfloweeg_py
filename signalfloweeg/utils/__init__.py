@@ -5,6 +5,6 @@ Description: Module for utility functions
 """
 
 # from . import *
-from .file_helpers import *
+from . import *
 
 __all__ = ['Catalog', 'save_dictionaries']
